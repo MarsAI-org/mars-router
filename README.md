@@ -542,6 +542,7 @@ a third party under a provider named "Self-hosted".
 | 🎯 **Smart 3-Tier Fallback**                                                      | Auto-route: Subscription → Cheap → Free                                                  | Never stop coding, zero downtime                  |
 | 🚦 **Per-Provider Limits & Budget**                                               | Cap RPM/TPM, daily/monthly tokens and cost per provider                                  | Bound spend and stop runaway loops                |
 | 🔁 **Flexible Retry & Fallback Policy**                                           | Tune retry attempts/delay per status per provider; gate account/combo rotation           | Match your reliability and cost tradeoff          |
+| 💳 **Reseller Tiers & Billing**                                                   | Plans, per-key subscriptions, quota enforcement, MRR/margin analytics, abuse log         | Sell API access with metered plans                 |
 | 📊 **Real-Time Quota Tracking**                                                   | Live token count + reset countdown                                                       | Maximize subscription value                       |
 | 🔄 **Format Translation**                                                         | OpenAI ↔ Claude ↔ Gemini ↔ Cursor ↔ Kiro ↔ Vertex                                        | Works with any CLI tool                           |
 | 👥 **Multi-Account Support**                                                      | Multiple accounts per provider                                                           | Load balancing + redundancy                       |
@@ -690,6 +691,41 @@ and combos:
 - `accountFallbackEnabled: false` keeps a failing credential in place instead of
   rotating to the next account.
 - `extraFallbackStatuses` widens rotation to status codes beyond the built-ins.
+
+### 💳 Reseller Tiers & Billing
+
+Sell API access on monthly subscription tiers. A **plan** defines the limits and
+the list price; a **subscription** binds a plan to one API key. Enforcement is
+**opt-in** (`settings.billingEnforcementEnabled`) so a fresh install behaves
+exactly like today until you configure plans.
+
+- **Plans** (`/api/plans`): `rpm`, `tpm`, `dailyRequests`, `dailyTokens`,
+  `monthlyRequests`, `monthlyTokens`, `monthlyCost`, plus `priceMonthly` and
+  `rank`. `0` = unlimited.
+- **Subscriptions** (`/api/subscriptions`): one per key, `active` /
+  `suspended` / `canceled`. A `suspended` key is rejected with `403`; an
+  `active` key is metered against its plan quota (exceeding → `429`).
+- **Per-key quota** (`GET /api/billing/quota/<keyId>`): live usage + remaining
+  headroom for RPM/TPM, day and month windows.
+- **Sales analytics** (`GET /api/billing/analytics?days=30`): MRR, per-key
+  usage, provider cost and gross margin — the numbers you need to price tiers.
+- **Anti-abuse** (`/api/billing/abuse`): records `rate_spike`, `multi_ip`,
+  `error_burst` and `quota_breach` events when thresholds trip, so leaked or
+  shared keys surface quickly. Enable with `settings.abuseMonitoring`.
+
+Open **Dashboard → Billing & Sales** to manage plans, assign subscriptions and
+watch usage, margin and abuse events. Metering is **fail-open**: a metering or
+DB error never takes inference offline.
+
+```bash
+# Create a plan
+curl -X POST localhost:20128/api/plans -H 'Content-Type: application/json' \
+  -d '{"name":"Pro","priceMonthly":20,"rpm":60,"monthlyTokens":5000000,"monthlyCost":50}'
+
+# Assign it to a key
+curl -X POST localhost:20128/api/subscriptions -H 'Content-Type: application/json' \
+  -d '{"keyId":"<key-id>","planId":"<plan-id>","status":"active"}'
+```
 
 ### 📊 Real-Time Quota Tracking
 

@@ -73,6 +73,11 @@ const DEFAULT_SETTINGS = {
   retryPolicy: { enabled: false },
   // Flexible fallback policy. Shape: { accountFallbackEnabled, comboFallbackEnabled, extraFallbackStatuses: [] }
   fallbackPolicy: {},
+  // Reseller billing: plan-based quota enforcement is opt-in (a fresh install
+  // behaves exactly like today until plans/subscriptions are configured).
+  billingEnforcementEnabled: false,
+  // Anti-abuse monitoring. Shape: { enabled, rpmThreshold, multiIpThreshold, errorBurstThreshold }
+  abuseMonitoring: { enabled: false, rpmThreshold: 300, multiIpThreshold: 5, errorBurstThreshold: 20 },
 };
 
 async function readRaw() {

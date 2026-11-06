@@ -3,6 +3,7 @@ import {
   sanitizeProviderLimits,
   sanitizeRetryPolicy,
   sanitizeFallbackPolicy,
+  sanitizeAbuseMonitoring,
   toNonNegativeNumber,
 } from "../../src/lib/settingsSanitizers.js";
 
@@ -89,5 +90,21 @@ describe("toNonNegativeNumber", () => {
     expect(toNonNegativeNumber(-1)).toBe(0);
     expect(toNonNegativeNumber("abc")).toBe(0);
     expect(toNonNegativeNumber("12")).toBe(12);
+  });
+});
+
+describe("sanitizeAbuseMonitoring", () => {
+  it("returns defaults for garbage", () => {
+    expect(sanitizeAbuseMonitoring(null)).toEqual({
+      enabled: false, rpmThreshold: 300, multiIpThreshold: 5, errorBurstThreshold: 20,
+    });
+  });
+
+  it("coerces enabled and thresholds", () => {
+    const out = sanitizeAbuseMonitoring({ enabled: true, rpmThreshold: "50", multiIpThreshold: -3 });
+    expect(out.enabled).toBe(true);
+    expect(out.rpmThreshold).toBe(50);
+    expect(out.multiIpThreshold).toBe(0);
+    expect(out.errorBurstThreshold).toBe(20);
   });
 });

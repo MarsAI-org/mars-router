@@ -69,6 +69,28 @@ export {
   saveRequestDetail, getRequestDetails, getRequestDetailById, getDistinctProviders,
 } from "./repos/requestDetailsRepo.js";
 
+// Reseller billing: plans, subscriptions, per-key usage, abuse events
+export {
+  PLAN_LIMIT_KEYS, normalizePlanInput,
+  getPlans, getActivePlans, getPlanById, getPlanByName,
+  createPlan, updatePlan, deletePlan,
+} from "./repos/plansRepo.js";
+
+export {
+  SUBSCRIPTION_STATUSES, getSubscriptions, getSubscriptionByKeyId,
+  getSubscriptionById, setSubscription, updateSubscription, deleteSubscription,
+} from "./repos/subscriptionsRepo.js";
+
+export {
+  recordKeyUsage, getKeyUsageForDay, getKeyUsageForMonth,
+  getKeyUsageSeries, getUsageTotalsByKey,
+} from "./repos/keyUsageRepo.js";
+
+export {
+  ABUSE_KINDS, ABUSE_SEVERITIES, recordAbuseEvent, getAbuseEvents,
+  countRecentAbuseEvents, clearAbuseEvents,
+} from "./repos/abuseRepo.js";
+
 // Export/import full DB
 export async function exportDb() {
   const db = await getAdapter();

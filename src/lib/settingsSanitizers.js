@@ -73,3 +73,15 @@ export function sanitizeFallbackPolicy(input) {
   }
   return out;
 }
+
+// Anti-abuse monitoring config. Thresholds are positive integers; 0 disables
+// that specific check (the master `enabled` flag still gates everything).
+export function sanitizeAbuseMonitoring(input) {
+  const defaults = { enabled: false, rpmThreshold: 300, multiIpThreshold: 5, errorBurstThreshold: 20 };
+  if (!input || typeof input !== "object" || Array.isArray(input)) return defaults;
+  const out = { enabled: input.enabled === true };
+  for (const key of ["rpmThreshold", "multiIpThreshold", "errorBurstThreshold"]) {
+    out[key] = input[key] == null ? defaults[key] : Math.max(0, Math.floor(toNonNegativeNumber(input[key])));
+  }
+  return out;
+}

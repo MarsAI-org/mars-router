@@ -1,3 +1,13 @@
+# v0.5.114 (2026-11-07)
+
+## Features
+- **Reseller billing / tiers**: sell API access on monthly plans. New `plans` table (limits + `priceMonthly` + `rank`), `subscriptions` binding one plan to one API key (`active`/`suspended`/`canceled`), and per-key enforcement in the `/v1` chat path. A `suspended` key answers `403`; an `active` key over its plan quota answers `429`. Opt-in via `settings.billingEnforcementEnabled` so a fresh install is unchanged, and fail-open so metering never takes inference offline.
+- **Quota API**: `GET /api/billing/quota/[keyId]` returns live usage and remaining headroom across RPM/TPM, daily and monthly windows.
+- **Sales analytics**: `GET /api/billing/analytics?days=N` reports MRR, per-key usage, provider cost and gross margin; backed by a new `keyUsageDaily` aggregate table.
+- **Anti-abuse**: `abuseEvents` table + heuristics that flag `rate_spike`, `multi_ip`, `error_burst` and `quota_breach` (opt-in via `settings.abuseMonitoring`); list/clear via `GET/DELETE /api/billing/abuse`.
+- **Dashboard**: add a **Billing & Sales** page (plans CRUD, subscription assignment, usage/margin overview, abuse log) with a sidebar entry.
+- **DB**: add `plans`, `subscriptions`, `keyUsageDaily`, `abuseEvents` tables (migration `002-billing-tiers`, SCHEMA_VERSION 3); sanitize `billingEnforcementEnabled` and `abuseMonitoring` in `PATCH /api/settings`.
+
 # v0.5.113 (2026-11-07)
 
 ## Features

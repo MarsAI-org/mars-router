@@ -309,6 +309,32 @@ export async function saveRequestUsage(entry) {
     if (inserted) {
       pushToRing(entry);
       scheduleStatsEvent("update", 250);
+      // Reseller metering: aggregate per API key (fail-open). The key id is
+      // resolved from the presented key; unknown/absent keys are skipped.
+      if (entry.apiKey) {
+        import("./apiKeysRepo.js").then(({ getApiKeyByKey }) => getApiKeyByKey(entry.apiKey))
+          .then((rec) => {
+            if (!rec?.id) return;
+            const tokens = entry.tokens || {};
+            const isError = entry.status && String(entry.status).toLowerCase() !== "ok";
+            // Meter usage for plan quotas & aggregates
+            import("@/lib/billing/enforce.js").then(({ meterKeyRequest }) => meterKeyRequest(rec.id, {
+              promptTokens: tokens.prompt_tokens || tokens.input_tokens || 0,
+              completionTokens: tokens.completion_tokens || tokens.output_tokens || 0,
+              cost: entry.cost || 0,
+            })).catch(() => {});
+            // Anti-abuse heuristic monitoring
+            import("@/lib/localDb").then(({ getSettings }) => getSettings()).then((s) => {
+              if (s?.abuseMonitoring?.enabled) {
+                return import("@/lib/billing/abuse.js").then(({ observeKeyRequest }) => observeKeyRequest(rec.id, {
+                  isError,
+                  config: s.abuseMonitoring,
+                }));
+              }
+            }).catch(() => {});
+          })
+          .catch(() => {});
+      }
     }
   } catch (e) {
     console.error("Failed to save usage stats:", e);

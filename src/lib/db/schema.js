@@ -3,7 +3,7 @@
 // pre-change safety backup in migrate.js: when the stored version is lower,
 // one lightweight DB backup is taken before applying schema changes. Forgetting
 // to bump only skips that backup — it does NOT break the additive auto-sync.
-export const SCHEMA_VERSION = 2;
+export const SCHEMA_VERSION = 3;
 
 export const PRAGMA_SQL = `
 PRAGMA journal_mode = WAL;
@@ -154,6 +154,76 @@ export const TABLES = {
       "CREATE INDEX IF NOT EXISTS idx_rd_provider ON requestDetails(provider)",
       "CREATE INDEX IF NOT EXISTS idx_rd_model ON requestDetails(model)",
       "CREATE INDEX IF NOT EXISTS idx_rd_conn ON requestDetails(connectionId)",
+    ],
+  },
+  // ---- Reseller billing / tiers (additive; picked up by syncSchemaFromTables) ----
+  plans: {
+    columns: {
+      id: "TEXT PRIMARY KEY",
+      name: "TEXT UNIQUE NOT NULL",
+      description: "TEXT",
+      isActive: "INTEGER DEFAULT 1",
+      // Ordered tier rank for display/sorting (higher = more premium).
+      rank: "INTEGER DEFAULT 0",
+      // Limits enforced per API key on this plan. 0 = unlimited.
+      rpm: "INTEGER DEFAULT 0",
+      tpm: "INTEGER DEFAULT 0",
+      dailyRequests: "INTEGER DEFAULT 0",
+      dailyTokens: "INTEGER DEFAULT 0",
+      monthlyRequests: "INTEGER DEFAULT 0",
+      monthlyTokens: "INTEGER DEFAULT 0",
+      monthlyCost: "REAL DEFAULT 0",
+      // Monthly list price in USD for revenue analytics (0 = free/manual).
+      priceMonthly: "REAL DEFAULT 0",
+      createdAt: "TEXT NOT NULL",
+      updatedAt: "TEXT NOT NULL",
+    },
+    indexes: ["CREATE INDEX IF NOT EXISTS idx_plan_active ON plans(isActive)"],
+  },
+  subscriptions: {
+    columns: {
+      id: "TEXT PRIMARY KEY",
+      keyId: "TEXT NOT NULL",
+      planId: "TEXT NOT NULL",
+      status: "TEXT NOT NULL DEFAULT 'active'", // active | suspended | canceled
+      startedAt: "TEXT NOT NULL",
+      currentPeriodEnd: "TEXT",
+      notes: "TEXT",
+      createdAt: "TEXT NOT NULL",
+      updatedAt: "TEXT NOT NULL",
+    },
+    indexes: [
+      "CREATE INDEX IF NOT EXISTS idx_sub_key ON subscriptions(keyId)",
+      "CREATE INDEX IF NOT EXISTS idx_sub_plan ON subscriptions(planId)",
+      "CREATE INDEX IF NOT EXISTS idx_sub_status ON subscriptions(status)",
+    ],
+  },
+  keyUsageDaily: {
+    columns: {
+      keyId: "TEXT NOT NULL",
+      dateKey: "TEXT NOT NULL",
+      requests: "INTEGER DEFAULT 0",
+      promptTokens: "INTEGER DEFAULT 0",
+      completionTokens: "INTEGER DEFAULT 0",
+      cost: "REAL DEFAULT 0",
+      updatedAt: "TEXT NOT NULL",
+    },
+    primaryKey: "PRIMARY KEY (keyId, dateKey)",
+    indexes: ["CREATE INDEX IF NOT EXISTS idx_kud_key ON keyUsageDaily(keyId)"],
+  },
+  abuseEvents: {
+    columns: {
+      id: "TEXT PRIMARY KEY",
+      keyId: "TEXT",
+      kind: "TEXT NOT NULL", // rate_spike | multi_ip | error_burst | quota_breach
+      severity: "TEXT NOT NULL DEFAULT 'warn'", // info | warn | critical
+      detail: "TEXT",
+      ip: "TEXT",
+      createdAt: "TEXT NOT NULL",
+    },
+    indexes: [
+      "CREATE INDEX IF NOT EXISTS idx_ab_key ON abuseEvents(keyId)",
+      "CREATE INDEX IF NOT EXISTS idx_ab_ts ON abuseEvents(createdAt DESC)",
     ],
   },
 };

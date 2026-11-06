@@ -31,6 +31,9 @@ import { resolveSmartChoice } from "../services/systemoneRouter.js";
 import { checkProviderLimits, recordProviderUsage, buildLimitBreach } from "@/lib/limits/engine.js";
 import { mergeLimitConfig } from "@/lib/limits/constants.js";
 import { resolveRetryConfig, resolveFallbackPolicy, applyFallbackPolicy } from "open-sse/config/retryPolicy.js";
+import { enforceKeyQuota } from "@/lib/billing/enforce.js";
+import { getApiKeyByKey } from "@/lib/db/repos/apiKeysRepo.js";
+import { getClientIp } from "@/lib/auth/loginLimiter.js";
 
 /**
  * Handle chat completion request
@@ -268,6 +271,24 @@ async function handleSingleModelChat(body, modelStr, clientRawRequest = null, re
 
   const { provider, model } = modelInfo;
 
+  // Billing / tier quota enforcement per API key (fail-open). Resolved before
+  // dispatch so a plan breach never reaches a provider account.
+  let billingKeyId = null;
+  let billingIp = null;
+  if (apiKey) {
+    try {
+      const keyRecord = await getApiKeyByKey(apiKey);
+      if (keyRecord?.id) {
+        billingKeyId = keyRecord.id;
+        billingIp = request ? getClientIp(request) : null;
+        const blocked = await enforceKeyQuota(billingKeyId, { ip: billingIp });
+        if (blocked) return blocked;
+      }
+    } catch {
+      // fail-open: never block inference on metering errors
+    }
+  }
+
   // Routing shown in the unified "▶" line (client model → provider/model)
 
   // Per-provider rate limit & budget (fail-open). Enforced only when the
@@ -397,6 +418,8 @@ async function handleSingleModelChat(body, modelStr, clientRawRequest = null, re
 
     if (result.success) {
       // Record usage toward per-provider rate/budget counters (fail-open).
+      // The API-key plan metering happens in usageRepo.saveRequestUsage, where
+      // the real token/cost totals are available.
       try {
         const usage = result.usage || {};
         const tokens = (usage.prompt_tokens || 0) + (usage.completion_tokens || 0);
