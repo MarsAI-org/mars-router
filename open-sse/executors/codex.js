@@ -290,7 +290,7 @@ export class CodexExecutor extends BaseExecutor {
 
     // Retry loop for SSE-level overloaded errors (200 OK body contains event: error)
     // Reuses 503 retry config — same semantic: upstream temporarily unavailable
-    const retryConfig = { ...DEFAULT_RETRY_CONFIG, ...this.config.retry };
+    const retryConfig = { ...DEFAULT_RETRY_CONFIG, ...this.config.retry, ...(args.retryOverrides || {}) };
     const { attempts, delayMs } = resolveRetryEntry(retryConfig[503]);
     let attempt = 0;
     while (true) {

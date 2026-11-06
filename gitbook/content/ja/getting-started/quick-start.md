@@ -1,6 +1,6 @@
 # はじめに
 
-9Routerを5分で起動し、AIリクエストをインテリジェントにルーティングし始めましょう。
+Mars Routerを5分で起動し、AIリクエストをインテリジェントにルーティングし始めましょう。
 
 ---
 
@@ -43,7 +43,7 @@ Dashboard → Providers → Connect [Provider]
 **例: Claude Code**
 1. 「Connect Claude Code」をクリック
 2. Claudeアカウントでログイン
-3. 9Routerを認可
+3. Mars Routerを認可
 4. ✅ 完了! モデルを使用: `cc/claude-opus-4-5-20251101`
 
 #### オプションB: APIキー(低価格プロバイダー)
@@ -83,7 +83,7 @@ Dashboard → Providers → Connect [Free Provider]
 
 ## 4. CLIツールで使用
 
-コーディングツールを9Routerに向けます:
+コーディングツールをMars Routerに向けます:
 
 ### Cursor IDE
 

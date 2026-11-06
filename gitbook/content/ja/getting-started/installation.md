@@ -1,6 +1,6 @@
 # インストール
 
-トラブルシューティングのヒント付きの9Router詳細インストールガイド。
+トラブルシューティングのヒント付きのMars Router詳細インストールガイド。
 
 ---
 
@@ -31,13 +31,13 @@ npm --version
 
 ### 方法1: グローバルインストール (推奨)
 
-どこからでも使用できるように9Routerをグローバルインストール:
+どこからでも使用できるようにMars Routerをグローバルインストール:
 
 ```bash
 npm install -g 9router
 ```
 
-**9Routerを起動:**
+**Mars Routerを起動:**
 
 ```bash
 9router
@@ -58,7 +58,7 @@ cd my-9router
 npm install 9router
 ```
 
-**9Routerを起動:**
+**Mars Routerを起動:**
 
 ```bash
 npx 9router
@@ -345,7 +345,7 @@ Dashboard → Provider → Disconnect → Reconnect
 
 ### 高メモリ使用量
 
-**問題:** 9RouterがRAMを使いすぎている
+**問題:** Mars RouterがRAMを使いすぎている
 
 **解決策: サーバーを再起動**
 

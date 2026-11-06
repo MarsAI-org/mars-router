@@ -28,6 +28,9 @@ import { getProjectIdForConnection } from "open-sse/services/projectId.js";
 import { stripModelContextMarker } from "open-sse/utils/modelMarkers.js";
 import { getKeyAccessContext, enforceKeyAccess, filterAdapterModels } from "../services/keyAccess.js";
 import { resolveSmartChoice } from "../services/systemoneRouter.js";
+import { checkProviderLimits, recordProviderUsage, buildLimitBreach } from "@/lib/limits/engine.js";
+import { mergeLimitConfig } from "@/lib/limits/constants.js";
+import { resolveRetryConfig, resolveFallbackPolicy, applyFallbackPolicy } from "open-sse/config/retryPolicy.js";
 
 /**
  * Handle chat completion request
@@ -267,6 +270,39 @@ async function handleSingleModelChat(body, modelStr, clientRawRequest = null, re
 
   // Routing shown in the unified "▶" line (client model → provider/model)
 
+  // Per-provider rate limit & budget (fail-open). Enforced only when the
+  // provider entry sets `enabled: true` in settings.providerLimits.
+  const limitSettings = await getSettings().catch(() => null);
+  const providerLimitRaw = limitSettings?.providerLimits?.[provider];
+  if (providerLimitRaw && mergeLimitConfig(providerLimitRaw).enabled) {
+    let limitCheck = { allowed: true };
+    try {
+      limitCheck = checkProviderLimits(provider, providerLimitRaw);
+    } catch {
+      limitCheck = { allowed: true };
+    }
+    if (!limitCheck.allowed && mergeLimitConfig(providerLimitRaw).enforce) {
+      const breach = buildLimitBreach(provider, limitCheck);
+      log.warn("LIMIT", `⛔ ${breach.message}`);
+      return unavailableResponse(
+        HTTP_STATUS.RATE_LIMITED,
+        breach.message,
+        Math.ceil((breach.retryAfterMs || 60000) / 1000),
+        "1m",
+        null
+      );
+    }
+    if (!limitCheck.allowed) {
+      log.warn("LIMIT", `⚠ ${provider} ${limitCheck.breachedKind} limit reached (monitor mode)`);
+    }
+  }
+
+  // Per-provider retry override resolved from settings.retryPolicy (fail-open:
+  // null keeps the executor's built-in retry config).
+  const retryOverrides = limitSettings
+    ? resolveRetryConfig(provider, null, limitSettings)
+    : null;
+
   // Extract userAgent from request
   const userAgent = request?.headers?.get("user-agent") || "";
 
@@ -341,6 +377,8 @@ async function handleSingleModelChat(body, modelStr, clientRawRequest = null, re
       providerThinking,
       // Per-provider user overrides (custom headers / connect timeout) from settings
       providerOverrides: (chatSettings.providerOverrides || {})[provider] || null,
+      // Per-provider retry policy from settings (null keeps built-in defaults)
+      retryOverrides,
       // Detect source format by endpoint + body
       sourceFormatOverride: request?.url ? detectFormatByEndpoint(new URL(request.url).pathname, body) : null,
       onCredentialsRefreshed: async (newCreds) => {
@@ -357,7 +395,17 @@ async function handleSingleModelChat(body, modelStr, clientRawRequest = null, re
       }
     });
 
-    if (result.success) return result.response;
+    if (result.success) {
+      // Record usage toward per-provider rate/budget counters (fail-open).
+      try {
+        const usage = result.usage || {};
+        const tokens = (usage.prompt_tokens || 0) + (usage.completion_tokens || 0);
+        recordProviderUsage(provider, { tokens, cost: result.cost || 0 });
+      } catch {
+        // fail-open
+      }
+      return result.response;
+    }
 
     // Antigravity 409/429: refresh live quota to get exact resetAt before locking
     let quotaResetMs = null;
@@ -372,9 +420,13 @@ async function handleSingleModelChat(body, modelStr, clientRawRequest = null, re
 
     // Exhausted Antigravity model is blocked only in RAM cache until upstream resetAt.
     // Do not persist a modelLock_* for this path.
-    const shouldFallback = provider === "antigravity" && quotaResetMs
+    const builtinShouldFallback = provider === "antigravity" && quotaResetMs
       ? true
       : (await markAccountUnavailable(credentials.connectionId, result.status, result.error, provider, model, resetsAtMs)).shouldFallback;
+
+    // Honor the user's fallback policy (may disable or widen account rotation).
+    const fallbackPolicy = resolveFallbackPolicy(chatSettings);
+    const shouldFallback = applyFallbackPolicy(builtinShouldFallback, result.status, fallbackPolicy);
 
     if (shouldFallback) {
       log.warn("FALLBACK", `⇄ ACC:${credentials.connectionName} UNAVAILABLE (${result.status}) → NEXT ACCOUNT`);

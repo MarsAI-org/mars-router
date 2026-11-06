@@ -131,7 +131,7 @@ const codex = {
     cfg.model_providers = cfg.model_providers || {};
     // Custom providers ignore auth.json — key must travel as a static header.
     cfg.model_providers["9router"] = {
-      name: "9Router",
+      name: "Mars Router",
       base_url: v1(baseUrl),
       wire_api: "responses",
       http_headers: { Authorization: `Bearer ${apiKey}` },

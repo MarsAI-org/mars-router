@@ -49,7 +49,7 @@ const has9RouterInYml = (content) => {
   return content.includes("9router:") || content.includes("localhost:20128");
 };
 
-// Build standard 9Router provider block for models.yml
+// Build standard Mars Router provider block for models.yml
 const buildOmpProviderYaml = (baseUrl, apiKey) => {
   const normalizedBaseUrl = baseUrl.endsWith("/v1") ? baseUrl : `${baseUrl}/v1`;
   const key = apiKey || "";
@@ -152,7 +152,7 @@ export async function POST(request) {
 
     return NextResponse.json({
       success: true,
-      message: "Oh My Pi settings applied! Run 'omp' and all 9Router models appear under 9router in /model.",
+      message: "Oh My Pi settings applied! Run 'omp' and all Mars Router models appear under 9router in /model.",
       configPath: getOmpModelsYmlPath(),
     });
   } catch (err) {
@@ -174,7 +174,7 @@ export async function DELETE() {
 
     return NextResponse.json({
       success: true,
-      message: "9Router removed from Oh My Pi",
+      message: "Mars Router removed from Oh My Pi",
     });
   } catch (err) {
     return NextResponse.json({ error: { message: err.message } }, { status: 500 });

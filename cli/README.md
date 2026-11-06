@@ -1,4 +1,4 @@
-# 9Router - FREE AI Router & Token Saver
+# Mars Router - FREE AI Router & Token Saver
 
 **Never stop coding. Save 20-40% tokens with RTK + auto-fallback to FREE & cheap AI models.**
 
@@ -16,7 +16,7 @@
 
 ---
 
-## 🤔 Why 9Router?
+## 🤔 Why Mars Router?
 
 **Stop wasting money, tokens and hitting limits:**
 
@@ -25,7 +25,7 @@
 - ❌ Tool outputs (git diff, grep, ls...) burn tokens fast
 - ❌ Expensive APIs ($20-50/month per provider)
 
-**9Router solves this:**
+**Mars Router solves this:**
 
 - ✅ **RTK Token Saver** - Auto-compress tool_result, save 20-40% tokens
 - ✅ **Maximize subscriptions** - Track quota, use every bit before reset
@@ -90,9 +90,9 @@ That's it! Start coding with FREE AI models.
 
 ---
 
-## 🔌 Connect to a Remote 9Router
+## 🔌 Connect to a Remote Mars Router
 
-Already running 9Router on another machine (e.g. a team server on your LAN)? Point this machine's CLI tools at it — no local server is started:
+Already running Mars Router on another machine (e.g. a team server on your LAN)? Point this machine's CLI tools at it — no local server is started:
 
 ```bash
 npx 9router connect http://<server-host>:20128                       # pick tools interactively

@@ -24,7 +24,22 @@ const SPECIALIZED = new Set([
 ]);
 
 // Per-process / per-request values: kimi's random device name, minimax's session UUID.
-const VOLATILE_HEADERS = new Set(["x-msh-device-name", "x-mavis-session-id"]);
+// Also volatile: platform version and package version (changes on every release
+// and environment, breaking the golden snapshot if left literal).
+// Also volatile: CodeBuddy's randomUUID() headers generated per-request.
+const VOLATILE_HEADERS = new Set([
+  "x-msh-device-name",
+  "x-mavis-session-id",
+  "x-mavis-timezone-offset",
+  "x-platform-version",
+  "x-client-version",
+  "x-core-version",
+  "x-msh-version",
+  "x-conversation-id",
+  "x-conversation-message-id",
+  "x-conversation-request-id",
+  "x-request-id",
+]);
 
 // Sanitize header: khử token + field thời gian động (kimi X-Msh-Device-Id) để snapshot ổn định.
 function sanitize(headers) {
@@ -35,6 +50,7 @@ function sanitize(headers) {
       ? v.replace(/Bearer .+/, "Bearer <TOK>")
           .replace(/sk-test-APIKEY|tok-test-ACCESS/g, "<CRED>")
           .replace(/kimi-\d{10,}/g, "kimi-<TS>")
+          .replace(/(Mars Router|9Router)\/\d+\.\d+\.\d+/, "$1/<VERSION>")
       : v;
   }
   return out;

@@ -3,7 +3,7 @@
 ## Problem
 
 OpenCode Go will begin rejecting some requests without an
-`x-opencode-session` header on September 6, 2026. In 9Router v0.5.65,
+`x-opencode-session` header on September 6, 2026. In Mars Router v0.5.65,
 `opencode-go` uses `DefaultExecutor`, whose generic header builder does not add
 that header. The specialized OpenCode Free executor already sends it, but that
 logic does not apply to the paid OpenCode Go provider or its three transports.

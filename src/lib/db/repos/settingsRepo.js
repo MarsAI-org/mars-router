@@ -67,6 +67,12 @@ const DEFAULT_SETTINGS = {
   pxpipeTimeoutMs: 15000,
   // Per-provider user header overrides applied at dispatch: { [providerId]: { headers: {..} } }
   providerOverrides: {},
+  // Per-provider rate limit & budget. Shape: { [providerId]: { enabled, rpm, tpm, dailyRequests, dailyTokens, dailyCost, monthlyCost, enforce } }
+  providerLimits: {},
+  // Flexible retry policy override. Shape: { enabled, default: { [status]: {attempts,delayMs} }, byProvider: { [provider]: { [status]: {attempts,delayMs} } } }
+  retryPolicy: { enabled: false },
+  // Flexible fallback policy. Shape: { accountFallbackEnabled, comboFallbackEnabled, extraFallbackStatuses: [] }
+  fallbackPolicy: {},
 };
 
 async function readRaw() {

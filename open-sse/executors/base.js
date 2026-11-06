@@ -97,14 +97,16 @@ export class BaseExecutor {
     return { status: response.status, message: bodyText || `HTTP ${response.status}` };
   }
 
-  async execute({ model, body, stream, credentials, signal, log, proxyOptions = null, providerOverrides = null, directFetch = null }) {
+  async execute({ model, body, stream, credentials, signal, log, proxyOptions = null, providerOverrides = null, retryOverrides = null, directFetch = null }) {
     const fallbackCount = this.getFallbackCount();
     let lastError = null;
     let lastStatus = 0;
     const retryAttemptsByUrl = {};
 
-    // Merge default retry config with provider-specific config
-    const retryConfig = { ...DEFAULT_RETRY_CONFIG, ...this.config.retry };
+    // Merge default retry config with provider-specific config, then allow a
+    // per-call override (resolved from user settings in chatCore). The override
+    // is per-call, never mutating the shared executor instance.
+    const retryConfig = { ...DEFAULT_RETRY_CONFIG, ...this.config.retry, ...(retryOverrides || {}) };
 
     // Schedule retry via retryConfig[statusKey]. Returns true when caller should `urlIndex--; continue`
     // response (optional) lets a subclass hook compute a dynamic delay (e.g. antigravity Retry-After).

@@ -1,6 +1,6 @@
-# 9Router — Agent Skills
+# Mars Router — Agent Skills
 
-Drop-in skills for any AI agent (Claude, Cursor, ChatGPT, custom SDK). Just **copy a link** below and paste it to your AI — it will fetch the skill and use 9Router for you.
+Drop-in skills for any AI agent (Claude, Cursor, ChatGPT, custom SDK). Just **copy a link** below and paste it to your AI — it will fetch the skill and use Mars Router for you.
 
 > Tip: start with the **9router** entry skill — it covers setup and links to all capability skills.
 

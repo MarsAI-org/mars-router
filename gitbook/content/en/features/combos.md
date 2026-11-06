@@ -6,7 +6,7 @@ Create custom model combinations with automatic fallback. Combos let you define 
 
 ## What Are Combos?
 
-Combos are **custom fallback chains** that you create in the dashboard. Instead of using a single model, you define a sequence of models that 9Router tries in order.
+Combos are **custom fallback chains** that you create in the dashboard. Instead of using a single model, you define a sequence of models that Mars Router tries in order.
 
 **Example:**
 ```
@@ -22,7 +22,7 @@ Models:
 Model: premium-coding
 ```
 
-9Router automatically tries each model in sequence until one succeeds.
+Mars Router automatically tries each model in sequence until one succeeds.
 
 ---
 
@@ -123,14 +123,14 @@ Cursor/Cline/Any tool:
 On **Dashboard → Combos**, you can choose how models within each combo are selected for incoming requests:
 
 ### 1. Fallback (Default)
-Tries models sequentially in the configured order. The first model is always called first; if it returns a rate limit (429) or transient error (502/503/504), 9Router automatically falls back to the next model in the chain.
+Tries models sequentially in the configured order. The first model is always called first; if it returns a rate limit (429) or transient error (502/503/504), Mars Router automatically falls back to the next model in the chain.
 
 ### 2. Round Robin
 Rotates models across incoming requests to distribute load and prevent exhausting a single model's quota. You can configure a sticky limit (calls per model before rotating).
 
 ### 3. Smart Router (System One)
 Uses a **System One decision model** (configured under **Media Providers → System One**) to evaluate user prompts and dynamically pick the optimal model before generation begins.
-- **Fail-Open**: If the System One model is unreachable or times out (default 8s), 9Router safely falls back to standard sequential order.
+- **Fail-Open**: If the System One model is unreachable or times out (default 8s), Mars Router safely falls back to standard sequential order.
 - **Session Policies (Prompt Cache Retention)**:
   - **Smart Switch (Default, adaptive ≥80% confidence)**: Remembers the chosen model for the session to keep upstream prompt cache warm (Claude Prompt Cache, DeepSeek KV-cache, Gemini Implicit Cache). If the user's task drastically changes on a subsequent turn and System One is highly confident (≥80%), the session automatically switches to the new optimal model.
   - **Strict Lock (1 task = 1 session)**: Evaluates System One once on the first turn, then locks that model for the entire session. Adds **0 ms latency** and **0 extra router calls** on follow-up turns, guaranteeing 100% prompt cache reuse.
@@ -145,17 +145,17 @@ Queries all panel models in parallel, then uses a Judge model to synthesize one 
 
 ## Cursor / Claude Default Combos
 
-Cursor and Claude Code send **unprefixed** model IDs (`composer-2.5`, `claude-opus-5`, `opus`), while 9Router routes with provider prefixes (`cu/composer-2.5`, `cc/claude-opus-5`). Default combo generators bridge that gap.
+Cursor and Claude Code send **unprefixed** model IDs (`composer-2.5`, `claude-opus-5`, `opus`), while Mars Router routes with provider prefixes (`cu/composer-2.5`, `cc/claude-opus-5`). Default combo generators bridge that gap.
 
 On **Dashboard → Combos**:
 
 1. Click **Cursor Default** or **Claude Default**
 2. Confirm the preview (new vs already-existing names)
-3. 9Router creates one combo per client model ID, seeded with the matching prefixed route
+3. Mars Router creates one combo per client model ID, seeded with the matching prefixed route
 
 **Examples:**
 
-| Combo name (what the client sends) | Seeded model (what 9Router routes) |
+| Combo name (what the client sends) | Seeded model (what Mars Router routes) |
 |------------------------------------|------------------------------------|
 | `composer-2.5` | `cu/composer-2.5` |
 | `cursor-grok-4.6-high-fast` | `cu/cursor-grok-4.6-high-fast` |
@@ -164,7 +164,7 @@ On **Dashboard → Combos**:
 
 Existing combo names are **skipped** (not overwritten). Edit any generated combo afterward to add fallbacks. Click the button again later to pick up new catalog IDs.
 
-> These combos help when Cursor/Claude already talk to 9Router (`/v1` or `ANTHROPIC_BASE_URL`) and send their native model IDs. They do not change Cursor’s built-in Models tab by themselves.
+> These combos help when Cursor/Claude already talk to Mars Router (`/v1` or `ANTHROPIC_BASE_URL`) and send their native model IDs. They do not change Cursor’s built-in Models tab by themselves.
 
 ---
 
@@ -530,7 +530,7 @@ Dashboard → Combos → Edit → Budget:
   Monthly limit: $50
 ```
 
-When limit reached, 9Router skips paid models and uses free tier only.
+When limit reached, Mars Router skips paid models and uses free tier only.
 
 ### Enable/Disable Models in Combo
 

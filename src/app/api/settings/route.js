@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getSettings, updateSettings } from "@/lib/localDb";
 import { applyOutboundProxyEnv } from "@/lib/network/outboundProxy";
 import { resetComboRotation } from "open-sse/services/combo.js";
+import { sanitizeProviderLimits, sanitizeRetryPolicy, sanitizeFallbackPolicy } from "@/lib/settingsSanitizers.js";
 import bcrypt from "bcryptjs";
 
 export const dynamic = "force-dynamic";
@@ -76,7 +77,30 @@ export async function PATCH(request) {
       }
     }
 
+    // Sanitize the flexible routing-control settings so a malformed payload
+    // can never corrupt the stored settings object (defense-in-depth, CWE-915).
+    if (Object.prototype.hasOwnProperty.call(body, "providerLimits")) {
+      body.providerLimits = sanitizeProviderLimits(body.providerLimits);
+    }
+    if (Object.prototype.hasOwnProperty.call(body, "retryPolicy")) {
+      body.retryPolicy = sanitizeRetryPolicy(body.retryPolicy);
+    }
+    if (Object.prototype.hasOwnProperty.call(body, "fallbackPolicy")) {
+      body.fallbackPolicy = sanitizeFallbackPolicy(body.fallbackPolicy);
+    }
+
     const settings = await updateSettings(body);
+
+    // Reset in-memory limit counters when limits change so the new config
+    // takes effect immediately instead of waiting for the window to roll over.
+    if (Object.prototype.hasOwnProperty.call(body, "providerLimits")) {
+      try {
+        const { resetProviderLimitState } = await import("@/lib/limits/engine.js");
+        resetProviderLimitState();
+      } catch {
+        // fail-open
+      }
+    }
 
     // Apply outbound proxy settings immediately (no restart required)
     if (

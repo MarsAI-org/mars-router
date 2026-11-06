@@ -1,0 +1,93 @@
+import { describe, expect, it } from "vitest";
+import {
+  sanitizeProviderLimits,
+  sanitizeRetryPolicy,
+  sanitizeFallbackPolicy,
+  toNonNegativeNumber,
+} from "../../src/lib/settingsSanitizers.js";
+
+describe("sanitizeProviderLimits", () => {
+  it("returns {} for non-objects", () => {
+    expect(sanitizeProviderLimits(null)).toEqual({});
+    expect(sanitizeProviderLimits([])).toEqual({});
+    expect(sanitizeProviderLimits("x")).toEqual({});
+  });
+
+  it("coerces numbers and drops garbage", () => {
+    const out = sanitizeProviderLimits({
+      claude: { enabled: true, rpm: "60", tpm: -5, dailyCost: "abc", enforce: false },
+    });
+    expect(out.claude).toEqual({
+      enabled: true,
+      enforce: false,
+      rpm: 60,
+      tpm: 0,
+      dailyRequests: 0,
+      dailyTokens: 0,
+      dailyCost: 0,
+      monthlyCost: 0,
+    });
+  });
+
+  it("defaults enforce to true and enabled to false", () => {
+    const out = sanitizeProviderLimits({ openai: { rpm: 1 } });
+    expect(out.openai.enabled).toBe(false);
+    expect(out.openai.enforce).toBe(true);
+  });
+
+  it("skips non-object entries", () => {
+    expect(sanitizeProviderLimits({ bad: 5, good: { rpm: 1 } })).toEqual({
+      good: expect.objectContaining({ rpm: 1 }),
+    });
+  });
+});
+
+describe("sanitizeRetryPolicy", () => {
+  it("returns disabled for non-objects", () => {
+    expect(sanitizeRetryPolicy(null)).toEqual({ enabled: false });
+  });
+
+  it("keeps only numeric statuses and valid entries", () => {
+    const out = sanitizeRetryPolicy({
+      enabled: true,
+      default: { 502: { attempts: 4, delayMs: 100 }, foo: 1, 503: 3, 504: { attempts: -2 } },
+    });
+    expect(out.enabled).toBe(true);
+    expect(out.default[502]).toEqual({ attempts: 4, delayMs: 100 });
+    expect(out.default[503]).toEqual({ attempts: 3 });
+    expect(out.default[504]).toEqual({ attempts: 0 });
+    expect(out.default.foo).toBeUndefined();
+  });
+
+  it("sanitizes byProvider", () => {
+    const out = sanitizeRetryPolicy({
+      enabled: true,
+      byProvider: { claude: { 429: { attempts: 1, delayMs: 0 } }, bad: [] },
+    });
+    expect(out.byProvider.claude[429]).toEqual({ attempts: 1, delayMs: 0 });
+    expect(out.byProvider.bad).toBeUndefined();
+  });
+});
+
+describe("sanitizeFallbackPolicy", () => {
+  it("filters invalid status codes and dedupes", () => {
+    const out = sanitizeFallbackPolicy({ extraFallbackStatuses: [500, 500, 99, 600, "502", "x"] });
+    expect(out.extraFallbackStatuses).toEqual([500, 502]);
+  });
+
+  it("coerces booleans", () => {
+    expect(sanitizeFallbackPolicy({ accountFallbackEnabled: 0 })).toEqual({ accountFallbackEnabled: false });
+  });
+
+  it("returns {} for garbage", () => {
+    expect(sanitizeFallbackPolicy(null)).toEqual({});
+  });
+});
+
+describe("toNonNegativeNumber", () => {
+  it("clamps negatives and NaN to 0", () => {
+    expect(toNonNegativeNumber(-1)).toBe(0);
+    expect(toNonNegativeNumber("abc")).toBe(0);
+    expect(toNonNegativeNumber("12")).toBe(12);
+  });
+});

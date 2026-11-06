@@ -1,6 +1,6 @@
 # Instalación
 
-Guía detallada de instalación de 9Router con consejos de solución de problemas.
+Guía detallada de instalación de Mars Router con consejos de solución de problemas.
 
 ---
 
@@ -31,13 +31,13 @@ npm --version
 
 ### Método 1: Instalación global (Recomendado)
 
-Instala 9Router globalmente para usar desde cualquier lugar:
+Instala Mars Router globalmente para usar desde cualquier lugar:
 
 ```bash
 npm install -g 9router
 ```
 
-**Iniciar 9Router:**
+**Iniciar Mars Router:**
 
 ```bash
 9router
@@ -58,7 +58,7 @@ cd my-9router
 npm install 9router
 ```
 
-**Iniciar 9Router:**
+**Iniciar Mars Router:**
 
 ```bash
 npx 9router
@@ -345,7 +345,7 @@ Dashboard → Provider → Disconnect → Reconnect
 
 ### Uso alto de memoria
 
-**Problema:** 9Router usa demasiada RAM
+**Problema:** Mars Router usa demasiada RAM
 
 **Solución: Reinicia el servidor**
 

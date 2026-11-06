@@ -149,7 +149,7 @@ function assertRequiredApiArtifacts(cliAppDir) {
 }
 
 function buildCliPackage() {
-  console.log("📦 Building 9Router CLI package with Next.js...\n");
+  console.log("📦 Building Mars Router CLI package with Next.js...\n");
 
   fs.mkdirSync(buildHomeDir, { recursive: true });
   fs.mkdirSync(path.join(buildHomeDir, "AppData", "Roaming"), { recursive: true });
