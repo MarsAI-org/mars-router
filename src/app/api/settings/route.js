@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getSettings, updateSettings } from "@/lib/localDb";
 import { applyOutboundProxyEnv } from "@/lib/network/outboundProxy";
 import { resetComboRotation } from "open-sse/services/combo.js";
-import { sanitizeProviderLimits, sanitizeRetryPolicy, sanitizeFallbackPolicy, sanitizeAbuseMonitoring } from "@/lib/settingsSanitizers.js";
+import { sanitizeProviderLimits, sanitizeRetryPolicy, sanitizeFallbackPolicy, sanitizeAbuseMonitoring, sanitizePromptInjections, sanitizeModelCatalog } from "@/lib/settingsSanitizers.js";
 import bcrypt from "bcryptjs";
 
 export const dynamic = "force-dynamic";
@@ -93,6 +93,12 @@ export async function PATCH(request) {
     }
     if (Object.prototype.hasOwnProperty.call(body, "abuseMonitoring")) {
       body.abuseMonitoring = sanitizeAbuseMonitoring(body.abuseMonitoring);
+    }
+    if (Object.prototype.hasOwnProperty.call(body, "promptInjections")) {
+      body.promptInjections = sanitizePromptInjections(body.promptInjections);
+    }
+    if (Object.prototype.hasOwnProperty.call(body, "modelCatalog")) {
+      body.modelCatalog = sanitizeModelCatalog(body.modelCatalog);
     }
 
     const settings = await updateSettings(body);

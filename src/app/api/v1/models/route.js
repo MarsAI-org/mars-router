@@ -640,7 +640,16 @@ export async function buildModelsList(kindFilter, options = {}) {
     dedupedModels.push(model);
   }
 
-  return dedupedModels;
+  // Apply operator catalog control (hide/rename/reorder) last, so it always
+  // wins over the resolved list. Fail-open: bad config returns the list as-is.
+  try {
+    const { getSettings } = await import("@/lib/localDb");
+    const { applyCatalogOverrides } = await import("@/lib/modelCatalog.js");
+    const settings = await getSettings();
+    return applyCatalogOverrides(dedupedModels, settings?.modelCatalog);
+  } catch {
+    return dedupedModels;
+  }
 }
 
 /**

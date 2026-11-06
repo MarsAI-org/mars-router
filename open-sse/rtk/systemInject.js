@@ -10,13 +10,13 @@ const SEP = "\n\n";
 
 export function injectSystemPrompt(body, format, prompt) {
   try {
-    if (!body || !prompt) return;
-    if (typeof body !== "object") return;
+    if (!body || !prompt) return false;
+    if (typeof body !== "object") return false;
 
     // Kiro wire shape is unique (conversationState) — handle directly.
     if (isKiroBody(body) || format === FORMATS.KIRO) {
       injectKiroSystem(body, prompt);
-      return;
+      return true;
     }
 
     // Claude/Gemini own a dedicated system field, yet their bodies also carry
@@ -24,38 +24,147 @@ export function injectSystemPrompt(body, format, prompt) {
     // Anthropic rejects a "system" role inside messages[] (no such input role).
     if (format === FORMATS.CLAUDE) {
       injectClaudeSystem(body, prompt);
-      return;
+      return true;
     }
     if (format === FORMATS.GEMINI || format === FORMATS.GEMINI_CLI
       || format === FORMATS.VERTEX || format === FORMATS.ANTIGRAVITY) {
       // Antigravity wraps Gemini shape in body.request → injectGeminiSystem handles it
       injectGeminiSystem(body, prompt);
-      return;
+      return true;
     }
 
     // Dispatch by actual wire shape for OpenAI-shaped formats.
     // instructions string takes precedence; messages[] means Chat; input[] means Responses.
     if (typeof body.instructions === "string") {
       injectInstructionsSystem(body, prompt);
-      return;
+      return true;
     }
     if (Array.isArray(body.messages)) {
       injectChatSystem(body, prompt);
-      return;
+      return true;
     }
     if (Array.isArray(body.input)) {
       // Responses input[]: empty array already normalized elsewhere; string stays untouched here
       injectResponsesInputSystem(body, prompt);
-      return;
+      return true;
     }
     if (typeof body.input === "string") {
       // string input must stay untouched
-      return;
+      return false;
     }
 
     // OpenAI-shaped but no array (e.g. empty body) — no-op
+    return false;
   } catch (_) {
     // fail-open
+    return false;
+  }
+}
+
+/**
+ * Prepend an instruction to the FRONT of the system message. Where the format
+ * has no ordered system field (or a wire shape we do not special-case), this
+ * falls back to the append injector so the instruction still reaches the model.
+ * @returns {boolean} whether an injection happened
+ */
+export function prependSystemPrompt(body, format, prompt) {
+  try {
+    if (!body || !prompt || typeof body !== "object") return false;
+
+    if (format === FORMATS.CLAUDE && !isKiroBody(body)) {
+      return prependClaudeSystem(body, prompt);
+    }
+    if (typeof body.instructions === "string") {
+      if (hasPrompt(body.instructions, prompt)) return false;
+      body.instructions = body.instructions ? `${prompt}${SEP}${body.instructions}` : prompt;
+      return true;
+    }
+    if (Array.isArray(body.messages)) {
+      return prependChatSystem(body, prompt);
+    }
+    if (Array.isArray(body.input)) {
+      return prependResponsesInputSystem(body, prompt);
+    }
+    // Fallback: formats without an ordered system slot (Gemini/Kiro/…) use append.
+    return injectSystemPrompt(body, format, prompt);
+  } catch (_) {
+    return false;
+  }
+}
+
+function prependClaudeSystem(body, prompt) {
+  try {
+    const sys = body.system;
+    if (typeof sys === "string") {
+      if (hasPrompt(sys, prompt)) return false;
+      body.system = sys ? `${prompt}${SEP}${sys}` : prompt;
+      return true;
+    }
+    if (Array.isArray(sys)) {
+      if (sys.some((b) => b && b.text === prompt)) return false;
+      sys.unshift({ type: CLAUDE_BLOCK.TEXT, text: prompt });
+      return true;
+    }
+    body.system = prompt;
+    return true;
+  } catch (_) {
+    return false;
+  }
+}
+
+function prependChatSystem(body, prompt) {
+  try {
+    const arr = body.messages;
+    if (!Array.isArray(arr)) return false;
+    if (containsPromptInMessages(arr, prompt)) return false;
+    let idx = -1;
+    try { idx = arr.findIndex((m) => m && (m.role === ROLE.SYSTEM || m.role === ROLE.DEVELOPER)); } catch (_) { return false; }
+    if (idx >= 0) {
+      const msg = arr[idx];
+      const c = msg.content;
+      if (typeof c === "string") {
+        msg.content = c ? `${prompt}${SEP}${c}` : prompt;
+        return true;
+      }
+      if (Array.isArray(c)) {
+        c.unshift({ type: OPENAI_BLOCK.TEXT, text: prompt });
+        return true;
+      }
+      msg.content = prompt;
+      return true;
+    }
+    arr.unshift({ role: ROLE.SYSTEM, content: prompt });
+    return true;
+  } catch (_) {
+    return false;
+  }
+}
+
+function prependResponsesInputSystem(body, prompt) {
+  try {
+    const arr = body.input;
+    if (!Array.isArray(arr)) return false;
+    if (containsPromptInResponsesInput(arr, prompt)) return false;
+    let idx = -1;
+    try { idx = arr.findIndex((m) => m && m.type === RESPONSES_ITEM.MESSAGE && (m.role === ROLE.SYSTEM || m.role === ROLE.DEVELOPER)); } catch (_) { return false; }
+    if (idx >= 0) {
+      const msg = arr[idx];
+      const c = msg.content;
+      if (typeof c === "string") {
+        msg.content = c ? `${prompt}${SEP}${c}` : prompt;
+        return true;
+      }
+      if (Array.isArray(c)) {
+        c.unshift({ type: RESPONSES_ITEM.INPUT_TEXT, text: prompt });
+        return true;
+      }
+      msg.content = [{ type: RESPONSES_ITEM.INPUT_TEXT, text: prompt }];
+      return true;
+    }
+    arr.unshift({ type: RESPONSES_ITEM.MESSAGE, role: ROLE.SYSTEM, content: [{ type: RESPONSES_ITEM.INPUT_TEXT, text: prompt }] });
+    return true;
+  } catch (_) {
+    return false;
   }
 }
 

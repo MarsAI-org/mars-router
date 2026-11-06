@@ -543,6 +543,8 @@ a third party under a provider named "Self-hosted".
 | 🚦 **Per-Provider Limits & Budget**                                               | Cap RPM/TPM, daily/monthly tokens and cost per provider                                  | Bound spend and stop runaway loops                |
 | 🔁 **Flexible Retry & Fallback Policy**                                           | Tune retry attempts/delay per status per provider; gate account/combo rotation           | Match your reliability and cost tradeoff          |
 | 💳 **Reseller Tiers & Billing**                                                   | Plans, per-key subscriptions, quota enforcement, MRR/margin analytics, abuse log         | Sell API access with metered plans                 |
+| 💉 **Prompt Injection**                                                           | Operator instructions injected into the system message — global or per-combo             | Enforce tone, safety, persona without touching clients |
+| 📚 **Model Catalog Control**                                                      | Choose what `/v1/models` publishes: hide entries, rename, reorder                        | Curate the catalog your customers see              |
 | 📊 **Real-Time Quota Tracking**                                                   | Live token count + reset countdown                                                       | Maximize subscription value                       |
 | 🔄 **Format Translation**                                                         | OpenAI ↔ Claude ↔ Gemini ↔ Cursor ↔ Kiro ↔ Vertex                                        | Works with any CLI tool                           |
 | 👥 **Multi-Account Support**                                                      | Multiple accounts per provider                                                           | Load balancing + redundancy                       |
@@ -726,6 +728,41 @@ curl -X POST localhost:20128/api/plans -H 'Content-Type: application/json' \
 curl -X POST localhost:20128/api/subscriptions -H 'Content-Type: application/json' \
   -d '{"keyId":"<key-id>","planId":"<plan-id>","status":"active"}'
 ```
+
+### 💉 Prompt Injection
+
+Operator-authored instructions are merged into the system message of every
+request, either **globally** or scoped to a **combo**. Use it to enforce tone,
+answer language, safety rules or a persona without changing any client.
+Manage it at **Dashboard → Prompt Injection** or via `PUT /api/prompt-injections`.
+
+```json
+[
+  { "name": "Reply language", "text": "Always answer in Indonesian.", "enabled": true, "scope": "global", "position": "append", "priority": 0 },
+  { "name": "Coding style", "text": "Prefer stdlib and minimal diffs.", "enabled": true, "scope": "combo", "comboName": "coding", "position": "prepend", "priority": 10 }
+]
+```
+
+- `position: "prepend"` places the instruction before the existing system text;
+  `"append"` adds it after. Prepend group runs first (by `priority`), then append.
+- Injections are idempotent per request; duplicates are never added twice.
+
+### 📚 Model Catalog Control
+
+Curate exactly what `GET /v1/models` publishes — hide models you do not want
+customers to see, give them friendlier display names, or pin an order. Manage it
+at **Dashboard → Model Catalog** or via `PUT /api/model-catalog`.
+
+```json
+{
+  "hidden": ["kr/internal-preview"],
+  "displayNames": { "glm/glm-5": "GLM 5 (cheap)" },
+  "order": ["cc/claude-opus", "kr/claude-sonnet"]
+}
+```
+
+- `displayNames` sets the entry's `name` while the routable `id` stays the same.
+- `order` moves the listed ids to the front in that order; the rest follow.
 
 ### 📊 Real-Time Quota Tracking
 

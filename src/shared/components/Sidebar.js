@@ -22,6 +22,8 @@ const navItems = [
   { href: "/dashboard/providers", label: "Providers", icon: "dns" },
   // { href: "/dashboard/basic-chat", label: "Basic Chat", icon: "chat" }, // Hidden
   { href: "/dashboard/combos", label: "Combo & Vision Adapter", icon: "layers" },
+  { href: "/dashboard/model-catalog", label: "Model Catalog", icon: "list_alt" },
+  { href: "/dashboard/prompt-injection", label: "Prompt Injection", icon: "syringe" },
   { href: "/dashboard/usage", label: "Usage", icon: "bar_chart" },
   { href: "/dashboard/quota", label: "Quota Tracker", icon: "data_usage" },
   { href: "/dashboard/billing", label: "Billing & Sales", icon: "payments" },

@@ -4,6 +4,8 @@ import {
   sanitizeRetryPolicy,
   sanitizeFallbackPolicy,
   sanitizeAbuseMonitoring,
+  sanitizePromptInjections,
+  sanitizeModelCatalog,
   toNonNegativeNumber,
 } from "../../src/lib/settingsSanitizers.js";
 
@@ -106,5 +108,49 @@ describe("sanitizeAbuseMonitoring", () => {
     expect(out.rpmThreshold).toBe(50);
     expect(out.multiIpThreshold).toBe(0);
     expect(out.errorBurstThreshold).toBe(20);
+  });
+});
+
+describe("sanitizePromptInjections", () => {
+  it("returns [] for non-arrays", () => {
+    expect(sanitizePromptInjections(null)).toEqual([]);
+    expect(sanitizePromptInjections({})).toEqual([]);
+  });
+
+  it("drops empty-text and combo-scoped entries without a target", () => {
+    const out = sanitizePromptInjections([
+      { text: "  " },
+      { text: "ok", scope: "combo", comboName: "" },
+      { text: "ok2", scope: "combo", comboName: "Coding" },
+    ]);
+    expect(out).toHaveLength(1);
+    expect(out[0].text).toBe("ok2");
+    expect(out[0].comboName).toBe("Coding");
+  });
+
+  it("defaults scope/position and coerces enabled", () => {
+    const [e] = sanitizePromptInjections([{ text: "x" }]);
+    expect(e.scope).toBe("global");
+    expect(e.position).toBe("append");
+    expect(e.enabled).toBe(false);
+  });
+
+  it("caps the text length", () => {
+    const big = "a".repeat(50000);
+    const [e] = sanitizePromptInjections([{ text: big }]);
+    expect(e.text.length).toBe(20000);
+  });
+});
+
+describe("sanitizeModelCatalog", () => {
+  it("returns defaults for garbage", () => {
+    expect(sanitizeModelCatalog(null)).toEqual({ hidden: [], displayNames: {}, order: [] });
+  });
+
+  it("trims and de-dupes", () => {
+    const c = sanitizeModelCatalog({ hidden: [" a ", "a"], order: ["x", "x"], displayNames: { " cc/m ": "N", bad: 1 } });
+    expect(c.hidden).toEqual(["a"]);
+    expect(c.order).toEqual(["x"]);
+    expect(c.displayNames).toEqual({ "cc/m": "N" });
   });
 });

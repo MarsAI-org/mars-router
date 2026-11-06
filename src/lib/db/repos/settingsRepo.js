@@ -78,6 +78,12 @@ const DEFAULT_SETTINGS = {
   billingEnforcementEnabled: false,
   // Anti-abuse monitoring. Shape: { enabled, rpmThreshold, multiIpThreshold, errorBurstThreshold }
   abuseMonitoring: { enabled: false, rpmThreshold: 300, multiIpThreshold: 5, errorBurstThreshold: 20 },
+  // Operator prompt injections appended/prepended to the system message.
+  // Array of { id, name, text, enabled, scope: "global"|"combo", comboName, position: "prepend"|"append", priority }.
+  promptInjections: [],
+  // /v1/models catalog control: hide ids, rename, and order the published list.
+  // Shape: { hidden: string[], displayNames: { [modelId]: string }, order: string[] }
+  modelCatalog: { hidden: [], displayNames: {}, order: [] },
 };
 
 async function readRaw() {

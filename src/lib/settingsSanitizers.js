@@ -85,3 +85,56 @@ export function sanitizeAbuseMonitoring(input) {
   }
   return out;
 }
+
+const PROMPT_SCOPES = ["global", "combo"];
+const PROMPT_POSITIONS = ["prepend", "append"];
+const PROMPT_MAX_ENTRIES = 100;
+const PROMPT_MAX_TEXT = 20000;
+
+// Operator prompt injections. Keeps only well-formed, bounded entries.
+export function sanitizePromptInjections(input) {
+  if (!Array.isArray(input)) return [];
+  const out = [];
+  for (const entry of input.slice(0, PROMPT_MAX_ENTRIES)) {
+    if (!entry || typeof entry !== "object" || Array.isArray(entry)) continue;
+    const text = typeof entry.text === "string" ? entry.text.slice(0, PROMPT_MAX_TEXT) : "";
+    if (!text.trim()) continue;
+    const scope = PROMPT_SCOPES.includes(entry.scope) ? entry.scope : "global";
+    const position = PROMPT_POSITIONS.includes(entry.position) ? entry.position : "append";
+    const name = typeof entry.name === "string" ? entry.name.slice(0, 200) : "";
+    const comboName = typeof entry.comboName === "string" ? entry.comboName.slice(0, 200) : "";
+    if (scope === "combo" && !comboName.trim()) continue; // a combo scope needs a target
+    out.push({
+      id: typeof entry.id === "string" && entry.id ? entry.id : undefined,
+      name,
+      text,
+      enabled: entry.enabled === true,
+      scope,
+      comboName,
+      position,
+      priority: Number.isFinite(Number(entry.priority)) ? Math.floor(Number(entry.priority)) : 0,
+    });
+  }
+  return out;
+}
+
+// /v1/models catalog control.
+export function sanitizeModelCatalog(input) {
+  const defaults = { hidden: [], displayNames: {}, order: [] };
+  if (!input || typeof input !== "object" || Array.isArray(input)) return defaults;
+  const hidden = Array.isArray(input.hidden)
+    ? [...new Set(input.hidden.filter((x) => typeof x === "string" && x.trim()).map((x) => x.trim()))]
+    : [];
+  const order = Array.isArray(input.order)
+    ? [...new Set(input.order.filter((x) => typeof x === "string" && x.trim()).map((x) => x.trim()))]
+    : [];
+  const displayNames = {};
+  if (input.displayNames && typeof input.displayNames === "object" && !Array.isArray(input.displayNames)) {
+    for (const [k, v] of Object.entries(input.displayNames)) {
+      if (typeof k === "string" && typeof v === "string" && k.trim() && v.trim()) {
+        displayNames[k.trim()] = v.trim().slice(0, 256);
+      }
+    }
+  }
+  return { hidden, displayNames, order };
+}

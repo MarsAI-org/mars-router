@@ -149,7 +149,7 @@ export async function handleChat(request, clientRawRequest = null) {
       body,
       models: augmentedModels,
       handleSingleModel: withCapacityAdapterStripping(
-        (b, m) => handleSingleModelChat(b, m, clientRawRequest, request, apiKey),
+        (b, m) => handleSingleModelChat(b, m, clientRawRequest, request, apiKey, null, modelStr),
         adapterAdded
       ),
       log,
@@ -181,7 +181,7 @@ export async function handleChat(request, clientRawRequest = null) {
       body,
       models: soloAugmented,
       handleSingleModel: withCapacityAdapterStripping(
-        (b, m) => handleSingleModelChat(b, m, clientRawRequest, request, apiKey),
+        (b, m) => handleSingleModelChat(b, m, clientRawRequest, request, apiKey, null, modelStr),
         adapterAdded
       ),
       log,
@@ -196,7 +196,7 @@ export async function handleChat(request, clientRawRequest = null) {
 /**
  * Handle single model chat request
  */
-async function handleSingleModelChat(body, modelStr, clientRawRequest = null, request = null, apiKey = null, requestedModel = null) {
+async function handleSingleModelChat(body, modelStr, clientRawRequest = null, request = null, apiKey = null, requestedModel = null, activeCombo = null) {
   const modelInfo = await getModelInfo(modelStr);
 
   // If provider is null, this might be a combo name - check and handle
@@ -226,7 +226,7 @@ async function handleSingleModelChat(body, modelStr, clientRawRequest = null, re
               const { tools, tool_choice, ...cleanBody } = clientRawRequest.body || {};
               cleanRawReq = { ...clientRawRequest, body: cleanBody };
             }
-            return handleSingleModelChat(b, m, cleanRawReq, request, apiKey);
+            return handleSingleModelChat(b, m, cleanRawReq, request, apiKey, null, modelStr);
           },
           log,
           comboName: modelStr,
@@ -244,7 +244,7 @@ async function handleSingleModelChat(body, modelStr, clientRawRequest = null, re
         body,
         models: augmentedModels,
         handleSingleModel: withCapacityAdapterStripping(
-          (b, m) => handleSingleModelChat(b, m, clientRawRequest, request, apiKey),
+          (b, m) => handleSingleModelChat(b, m, clientRawRequest, request, apiKey, null, modelStr),
           adapterAdded
         ),
         log,
@@ -324,6 +324,11 @@ async function handleSingleModelChat(body, modelStr, clientRawRequest = null, re
     ? resolveRetryConfig(provider, null, limitSettings)
     : null;
 
+  // Prompt injections (global + this combo's) resolved from settings.
+  const promptInjections = Array.isArray(limitSettings?.promptInjections)
+    ? limitSettings.promptInjections
+    : null;
+
   // Extract userAgent from request
   const userAgent = request?.headers?.get("user-agent") || "";
 
@@ -400,6 +405,9 @@ async function handleSingleModelChat(body, modelStr, clientRawRequest = null, re
       providerOverrides: (chatSettings.providerOverrides || {})[provider] || null,
       // Per-provider retry policy from settings (null keeps built-in defaults)
       retryOverrides,
+      // Operator prompt injections (global + active combo)
+      promptInjections,
+      comboName: activeCombo,
       // Detect source format by endpoint + body
       sourceFormatOverride: request?.url ? detectFormatByEndpoint(new URL(request.url).pathname, body) : null,
       onCredentialsRefreshed: async (newCreds) => {

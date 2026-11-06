@@ -1,3 +1,12 @@
+# v0.5.115 (2026-11-07)
+
+## Features
+- **Prompt Injection**: operator-authored instructions merged into the system message of every request, scoped **globally** or to a **combo**, with `prepend`/`append` position and priority. Reuses the shared, idempotent system injector across all wire formats (OpenAI chat/instructions/Responses, Claude, Gemini, Kiro). Managed at Dashboard → Prompt Injection or `PUT /api/prompt-injections`; validated + bounded on save.
+- **System injector**: `prependSystemPrompt()` added alongside `injectSystemPrompt()`, and both now return whether an injection happened.
+- **Model Catalog control**: choose exactly what `GET /v1/models` publishes — hide entries, set display names (routing id unchanged), and pin an order. Managed at Dashboard → Model Catalog or `PUT /api/model-catalog`; applied last so it always wins over the resolved list. Fail-open.
+- **Dashboard**: new **Prompt Injection** and **Model Catalog** pages with sidebar entries.
+- **Settings API**: sanitize `promptInjections` and `modelCatalog` on `PATCH /api/settings`.
+
 # v0.5.114 (2026-11-07)
 
 ## Features
