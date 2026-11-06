@@ -6,6 +6,7 @@ import {
   sanitizeAbuseMonitoring,
   sanitizePromptInjections,
   sanitizeModelCatalog,
+  sanitizeUptimeMonitor,
   toNonNegativeNumber,
 } from "../../src/lib/settingsSanitizers.js";
 
@@ -152,5 +153,21 @@ describe("sanitizeModelCatalog", () => {
     expect(c.hidden).toEqual(["a"]);
     expect(c.order).toEqual(["x"]);
     expect(c.displayNames).toEqual({ "cc/m": "N" });
+  });
+});
+
+describe("sanitizeUptimeMonitor", () => {
+  it("returns defaults for garbage", () => {
+    expect(sanitizeUptimeMonitor(null)).toEqual({
+      enabled: false, intervalMinutes: 30, kinds: ["llm"], concurrency: 6, retentionDays: 30,
+    });
+  });
+
+  it("clamps concurrency and coerces fields", () => {
+    const out = sanitizeUptimeMonitor({ enabled: true, intervalMinutes: "15", concurrency: 99, kinds: ["llm", "llm", "image"] });
+    expect(out.enabled).toBe(true);
+    expect(out.intervalMinutes).toBe(15);
+    expect(out.concurrency).toBe(20);
+    expect(out.kinds).toEqual(["llm", "image"]);
   });
 });

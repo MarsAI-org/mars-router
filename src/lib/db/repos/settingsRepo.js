@@ -84,6 +84,9 @@ const DEFAULT_SETTINGS = {
   // /v1/models catalog control: hide ids, rename, and order the published list.
   // Shape: { hidden: string[], displayNames: { [modelId]: string }, order: string[] }
   modelCatalog: { hidden: [], displayNames: {}, order: [] },
+  // Uptime monitor: periodic health probes of models/combos.
+  // Shape: { enabled, intervalMinutes, kinds, concurrency, retentionDays }
+  uptimeMonitor: { enabled: false, intervalMinutes: 30, kinds: ["llm"], concurrency: 6, retentionDays: 30 },
 };
 
 async function readRaw() {

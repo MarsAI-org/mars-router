@@ -138,3 +138,19 @@ export function sanitizeModelCatalog(input) {
   }
   return { hidden, displayNames, order };
 }
+
+// Uptime monitor config.
+export function sanitizeUptimeMonitor(input) {
+  const defaults = { enabled: false, intervalMinutes: 30, kinds: ["llm"], concurrency: 6, retentionDays: 30 };
+  if (!input || typeof input !== "object" || Array.isArray(input)) return defaults;
+  const kinds = Array.isArray(input.kinds) && input.kinds.length
+    ? [...new Set(input.kinds.filter((k) => typeof k === "string" && k.trim()).map((k) => k.trim()))]
+    : defaults.kinds;
+  return {
+    enabled: input.enabled === true,
+    intervalMinutes: input.intervalMinutes == null ? defaults.intervalMinutes : Math.max(1, Math.floor(toNonNegativeNumber(input.intervalMinutes)) || defaults.intervalMinutes),
+    kinds,
+    concurrency: input.concurrency == null ? defaults.concurrency : Math.max(1, Math.min(20, Math.floor(toNonNegativeNumber(input.concurrency)) || defaults.concurrency)),
+    retentionDays: input.retentionDays == null ? defaults.retentionDays : Math.max(1, Math.floor(toNonNegativeNumber(input.retentionDays)) || defaults.retentionDays),
+  };
+}

@@ -91,6 +91,12 @@ export {
   countRecentAbuseEvents, clearAbuseEvents,
 } from "./repos/abuseRepo.js";
 
+// Uptime monitoring
+export {
+  recordUptimeCheck, recordUptimeChecks, getUptimeHistory,
+  getUptimeTargets, pruneUptimeChecks, clearUptimeChecks,
+} from "./repos/uptimeRepo.js";
+
 // Export/import full DB
 export async function exportDb() {
   const db = await getAdapter();

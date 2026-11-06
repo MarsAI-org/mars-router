@@ -1,3 +1,11 @@
+# v0.5.116 (2026-11-07)
+
+## Features
+- **Test all models**: `POST /api/models/test-all` probes every model the gateway publishes (bounded concurrency + warm-up token refresh) and returns per-model `{ ok, latencyMs, status, error }`; filterable by kind/provider.
+- **Uptime monitoring**: new `uptimeChecks` table (migration `003-uptime-monitor`, SCHEMA_VERSION 4) records every probe. `GET /api/uptime` returns uptime %, latency (avg/p50/p95), error breakdown and a worst-first target list; `GET /api/uptime/<targetId>` adds a daily sparkline; `POST /api/uptime` runs probes now for a model, a combo or everything; `DELETE /api/uptime` clears history. Pure engine (`src/lib/uptime/engine.js`) is unit-tested and fail-open.
+- **Dashboard**: new **Uptime & Health** page — Run all tests, per-target Test buttons, health badges, latency/uptime detail with sparkline; sidebar entry. Optional periodic monitor config (`settings.uptimeMonitor`).
+- **Settings API**: sanitize `uptimeMonitor` on `PATCH /api/settings`.
+
 # v0.5.115 (2026-11-07)
 
 ## Features

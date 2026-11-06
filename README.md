@@ -545,6 +545,7 @@ a third party under a provider named "Self-hosted".
 | 💳 **Reseller Tiers & Billing**                                                   | Plans, per-key subscriptions, quota enforcement, MRR/margin analytics, abuse log         | Sell API access with metered plans                 |
 | 💉 **Prompt Injection**                                                           | Operator instructions injected into the system message — global or per-combo             | Enforce tone, safety, persona without touching clients |
 | 📚 **Model Catalog Control**                                                      | Choose what `/v1/models` publishes: hide entries, rename, reorder                        | Curate the catalog your customers see              |
+| 🩺 **Test All Models & Uptime**                                                   | One-click health check of every model/combo + availability & latency history             | Prove your API works before customers do           |
 | 📊 **Real-Time Quota Tracking**                                                   | Live token count + reset countdown                                                       | Maximize subscription value                       |
 | 🔄 **Format Translation**                                                         | OpenAI ↔ Claude ↔ Gemini ↔ Cursor ↔ Kiro ↔ Vertex                                        | Works with any CLI tool                           |
 | 👥 **Multi-Account Support**                                                      | Multiple accounts per provider                                                           | Load balancing + redundancy                       |
@@ -763,6 +764,29 @@ at **Dashboard → Model Catalog** or via `PUT /api/model-catalog`.
 
 - `displayNames` sets the entry's `name` while the routable `id` stays the same.
 - `order` moves the listed ids to the front in that order; the rest follow.
+
+### 🩺 Test All Models & Uptime
+
+Prove your endpoint works before customers hit it.
+
+- **Test all models** — `POST /api/models/test-all` probes every model the
+  gateway publishes (bounded concurrency, warm-up token refresh) and returns a
+  per-model `{ ok, latencyMs, status, error }`. Also `POST /api/models/test` for a
+  single model.
+- **Uptime history** — every probe is recorded in `uptimeChecks`. `GET /api/uptime`
+  returns uptime %, latency (avg/p50/p95), error breakdown and a worst-first
+  target list; `GET /api/uptime/<targetId>` adds a daily sparkline. `POST /api/uptime`
+  runs probes now (`{ target: "all" | "model" | "combo", id?, models? }`).
+- **Dashboard → Uptime & Health** ties it together: **Run all tests**, per-target
+  **Test** buttons, health badges and a latency/uptime detail view.
+
+```bash
+# Probe every model + combo and store the results
+curl -X POST localhost:20128/api/uptime -H 'Content-Type: application/json' -d '{"target":"all"}'
+
+# Read the last 7 days of uptime
+curl 'localhost:20128/api/uptime?days=7'
+```
 
 ### 📊 Real-Time Quota Tracking
 

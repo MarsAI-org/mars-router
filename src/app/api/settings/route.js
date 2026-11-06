@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getSettings, updateSettings } from "@/lib/localDb";
 import { applyOutboundProxyEnv } from "@/lib/network/outboundProxy";
 import { resetComboRotation } from "open-sse/services/combo.js";
-import { sanitizeProviderLimits, sanitizeRetryPolicy, sanitizeFallbackPolicy, sanitizeAbuseMonitoring, sanitizePromptInjections, sanitizeModelCatalog } from "@/lib/settingsSanitizers.js";
+import { sanitizeProviderLimits, sanitizeRetryPolicy, sanitizeFallbackPolicy, sanitizeAbuseMonitoring, sanitizePromptInjections, sanitizeModelCatalog, sanitizeUptimeMonitor } from "@/lib/settingsSanitizers.js";
 import bcrypt from "bcryptjs";
 
 export const dynamic = "force-dynamic";
@@ -99,6 +99,9 @@ export async function PATCH(request) {
     }
     if (Object.prototype.hasOwnProperty.call(body, "modelCatalog")) {
       body.modelCatalog = sanitizeModelCatalog(body.modelCatalog);
+    }
+    if (Object.prototype.hasOwnProperty.call(body, "uptimeMonitor")) {
+      body.uptimeMonitor = sanitizeUptimeMonitor(body.uptimeMonitor);
     }
 
     const settings = await updateSettings(body);

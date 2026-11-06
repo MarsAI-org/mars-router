@@ -3,7 +3,7 @@
 // pre-change safety backup in migrate.js: when the stored version is lower,
 // one lightweight DB backup is taken before applying schema changes. Forgetting
 // to bump only skips that backup — it does NOT break the additive auto-sync.
-export const SCHEMA_VERSION = 3;
+export const SCHEMA_VERSION = 4;
 
 export const PRAGMA_SQL = `
 PRAGMA journal_mode = WAL;
@@ -224,6 +224,24 @@ export const TABLES = {
     indexes: [
       "CREATE INDEX IF NOT EXISTS idx_ab_key ON abuseEvents(keyId)",
       "CREATE INDEX IF NOT EXISTS idx_ab_ts ON abuseEvents(createdAt DESC)",
+    ],
+  },
+  // Uptime monitoring: one row per probe (a model or a whole combo).
+  uptimeChecks: {
+    columns: {
+      id: "INTEGER PRIMARY KEY AUTOINCREMENT",
+      target: "TEXT NOT NULL", // "model" | "combo"
+      targetId: "TEXT NOT NULL", // model id ("cc/claude-opus") or combo name
+      provider: "TEXT",
+      ok: "INTEGER NOT NULL DEFAULT 0",
+      latencyMs: "INTEGER DEFAULT 0",
+      status: "INTEGER",
+      error: "TEXT",
+      checkedAt: "TEXT NOT NULL",
+    },
+    indexes: [
+      "CREATE INDEX IF NOT EXISTS idx_uc_target ON uptimeChecks(target, targetId, checkedAt DESC)",
+      "CREATE INDEX IF NOT EXISTS idx_uc_ts ON uptimeChecks(checkedAt DESC)",
     ],
   },
 };
