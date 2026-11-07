@@ -283,8 +283,9 @@ export function createSSEStream(options = {}) {
                 usage = estimated;
                 injectedUsage = true;
               } else if (isFinishChunk && usage) {
-                const buffered = addBufferToUsage(usage);
-                parsed.usage = filterUsageForFormat(buffered, FORMATS.OPENAI);
+                // Pass authoritative upstream usage through unchanged; the buffer
+                // belongs to estimates only (see addBufferToUsage callers).
+                parsed.usage = filterUsageForFormat(usage, FORMATS.OPENAI);
                 output = `data: ${JSON.stringify(parsed)}\n`;
                 injectedUsage = true;
               } else if (idFixed || fieldsInjected || toolCallIdFixed || toolNameRestored) {
@@ -297,6 +298,16 @@ export function createSSEStream(options = {}) {
               // messages) in the SSE stream that would break downstream JSON decoders.
               continue;
             }
+          }
+
+          // The OpenAI SSE terminator must be forwarded exactly once. Upstreams
+          // (and a nested gateway) can send `data: [DONE]` more than once; a
+          // duplicate sentinel confuses strict clients, so drop it after the
+          // first one and remember that we already terminated.
+          const isDoneLine = trimmed.startsWith("data:") && trimmed.slice(5).trim() === "[DONE]";
+          if (isDoneLine) {
+            if (streamDoneSent) continue;
+            streamDoneSent = true;
           }
 
           if (!injectedUsage) {
@@ -442,9 +453,9 @@ export function createSSEStream(options = {}) {
               item.usage = filterUsageForFormat(estimated, sourceFormat); // Filter + already has buffer
               state.usage = estimated;
             } else if (state.finishReason && isFinishChunk && state.usage) {
-              // Add buffer and filter usage for client (but keep original in state.usage for logging)
-              const buffered = addBufferToUsage(state.usage);
-              item.usage = filterUsageForFormat(buffered, sourceFormat);
+              // Authoritative usage is reported as-is; estimates already carry the
+              // buffer, so adding it again would inflate every proxy hop.
+              item.usage = filterUsageForFormat(state.usage, sourceFormat);
             }
 
             const output = formatSSE(item, sourceFormat);

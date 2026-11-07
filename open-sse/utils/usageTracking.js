@@ -17,7 +17,10 @@ export const COLORS = {
   cyan: "\x1b[36m"
 };
 
-// Buffer tokens to prevent context errors
+// Buffer tokens to prevent context errors. Only applied to ESTIMATED usage —
+// authoritative usage reported by the upstream must pass through unchanged, or
+// every proxy hop inflates the count (a nested gateway added the buffer twice:
+// 580 real tokens were reported to the client as 4580).
 const BUFFER_TOKENS = 2000;
 
 // Get HH:MM:SS timestamp

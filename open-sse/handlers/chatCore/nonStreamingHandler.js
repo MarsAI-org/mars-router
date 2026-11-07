@@ -320,7 +320,11 @@ export async function handleNonStreamingResponse({ providerResponse, provider, m
   }
 
   if (translatedResponse?.usage) {
-    translatedResponse.usage = filterUsageForFormat(addBufferToUsage(translatedResponse.usage), sourceFormat);
+    // Authoritative usage is reported verbatim; only estimates get the headroom
+    // buffer (estimateUsage already adds it). Buffering real usage made a nested
+    // gateway count the same 2000 tokens once per hop.
+    const u = translatedResponse.usage;
+    translatedResponse.usage = filterUsageForFormat(u?.estimated ? addBufferToUsage(u) : u, sourceFormat);
   }
 
   // Strip reasoning_content only when content is non-empty.
