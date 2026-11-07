@@ -164,7 +164,7 @@ Consulta la [documentación de seguimiento de cuota](features/quota-tracking.md)
 
 ```
 Cursor Settings → Models → Advanced:
-  OpenAI API Base URL: https://mars-router.com/v1
+  OpenAI API Base URL: https://9router.com/v1
   OpenAI API Key: [desde el dashboard]
   Model: cc/claude-opus-4-5-20251101
 ```
@@ -316,7 +316,7 @@ mars-router --version
 ```
 
 **Cambios disruptivos:**
-- Revisa [CHANGELOG.md](https://github.com/MarsAI-org/mars-router/blob/main/CHANGELOG.md)
+- Revisa [CHANGELOG.md](https://github.com/MarsAI-org/mars-router/blob/master/CHANGELOG.md)
 - Respalda `~/.mars-router` antes de actualizaciones mayores
 - Revisa las guías de migración para versiones mayores
 
@@ -375,13 +375,13 @@ mars-router --version
 - Actualiza la documentación
 - Mantén los commits atómicos y descriptivos
 
-Consulta [CONTRIBUTING.md](https://github.com/MarsAI-org/mars-router/blob/main/CONTRIBUTING.md) para detalles.
+Consulta [CONTRIBUTING.md](https://github.com/MarsAI-org/mars-router/blob/master/CONTRIBUTING.md) para detalles.
 
 ---
 
 ## ¿Necesitas más ayuda?
 
-- **Documentación:** [mars-router.com/docs](https://mars-router.com/docs)
+- **Documentación:** [github.com/MarsAI-org/mars-router](https://github.com/MarsAI-org/mars-router)
 - **GitHub:** [github.com/MarsAI-org/mars-router](https://github.com/MarsAI-org/mars-router)
 - **Issues:** [github.com/MarsAI-org/mars-router/issues](https://github.com/MarsAI-org/mars-router/issues)
 - **Troubleshooting:** [troubleshooting.md](troubleshooting.md)

@@ -13,11 +13,9 @@
     <img src="../public/providers/openclaw.png" alt="OpenClaw" width="80"/>
   </p>
   
-  [![npm](https://img.shields.io/npm/v/mars-router.svg)](https://www.npmjs.com/package/mars-router)
-  [![Downloads](https://img.shields.io/npm/dm/mars-router.svg)](https://www.npmjs.com/package/mars-router)
-  [![License](https://img.shields.io/npm/l/mars-router.svg)](https://github.com/MarsAI-org/mars-router/blob/main/LICENSE)
+  [![License](https://img.shields.io/github/license/MarsAI-org/mars-router)](https://github.com/MarsAI-org/mars-router/blob/master/LICENSE)
   
-  [🚀 เริ่มต้นใช้งาน](#-quick-start) • [💡 ฟีเจอร์](#-key-features) • [📖 การตั้งค่า](#-setup-guide) • [🌐 เว็บไซต์](https://mars-router.com)
+  [🚀 เริ่มต้นใช้งาน](#-quick-start) • [💡 ฟีเจอร์](#-key-features) • [📖 การตั้งค่า](#-setup-guide) • [🌐 เว็บไซต์](https://github.com/MarsAI-org/mars-router)
 </div>
 
 ---
@@ -698,7 +696,7 @@ Authorization: Bearer your-api-key
 
 ## 📧 สนับสนุน
 
-- **เว็บไซต์**: [mars-router.com](https://mars-router.com)
+- **เว็บไซต์**: [Mars Router on GitHub](https://github.com/MarsAI-org/mars-router)
 - **GitHub**: [github.com/MarsAI-org/mars-router](https://github.com/MarsAI-org/mars-router)
 - **Issues**: [github.com/MarsAI-org/mars-router/issues](https://github.com/MarsAI-org/mars-router/issues)
 

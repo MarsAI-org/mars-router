@@ -143,7 +143,7 @@ Model: cc/claude-opus-4-5-20251101
 
 ### Para codificación móvil/remota
 
-- Usa el despliegue en la nube (https://mars-router.com)
+- Usa el despliegue en la nube (https://github.com/MarsAI-org/mars-router)
 - Accede desde iPad, teléfono, donde sea
 - Sin limitaciones de localhost
 - Red edge de Cloudflare (300+ ubicaciones)

@@ -164,7 +164,7 @@ Problemas comunes y soluciones al usar Mars Router.
 4. **Usa el endpoint en la nube:**
    Si localhost no funciona (ej. Cursor IDE):
    ```
-   Endpoint: https://mars-router.com/v1
+   Endpoint: https://9router.com/v1
    ```
 
 ---
@@ -347,5 +347,5 @@ Problemas comunes y soluciones al usar Mars Router.
 ## ¿Necesitas más ayuda?
 
 - **GitHub Issues:** [github.com/MarsAI-org/mars-router/issues](https://github.com/MarsAI-org/mars-router/issues)
-- **Documentación:** [mars-router.com/docs](https://mars-router.com/docs)
+- **Documentación:** [github.com/MarsAI-org/mars-router](https://github.com/MarsAI-org/mars-router)
 - **FAQ:** [faq.md](faq.md)

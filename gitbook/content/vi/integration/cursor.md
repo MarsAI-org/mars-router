@@ -11,7 +11,7 @@ Tích hợp Mars Router với Cursor IDE để định tuyến request AI qua h�
 
 ## ⚠️ Lưu ý Quan trọng
 
-> **Yêu cầu Cloud Endpoint**: Cursor định tuyến request qua server của chính nó và không hỗ trợ endpoint localhost. Bạn phải dùng Mars Router cloud endpoint: `https://mars-router.com`
+> **Yêu cầu Cloud Endpoint**: Cursor định tuyến request qua server của chính nó và không hỗ trợ endpoint localhost. Bạn phải dùng Mars Router cloud endpoint: `https://github.com/MarsAI-org/mars-router`
 
 > **Yêu cầu Cursor Pro**: Tính năng này yêu cầu tài khoản Cursor Pro để dùng custom API endpoint.
 
@@ -33,12 +33,12 @@ Tích hợp Mars Router với Cursor IDE để định tuyến request AI qua h�
 Đặt base URL tới Mars Router cloud endpoint:
 
 ```
-https://mars-router.com
+https://github.com/MarsAI-org/mars-router
 ```
 
 **Các bước:**
 1. Trong cài đặt Models, tìm field **Base URL**
-2. Nhập: `https://mars-router.com`
+2. Nhập: `https://github.com/MarsAI-org/mars-router`
 3. Click **Save**
 
 ### 4. Thêm API Key
@@ -66,7 +66,7 @@ Cursor settings của bạn nên trông như sau:
 
 ```
 OpenAI API: ✓ Enabled
-Base URL: https://mars-router.com
+Base URL: https://github.com/MarsAI-org/mars-router
 API Key: sk-mars-router-xxxxxxxxxxxxx
 Custom Models: gpt-4, claude-opus-4-5, gemini-2.0-flash
 ```
@@ -123,14 +123,14 @@ Bạn có thể dùng bất kỳ model nào đã cấu hình trong Mars Router d
 
 ### Lỗi Connection
 
-1. Xác minh bạn đang dùng cloud endpoint: `https://mars-router.com`
+1. Xác minh bạn đang dùng cloud endpoint: `https://github.com/MarsAI-org/mars-router`
 2. Kiểm tra kết nối internet
 3. Đảm bảo dịch vụ Mars Router cloud đang hoạt động
 4. Thử tắt VPN hoặc proxy nếu đang bật
 
 ### Localhost không hoạt động
 
-> **Nhớ**: Cursor không hỗ trợ endpoint localhost. Bạn phải dùng cloud endpoint `https://mars-router.com`. Nếu cần dùng Mars Router cục bộ, hãy cân nhắc dùng dịch vụ tunneling như ngrok để expose endpoint cục bộ.
+> **Nhớ**: Cursor không hỗ trợ endpoint localhost. Bạn phải dùng cloud endpoint `https://github.com/MarsAI-org/mars-router`. Nếu cần dùng Mars Router cục bộ, hãy cân nhắc dùng dịch vụ tunneling như ngrok để expose endpoint cục bộ.
 
 ## Setup Cloud Endpoint
 

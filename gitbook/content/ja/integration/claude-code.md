@@ -103,7 +103,7 @@ Claude Codeは設定を `~/.claude/settings.json` に保存します。必要に
 localhostの代わりにMars Routerクラウドエンドポイントを使用するには:
 
 ```bash
-export ANTHROPIC_BASE_URL="https://mars-router.com"
+export ANTHROPIC_BASE_URL="https://github.com/MarsAI-org/mars-router"
 ```
 
 Mars RouterクラウドダッシュボードでAPIキーが設定されていることを確認してください。

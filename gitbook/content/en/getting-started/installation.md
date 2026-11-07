@@ -473,6 +473,6 @@ nano ~/.bashrc  # or ~/.zshrc
 
 ## Need Help?
 
-- **Website**: [mars-router.com](https://mars-router.com)
+- **Website**: [Mars Router on GitHub](https://github.com/MarsAI-org/mars-router)
 - **GitHub**: [github.com/MarsAI-org/mars-router](https://github.com/MarsAI-org/mars-router)
 - **Issues**: [github.com/MarsAI-org/mars-router/issues](https://github.com/MarsAI-org/mars-router/issues)

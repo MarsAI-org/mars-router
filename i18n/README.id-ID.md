@@ -7,11 +7,9 @@
 
   **Hubungkan semua tool AI coding (Claude Code, Cursor, Antigravity, Copilot, Codex, Gemini, OpenCode, Cline, OpenClaw...) ke 40+ provider AI dan 100+ model.**
 
-  [![npm](https://img.shields.io/npm/v/mars-router.svg)](https://www.npmjs.com/package/mars-router)
-  [![Downloads](https://img.shields.io/npm/dm/mars-router.svg)](https://www.npmjs.com/package/mars-router)
-  [![License](https://img.shields.io/npm/l/mars-router.svg)](https://github.com/MarsAI-org/mars-router/blob/main/LICENSE)
+  [![License](https://img.shields.io/github/license/MarsAI-org/mars-router)](https://github.com/MarsAI-org/mars-router/blob/master/LICENSE)
 
-  [🚀 Mulai Cepat](#-mulai-cepat) • [💡 Fitur](#-fitur-utama) • [📖 Setup](#-panduan-setup) • [🌐 Website](https://mars-router.com)
+  [🚀 Mulai Cepat](#-mulai-cepat) • [💡 Fitur](#-fitur-utama) • [📖 Setup](#-panduan-setup) • [🌐 Website](https://github.com/MarsAI-org/mars-router)
 
   [🇻🇳 Tiếng Việt](./README.vi.md) • [🇨🇳 中文](./README.zh-CN.md) • [🇯🇵 日本語](./README.ja-JP.md) • [🇮🇩 Bahasa Indonesia](./README.id-ID.md)
 </div>
@@ -938,7 +936,7 @@ Kontribusi sangat diterima!
 
 ## 📄 Lisensi
 
-MIT License — lihat [LICENSE](https://github.com/MarsAI-org/mars-router/blob/main/LICENSE) untuk detailnya.
+MIT License — lihat [LICENSE](https://github.com/MarsAI-org/mars-router/blob/master/LICENSE) untuk detailnya.
 
 ---
 
@@ -946,6 +944,6 @@ MIT License — lihat [LICENSE](https://github.com/MarsAI-org/mars-router/blob/m
 
 **Kalau Mars Router membantumu, kasih ⭐ di [GitHub](https://github.com/MarsAI-org/mars-router)!**
 
-[🌐 Website](https://mars-router.com) • [📦 npm](https://www.npmjs.com/package/mars-router) • [🐛 Laporkan Bug](https://github.com/MarsAI-org/mars-router/issues)
+[🌐 Website](https://github.com/MarsAI-org/mars-router) • [📦 npm](https://www.npmjs.com/package/mars-router) • [🐛 Laporkan Bug](https://github.com/MarsAI-org/mars-router/issues)
 
 </div>

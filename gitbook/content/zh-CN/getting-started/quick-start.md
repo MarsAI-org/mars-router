@@ -242,6 +242,6 @@ CLI 中使用: premium-coding
 
 ## 需要帮助?
 
-- **网站**: [mars-router.com](https://mars-router.com)
+- **网站**: [Mars Router on GitHub](https://github.com/MarsAI-org/mars-router)
 - **GitHub**: [github.com/MarsAI-org/mars-router](https://github.com/MarsAI-org/mars-router)
 - **Issues**: [github.com/MarsAI-org/mars-router/issues](https://github.com/MarsAI-org/mars-router/issues)

@@ -164,7 +164,7 @@
 4. **使用云端 endpoint:**
    如果 localhost 不行(例如 Cursor IDE):
    ```
-   Endpoint: https://mars-router.com/v1
+   Endpoint: https://9router.com/v1
    ```
 
 ---
@@ -347,5 +347,5 @@
 ## 需要更多帮助?
 
 - **GitHub Issues:** [github.com/MarsAI-org/mars-router/issues](https://github.com/MarsAI-org/mars-router/issues)
-- **文档:** [mars-router.com/docs](https://mars-router.com/docs)
+- **文档:** [github.com/MarsAI-org/mars-router](https://github.com/MarsAI-org/mars-router)
 - **常见问题:** [faq.md](faq.md)

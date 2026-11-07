@@ -113,7 +113,7 @@ Si obtienes errores de "modelo no disponible":
 Para usar el endpoint en la nube de Mars Router en lugar de localhost:
 
 ```bash
-export OPENAI_BASE_URL="https://mars-router.com"
+export OPENAI_BASE_URL="https://github.com/MarsAI-org/mars-router"
 ```
 
 Asegúrate de haber configurado tu API key en el dashboard en la nube de Mars Router.

@@ -5,7 +5,7 @@ Integrate Mars Router with Roo AI Assistant to access multiple AI models through
 ## Prerequisites
 
 - Roo AI Assistant installed
-- Mars Router API key from [dashboard](https://mars-router.com/dashboard)
+- Mars Router API key from [dashboard](https://9router.com/dashboard)
 - Mars Router running (local or cloud)
 
 ## Configuration Steps
@@ -28,7 +28,7 @@ API Key: your-api-key-from-dashboard
 
 **For Cloud Mars Router:**
 ```
-Base URL: https://mars-router.com/v1
+Base URL: https://9router.com/v1
 API Key: your-api-key-from-dashboard
 ```
 

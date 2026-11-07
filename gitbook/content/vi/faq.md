@@ -164,7 +164,7 @@ Xem [tài liệu quota tracking](features/quota-tracking.md) để biết chi ti
 
 ```
 Cursor Settings → Models → Advanced:
-  OpenAI API Base URL: https://mars-router.com/v1
+  OpenAI API Base URL: https://9router.com/v1
   OpenAI API Key: [from dashboard]
   Model: cc/claude-opus-4-5-20251101
 ```
@@ -316,7 +316,7 @@ mars-router --version
 ```
 
 **Breaking changes:**
-- Xem [CHANGELOG.md](https://github.com/MarsAI-org/mars-router/blob/main/CHANGELOG.md)
+- Xem [CHANGELOG.md](https://github.com/MarsAI-org/mars-router/blob/master/CHANGELOG.md)
 - Backup `~/.mars-router` trước khi update lớn
 - Xem hướng dẫn migration cho major version
 
@@ -375,13 +375,13 @@ mars-router --version
 - Cập nhật tài liệu
 - Giữ commit nhỏ gọn và mô tả rõ ràng
 
-Xem [CONTRIBUTING.md](https://github.com/MarsAI-org/mars-router/blob/main/CONTRIBUTING.md) để biết chi tiết.
+Xem [CONTRIBUTING.md](https://github.com/MarsAI-org/mars-router/blob/master/CONTRIBUTING.md) để biết chi tiết.
 
 ---
 
 ## Cần trợ giúp thêm?
 
-- **Documentation:** [mars-router.com/docs](https://mars-router.com/docs)
+- **Documentation:** [github.com/MarsAI-org/mars-router](https://github.com/MarsAI-org/mars-router)
 - **GitHub:** [github.com/MarsAI-org/mars-router](https://github.com/MarsAI-org/mars-router)
 - **Issues:** [github.com/MarsAI-org/mars-router/issues](https://github.com/MarsAI-org/mars-router/issues)
 - **Troubleshooting:** [troubleshooting.md](troubleshooting.md)

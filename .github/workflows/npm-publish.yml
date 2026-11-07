@@ -1,0 +1,69 @@
+name: Publish CLI to npm
+
+# Publishes the `mars-router` CLI package (./cli) to npm. Runs on every v* tag
+# (matching the Docker release) or manually. Requires an NPM_TOKEN repository
+# secret with publish access to the `mars-router` package.
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "npm publish --dry-run (no upload)"
+        required: false
+        default: false
+        type: boolean
+
+concurrency:
+  group: npm-publish-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Build and publish mars-router
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: cli
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Ensure the tag matches cli/package.json
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          set -euo pipefail
+          tag="${GITHUB_REF_NAME#v}"
+          pkg="$(node -p "require('./package.json').version")"
+          if [ "$tag" != "$pkg" ]; then
+            echo "::error::tag v$tag does not match cli/package.json version $pkg"
+            exit 1
+          fi
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Build
+        run: npm run build
+
+      - name: Publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          if [ -z "${NODE_AUTH_TOKEN:-}" ]; then
+            echo "::error::NPM_TOKEN secret is not set; cannot publish."
+            exit 1
+          fi
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            npm publish --dry-run
+          else
+            npm publish --access public
+          fi

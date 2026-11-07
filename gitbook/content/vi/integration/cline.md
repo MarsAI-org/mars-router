@@ -34,7 +34,7 @@ http://localhost:20128/v1
 
 **Cho Mars Router cloud:**
 ```
-https://mars-router.com
+https://github.com/MarsAI-org/mars-router
 ```
 
 **Các bước:**
@@ -150,7 +150,7 @@ Bạn có thể dùng bất kỳ model nào đã cấu hình trong Mars Router d
 
 Để dùng Mars Router cloud endpoint thay vì localhost:
 
-1. Trong Cline settings, đặt Base URL: `https://mars-router.com`
+1. Trong Cline settings, đặt Base URL: `https://github.com/MarsAI-org/mars-router`
 2. Đảm bảo bạn đã cấu hình API key trong Mars Router cloud dashboard
 3. Đảm bảo cloud endpoint đang hoạt động và truy cập được
 

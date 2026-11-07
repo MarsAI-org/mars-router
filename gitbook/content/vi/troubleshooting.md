@@ -164,7 +164,7 @@ Các vấn đề và giải pháp phổ biến khi dùng Mars Router.
 4. **Dùng cloud endpoint:**
    Nếu localhost không hoạt động (ví dụ: Cursor IDE):
    ```
-   Endpoint: https://mars-router.com/v1
+   Endpoint: https://9router.com/v1
    ```
 
 ---
@@ -347,5 +347,5 @@ Các vấn đề và giải pháp phổ biến khi dùng Mars Router.
 ## Cần trợ giúp thêm?
 
 - **GitHub Issues:** [github.com/MarsAI-org/mars-router/issues](https://github.com/MarsAI-org/mars-router/issues)
-- **Documentation:** [mars-router.com/docs](https://mars-router.com/docs)
+- **Documentation:** [github.com/MarsAI-org/mars-router](https://github.com/MarsAI-org/mars-router)
 - **FAQ:** [faq.md](faq.md)

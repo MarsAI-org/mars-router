@@ -42,7 +42,7 @@ export default function Footer() {
           {/* Legal */}
           <div className="flex flex-col gap-4">
             <h4 className="font-bold text-white">Legal</h4>
-            <a className="text-gray-400 hover:text-[#f97815] text-sm transition-colors" href="https://github.com/MarsAI-org/mars-router/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT License</a>
+            <a className="text-gray-400 hover:text-[#f97815] text-sm transition-colors" href="https://github.com/MarsAI-org/mars-router/blob/master/LICENSE" target="_blank" rel="noopener noreferrer">MIT License</a>
           </div>
         </div>
         

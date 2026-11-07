@@ -11,7 +11,7 @@ Mars RouterをCursor IDEと統合し、AIリクエストをMars Routerのイン�
 
 ## ⚠️ 重要な注意点
 
-> **クラウドエンドポイントが必要**: Cursorは独自のサーバー経由でリクエストをルーティングし、localhostエンドポイントをサポートしません。Mars Routerクラウドエンドポイント `https://mars-router.com` を使用する必要があります。
+> **クラウドエンドポイントが必要**: Cursorは独自のサーバー経由でリクエストをルーティングし、localhostエンドポイントをサポートしません。Mars Routerクラウドエンドポイント `https://github.com/MarsAI-org/mars-router` を使用する必要があります。
 
 > **Cursor Proが必要**: この機能はカスタムAPIエンドポイントを使用するためにCursor Proアカウントが必要です。
 
@@ -33,12 +33,12 @@ Mars RouterをCursor IDEと統合し、AIリクエストをMars Routerのイン�
 Base URLをMars Routerクラウドエンドポイントに設定:
 
 ```
-https://mars-router.com
+https://github.com/MarsAI-org/mars-router
 ```
 
 **手順:**
 1. Models設定で **Base URL** フィールドを見つける
-2. 入力: `https://mars-router.com`
+2. 入力: `https://github.com/MarsAI-org/mars-router`
 3. **Save** をクリック
 
 ### 4. APIキーを追加
@@ -66,7 +66,7 @@ Cursor設定は次のようになります:
 
 ```
 OpenAI API: ✓ Enabled
-Base URL: https://mars-router.com
+Base URL: https://github.com/MarsAI-org/mars-router
 API Key: sk-mars-router-xxxxxxxxxxxxx
 Custom Models: gpt-4, claude-opus-4-5, gemini-2.0-flash
 ```
@@ -123,14 +123,14 @@ Mars Routerダッシュボードで設定されたモデルを使用できます
 
 ### 接続の問題
 
-1. クラウドエンドポイントを使用しているか確認: `https://mars-router.com`
+1. クラウドエンドポイントを使用しているか確認: `https://github.com/MarsAI-org/mars-router`
 2. インターネット接続を確認
 3. Mars Routerクラウドサービスが運用中か確認
 4. VPNまたはプロキシが有効な場合は無効化してみる
 
 ### Localhostが動作しない
 
-> **覚えておいてください**: Cursorはlocalhostエンドポイントをサポートしません。クラウドエンドポイント `https://mars-router.com` を使用する必要があります。ローカルMars Routerインスタンスを使用したい場合は、ngrokなどのトンネリングサービスを検討してローカルエンドポイントを公開してください。
+> **覚えておいてください**: Cursorはlocalhostエンドポイントをサポートしません。クラウドエンドポイント `https://github.com/MarsAI-org/mars-router` を使用する必要があります。ローカルMars Routerインスタンスを使用したい場合は、ngrokなどのトンネリングサービスを検討してローカルエンドポイントを公開してください。
 
 ## クラウドエンドポイントのセットアップ
 

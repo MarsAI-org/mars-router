@@ -164,7 +164,7 @@ Mars Router利用時の一般的な問題と解決策。
 4. **クラウドエンドポイントを使用:**
    localhostが動作しない場合(例: Cursor IDE):
    ```
-   Endpoint: https://mars-router.com/v1
+   Endpoint: https://9router.com/v1
    ```
 
 ---
@@ -347,5 +347,5 @@ Mars Router利用時の一般的な問題と解決策。
 ## さらにヘルプが必要?
 
 - **GitHub Issues:** [github.com/MarsAI-org/mars-router/issues](https://github.com/MarsAI-org/mars-router/issues)
-- **ドキュメント:** [mars-router.com/docs](https://mars-router.com/docs)
+- **ドキュメント:** [github.com/MarsAI-org/mars-router](https://github.com/MarsAI-org/mars-router)
 - **FAQ:** [faq.md](faq.md)

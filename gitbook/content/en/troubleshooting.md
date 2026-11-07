@@ -164,7 +164,7 @@ Common issues and solutions when using Mars Router.
 4. **Use cloud endpoint:**
    If localhost doesn't work (e.g., Cursor IDE):
    ```
-   Endpoint: https://mars-router.com/v1
+   Endpoint: https://9router.com/v1
    ```
 
 ---
@@ -347,5 +347,5 @@ Common issues and solutions when using Mars Router.
 ## Need More Help?
 
 - **GitHub Issues:** [github.com/MarsAI-org/mars-router/issues](https://github.com/MarsAI-org/mars-router/issues)
-- **Documentation:** [mars-router.com/docs](https://mars-router.com/docs)
+- **Documentation:** [github.com/MarsAI-org/mars-router](https://github.com/MarsAI-org/mars-router)
 - **FAQ:** [faq.md](faq.md)

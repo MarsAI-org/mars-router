@@ -7,15 +7,13 @@
   
   **Connectez tous vos outils de codage IA (Claude Code, Cursor, Antigravity, Copilot, Codex, Gemini, OpenCode, Cline, OpenClaw...) à plus de 40 fournisseurs d'IA et plus de 100 modèles.**
   
-  [![npm](https://img.shields.io/npm/v/mars-router.svg)](https://www.npmjs.com/package/mars-router)
-  [![Downloads](https://img.shields.io/npm/dm/mars-router.svg)](https://www.npmjs.com/package/mars-router)
-  [![Docker Pulls](https://img.shields.io/docker/pulls/MarsAI-org/mars-router.svg?logo=docker&label=Docker%20pulls)](https://hub.docker.com/r/MarsAI-org/mars-router)
+  [![License](https://img.shields.io/github/license/MarsAI-org/mars-router)](https://github.com/MarsAI-org/mars-router/blob/master/LICENSE)
   [![GHCR](https://img.shields.io/badge/GHCR-marsai-org%2Fmars-router-blue?logo=github)](https://github.com/MarsAI-org/mars-router/pkgs/container/mars-router)
-  [![License](https://img.shields.io/npm/l/mars-router.svg)](https://github.com/MarsAI-org/mars-router/blob/main/LICENSE)
+  [![Node](https://img.shields.io/badge/node-%E2%89%A520-brightgreen?logo=node.js)](https://nodejs.org/)
 
 <a href="https://trendshift.io/repositories/22628" target="_blank"><img src="https://trendshift.io/api/badge/repositories/22628" alt="marsai-org%2Fmars-router | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
 
-[🚀 Démarrage rapide](#-démarrage-rapide) • [💡 Fonctionnalités](#-fonctionnalités-clés) • [📖 Configuration](#-guide-dinstallation) • [🌐 Site web](https://mars-router.com)
+[🚀 Démarrage rapide](#-démarrage-rapide) • [💡 Fonctionnalités](#-fonctionnalités-clés) • [📖 Configuration](#-guide-dinstallation) • [🌐 Site web](https://github.com/MarsAI-org/mars-router)
 
 [🇻🇳 Tiếng Việt](./README.vi.md) • [🇨🇳 中文](./README.zh-CN.md) • [🇯🇵 日本語](./README.ja-JP.md) • [🇷🇺 Русский](./README.ru.md) • [🇹🇭 ไทย](./README.th.md) • [🇮🇷 فارسی](./README.fa_IR.md) • [🇮🇩 Indonesia](./README.id-ID.md) • [🇪🇸 Español](./README.es.md) • [🇫🇷 Français](./README.fr.md)
 
@@ -1140,7 +1138,7 @@ export PORT="20128"
 export HOSTNAME="0.0.0.0"
 export NODE_ENV="production"
 export NEXT_PUBLIC_BASE_URL="http://localhost:20128"
-export NEXT_PUBLIC_CLOUD_URL="https://mars-router.com"
+export NEXT_PUBLIC_CLOUD_URL="https://github.com/MarsAI-org/mars-router"
 export API_KEY_SECRET="endpoint-proxy-api-key-secret"
 export MACHINE_ID_SALT="endpoint-proxy-salt"
 
@@ -1211,9 +1209,9 @@ docker pull MarsAI-org/mars-router:latest   # mise à jour vers la dernière ver
 | `HOSTNAME`                                           | défaut du framework                         | Hôte de liaison (Docker utilise `0.0.0.0` par défaut)                                         |
 | `NODE_ENV`                                           | défaut du runtime                           | Définissez `production` pour le déploiement                                                   |
 | `BASE_URL`                                           | `http://localhost:20128`                    | URL de base interne côté serveur utilisée par les tâches de synchronisation cloud             |
-| `CLOUD_URL`                                          | `https://mars-router.com`                       | URL de base de l'endpoint de synchronisation cloud côté serveur                               |
+| `CLOUD_URL`                                          | `https://github.com/MarsAI-org/mars-router`                       | URL de base de l'endpoint de synchronisation cloud côté serveur                               |
 | `NEXT_PUBLIC_BASE_URL`                               | `http://localhost:3000`                     | URL de base publique/rétrocompatible (préférez `BASE_URL` pour le runtime serveur)            |
-| `NEXT_PUBLIC_CLOUD_URL`                              | `https://mars-router.com`                       | URL cloud publique/rétrocompatible (préférez `CLOUD_URL` pour le runtime serveur)             |
+| `NEXT_PUBLIC_CLOUD_URL`                              | `https://github.com/MarsAI-org/mars-router`                       | URL cloud publique/rétrocompatible (préférez `CLOUD_URL` pour le runtime serveur)             |
 | `API_KEY_SECRET`                                     | `endpoint-proxy-api-key-secret`             | Secret HMAC pour les clés API générées                                                         |
 | `MACHINE_ID_SALT`                                    | `endpoint-proxy-salt`                       | Sel pour le hachage stable de l'ID machine                                                    |
 | `ENABLE_REQUEST_LOGS`                                | `false`                                     | Active les journaux de requêtes/réponses dans `logs/`                                         |
@@ -1396,7 +1394,7 @@ Authorization: Bearer votre-clé-api
 
 ## 📧 Support
 
-- **Site web** : [mars-router.com](https://mars-router.com)
+- **Site web** : [Mars Router on GitHub](https://github.com/MarsAI-org/mars-router)
 - **GitHub** : [github.com/MarsAI-org/mars-router](https://github.com/MarsAI-org/mars-router)
 - **Problèmes** : [github.com/MarsAI-org/mars-router/issues](https://github.com/MarsAI-org/mars-router/issues)
 

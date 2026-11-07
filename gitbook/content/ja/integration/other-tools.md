@@ -24,7 +24,7 @@ Model: 任意のMars Routerモデル (cc/*, cx/*, glm/*など)
 
 **クラウドMars Router:**
 ```
-Base URL: https://mars-router.com/v1
+Base URL: https://9router.com/v1
 API Key: your-api-key-from-dashboard
 Model: 任意のMars Routerモデル (cc/*, cx/*, glm/*など)
 ```

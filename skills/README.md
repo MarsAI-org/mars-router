@@ -40,4 +40,4 @@ Verify: `curl $MARS_ROUTER_URL/api/health` → `{"ok":true}`.
 ## Links
 
 - Source: https://github.com/MarsAI-org/mars-router
-- Dashboard: https://mars-router.com
+- Dashboard: https://github.com/MarsAI-org/mars-router

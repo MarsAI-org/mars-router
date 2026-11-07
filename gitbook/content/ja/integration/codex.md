@@ -113,7 +113,7 @@ codex --model cx/gpt-5.1-codex-max "Explain what this code does: $(cat myfile.js
 localhostの代わりにMars Routerクラウドエンドポイントを使用するには:
 
 ```bash
-export OPENAI_BASE_URL="https://mars-router.com"
+export OPENAI_BASE_URL="https://github.com/MarsAI-org/mars-router"
 ```
 
 Mars RouterクラウドダッシュボードでAPIキーが設定されていることを確認してください。

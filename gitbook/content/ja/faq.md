@@ -164,7 +164,7 @@ Dashboard → Providers → Quota Tracking
 
 ```
 Cursor Settings → Models → Advanced:
-  OpenAI API Base URL: https://mars-router.com/v1
+  OpenAI API Base URL: https://9router.com/v1
   OpenAI API Key: [ダッシュボードから取得]
   Model: cc/claude-opus-4-5-20251101
 ```
@@ -316,7 +316,7 @@ mars-router --version
 ```
 
 **破壊的変更:**
-- [CHANGELOG.md](https://github.com/MarsAI-org/mars-router/blob/main/CHANGELOG.md)を確認
+- [CHANGELOG.md](https://github.com/MarsAI-org/mars-router/blob/master/CHANGELOG.md)を確認
 - メジャー更新前に`~/.mars-router`をバックアップ
 - メジャーバージョンの移行ガイドを確認
 
@@ -375,13 +375,13 @@ mars-router --version
 - ドキュメントを更新
 - コミットは小さく、わかりやすく
 
-詳細は[CONTRIBUTING.md](https://github.com/MarsAI-org/mars-router/blob/main/CONTRIBUTING.md)を参照。
+詳細は[CONTRIBUTING.md](https://github.com/MarsAI-org/mars-router/blob/master/CONTRIBUTING.md)を参照。
 
 ---
 
 ## さらにヘルプが必要?
 
-- **ドキュメント:** [mars-router.com/docs](https://mars-router.com/docs)
+- **ドキュメント:** [github.com/MarsAI-org/mars-router](https://github.com/MarsAI-org/mars-router)
 - **GitHub:** [github.com/MarsAI-org/mars-router](https://github.com/MarsAI-org/mars-router)
 - **Issues:** [github.com/MarsAI-org/mars-router/issues](https://github.com/MarsAI-org/mars-router/issues)
 - **トラブルシューティング:** [troubleshooting.md](troubleshooting.md)

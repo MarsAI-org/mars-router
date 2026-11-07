@@ -11,7 +11,7 @@ Integrate Mars Router with Cursor IDE to route your AI requests through Mars Rou
 
 ## ⚠️ Important Notes
 
-> **Cloud Endpoint Required**: Cursor routes requests through its own server and does not support localhost endpoints. You must use the Mars Router cloud endpoint: `https://mars-router.com`
+> **Cloud Endpoint Required**: Cursor routes requests through its own server and does not support localhost endpoints. You must use the Mars Router cloud endpoint: `https://github.com/MarsAI-org/mars-router`
 
 > **Cursor Pro Required**: This feature requires a Cursor Pro account to use custom API endpoints.
 
@@ -33,12 +33,12 @@ Integrate Mars Router with Cursor IDE to route your AI requests through Mars Rou
 Set the base URL to Mars Router cloud endpoint:
 
 ```
-https://mars-router.com
+https://github.com/MarsAI-org/mars-router
 ```
 
 **Steps:**
 1. In the Models settings, locate the **Base URL** field
-2. Enter: `https://mars-router.com`
+2. Enter: `https://github.com/MarsAI-org/mars-router`
 3. Click **Save**
 
 ### 4. Add API Key
@@ -66,7 +66,7 @@ Your Cursor settings should look like this:
 
 ```
 OpenAI API: ✓ Enabled
-Base URL: https://mars-router.com
+Base URL: https://github.com/MarsAI-org/mars-router
 API Key: sk-mars-router-xxxxxxxxxxxxx
 Custom Models: gpt-4, claude-opus-4-5, gemini-2.0-flash
 ```
@@ -123,14 +123,14 @@ You can use any model configured in your Mars Router dashboard. Common examples:
 
 ### Connection Issues
 
-1. Verify you are using the cloud endpoint: `https://mars-router.com`
+1. Verify you are using the cloud endpoint: `https://github.com/MarsAI-org/mars-router`
 2. Check your internet connection
 3. Ensure Mars Router cloud service is operational
 4. Try disabling VPN or proxy if enabled
 
 ### Localhost Not Working
 
-> **Remember**: Cursor does not support localhost endpoints. You must use the cloud endpoint `https://mars-router.com`. If you need to use a local Mars Router instance, consider using a tunneling service like ngrok to expose your local endpoint.
+> **Remember**: Cursor does not support localhost endpoints. You must use the cloud endpoint `https://github.com/MarsAI-org/mars-router`. If you need to use a local Mars Router instance, consider using a tunneling service like ngrok to expose your local endpoint.
 
 ## Cloud Endpoint Setup
 

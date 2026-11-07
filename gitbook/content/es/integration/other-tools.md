@@ -24,7 +24,7 @@ Model: cualquier modelo de Mars Router (cc/*, cx/*, glm/*, etc.)
 
 **Mars Router en la nube:**
 ```
-Base URL: https://mars-router.com/v1
+Base URL: https://9router.com/v1
 API Key: your-api-key-from-dashboard
 Model: cualquier modelo de Mars Router (cc/*, cx/*, glm/*, etc.)
 ```

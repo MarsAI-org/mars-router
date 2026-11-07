@@ -164,7 +164,7 @@
 
 ```
 Cursor Settings → Models → Advanced:
-  OpenAI API Base URL: https://mars-router.com/v1
+  OpenAI API Base URL: https://9router.com/v1
   OpenAI API Key: [从仪表盘获取]
   Model: cc/claude-opus-4-5-20251101
 ```
@@ -316,7 +316,7 @@ mars-router --version
 ```
 
 **破坏性变更:**
-- 查看 [CHANGELOG.md](https://github.com/MarsAI-org/mars-router/blob/main/CHANGELOG.md)
+- 查看 [CHANGELOG.md](https://github.com/MarsAI-org/mars-router/blob/master/CHANGELOG.md)
 - 大版本更新前备份 `~/.mars-router`
 - 阅读大版本的迁移指南
 
@@ -375,13 +375,13 @@ mars-router --version
 - 更新文档
 - 提交保持原子化、描述清晰
 
-详情见 [CONTRIBUTING.md](https://github.com/MarsAI-org/mars-router/blob/main/CONTRIBUTING.md)。
+详情见 [CONTRIBUTING.md](https://github.com/MarsAI-org/mars-router/blob/master/CONTRIBUTING.md)。
 
 ---
 
 ## 需要更多帮助?
 
-- **文档:** [mars-router.com/docs](https://mars-router.com/docs)
+- **文档:** [github.com/MarsAI-org/mars-router](https://github.com/MarsAI-org/mars-router)
 - **GitHub:** [github.com/MarsAI-org/mars-router](https://github.com/MarsAI-org/mars-router)
 - **Issues:** [github.com/MarsAI-org/mars-router/issues](https://github.com/MarsAI-org/mars-router/issues)
 - **故障排除:** [troubleshooting.md](troubleshooting.md)

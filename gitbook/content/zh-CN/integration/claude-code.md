@@ -103,7 +103,7 @@ Claude Code 将配置存储在 `~/.claude/settings.json`。如有需要可手动
 使用 Mars Router 云端 endpoint 而非 localhost:
 
 ```bash
-export ANTHROPIC_BASE_URL="https://mars-router.com"
+export ANTHROPIC_BASE_URL="https://github.com/MarsAI-org/mars-router"
 ```
 
 确保已在 Mars Router 云端仪表盘中配置 API key。

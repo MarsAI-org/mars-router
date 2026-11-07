@@ -3,6 +3,15 @@
   "version": "0.5.119",
   "description": "Mars Router web dashboard",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MarsAI-org/mars-router.git"
+  },
+  "homepage": "https://github.com/MarsAI-org/mars-router#readme",
+  "bugs": {
+    "url": "https://github.com/MarsAI-org/mars-router/issues"
+  },
+  "license": "MIT",
   "scripts": {
     "dev": "next dev --port 20127",
     "dev:webpack": "next dev --webpack --port 20127",

@@ -7,15 +7,13 @@
   
   **همه ابزارهای کدنویسی مبتنی بر هوش مصنوعی (Claude Code، Cursor، Antigravity، Copilot، Codex، Gemini، OpenCode، Cline، OpenClaw...) را به بیش از ۴۰ ارائه‌دهنده و ۱۰۰+ مدل متصل کنید.**
   
-  [![npm](https://img.shields.io/npm/v/mars-router.svg)](https://www.npmjs.com/package/mars-router)
-  [![Downloads](https://img.shields.io/npm/dm/mars-router.svg)](https://www.npmjs.com/package/mars-router)
-  [![Docker Pulls](https://img.shields.io/docker/pulls/MarsAI-org/mars-router.svg?logo=docker&label=Docker%20pulls)](https://hub.docker.com/r/MarsAI-org/mars-router)
+  [![License](https://img.shields.io/github/license/MarsAI-org/mars-router)](https://github.com/MarsAI-org/mars-router/blob/master/LICENSE)
   [![GHCR](https://img.shields.io/badge/GHCR-marsai-org%2Fmars-router-blue?logo=github)](https://github.com/MarsAI-org/mars-router/pkgs/container/mars-router)
-  [![License](https://img.shields.io/npm/l/mars-router.svg)](https://github.com/MarsAI-org/mars-router/blob/main/LICENSE)
+  [![Node](https://img.shields.io/badge/node-%E2%89%A520-brightgreen?logo=node.js)](https://nodejs.org/)
 
 <a href="https://trendshift.io/repositories/22628" target="_blank"><img src="https://trendshift.io/api/badge/repositories/22628" alt="marsai-org%2Fmars-router | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
 
-[🚀 شروع سریع](#-شروع-سریع) • [💡 ویژگی‌ها](#-ویژگی‌های-کلیدی) • [📖 راه‌اندازی](#-راهنمای-راه‌اندازی) • [🌐 وب‌سایت](https://mars-router.com)
+[🚀 شروع سریع](#-شروع-سریع) • [💡 ویژگی‌ها](#-ویژگی‌های-کلیدی) • [📖 راه‌اندازی](#-راهنمای-راه‌اندازی) • [🌐 وب‌سایت](https://github.com/MarsAI-org/mars-router)
 
 [🇻🇳 Tiếng Việt](./i18n/README.vi.md) • [🇨🇳 中文](./i18n/README.zh-CN.md) • [🇯🇵 日本語](./i18n/README.ja-JP.md) • [🇷🇺 Русский](./i18n/README.ru.md) • [🇮🇷 فارسی](./i18n/README.fa_IR.md)
 
@@ -1138,7 +1136,7 @@ export PORT="20128"
 export HOSTNAME="0.0.0.0"
 export NODE_ENV="production"
 export NEXT_PUBLIC_BASE_URL="http://localhost:20128"
-export NEXT_PUBLIC_CLOUD_URL="https://mars-router.com"
+export NEXT_PUBLIC_CLOUD_URL="https://github.com/MarsAI-org/mars-router"
 export API_KEY_SECRET="endpoint-proxy-api-key-secret"
 export MACHINE_ID_SALT="endpoint-proxy-salt"
 
@@ -1209,9 +1207,9 @@ docker pull MarsAI-org/mars-router:latest   # به‌روزرسانی به آخ�
 | `HOSTNAME`                                           | پیش‌فرض فریم‌ورک                        | هاست بایند (داکر پیش‌فرض `۰.۰.۰.۰` است)                                            |
 | `NODE_ENV`                                           | پیش‌فرض زمان اجرا                          | برای استقرار `production` را تنظیم کنید                                                         |
 | `BASE_URL`                                           | `http://localhost:20128`                 | آدرس پایه داخلی سمت سرور که توسط کارهای همگام‌سازی ابری استفاده می‌شود                               |
-| `CLOUD_URL`                                          | `https://mars-router.com`                    | آدرس پایه نقطه پایانی همگام‌سازی ابری سمت سرور                                            |
+| `CLOUD_URL`                                          | `https://github.com/MarsAI-org/mars-router`                    | آدرس پایه نقطه پایانی همگام‌سازی ابری سمت سرور                                            |
 | `NEXT_PUBLIC_BASE_URL`                               | `http://localhost:3000`                  | آدرس پایه عمومی/سازگار با گذشته (برای زمان اجرای سرور `BASE_URL` را ترجیح دهید)          |
-| `NEXT_PUBLIC_CLOUD_URL`                              | `https://mars-router.com`                    | آدرس ابری عمومی/سازگار با گذشته (برای زمان اجرای سرور `CLOUD_URL` را ترجیح دهید)        |
+| `NEXT_PUBLIC_CLOUD_URL`                              | `https://github.com/MarsAI-org/mars-router`                    | آدرس ابری عمومی/سازگار با گذشته (برای زمان اجرای سرور `CLOUD_URL` را ترجیح دهید)        |
 | `API_KEY_SECRET`                                     | `endpoint-proxy-api-key-secret`          | راز HMAC برای کلیدهای API تولید شده                                                  |
 | `MACHINE_ID_SALT`                                    | `endpoint-proxy-salt`                    | نمک برای هش کردن شناسه ماشین پایدار                                                  |
 | `ENABLE_REQUEST_LOGS`                                | `false`                                  | لاگ‌های درخواست/پاسخ را در `logs/` فعال می‌کند                                         |
@@ -1394,7 +1392,7 @@ Authorization: Bearer your-api-key
 
 ## 📧 پشتیبانی
 
-- **وب‌سایت**: [mars-router.com](https://mars-router.com)
+- **وب‌سایت**: [Mars Router on GitHub](https://github.com/MarsAI-org/mars-router)
 - **GitHub**: [github.com/MarsAI-org/mars-router](https://github.com/MarsAI-org/mars-router)
 - **مسائل**: [github.com/MarsAI-org/mars-router/issues](https://github.com/MarsAI-org/mars-router/issues)
 

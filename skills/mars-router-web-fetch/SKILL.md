@@ -35,7 +35,7 @@ IDs end in `/fetch` (e.g. `firecrawl/fetch`, `jina/fetch`). `fetch-combo` chains
 curl -X POST $MARS_ROUTER_URL/v1/web/fetch \
   -H "Authorization: Bearer $MARS_ROUTER_KEY" \
   -H "Content-Type: application/json" \
-  -d '{"model":"jina-reader","url":"https://mars-router.com","format":"markdown"}'
+  -d '{"model":"jina-reader","url":"https://github.com/MarsAI-org/mars-router","format":"markdown"}'
 ```
 
 ### Exa

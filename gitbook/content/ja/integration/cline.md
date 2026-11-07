@@ -34,7 +34,7 @@ http://localhost:20128/v1
 
 **クラウドMars Router用:**
 ```
-https://mars-router.com
+https://github.com/MarsAI-org/mars-router
 ```
 
 **手順:**
@@ -150,7 +150,7 @@ Mars Routerダッシュボードで設定されたモデルを使用できます
 
 localhostの代わりにMars Routerクラウドエンドポイントを使用:
 
-1. Cline設定で、Base URLを設定: `https://mars-router.com`
+1. Cline設定で、Base URLを設定: `https://github.com/MarsAI-org/mars-router`
 2. Mars RouterクラウドダッシュボードでAPIキーが設定されていることを確認
 3. クラウドエンドポイントがアクティブでアクセス可能か確認
 

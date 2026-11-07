@@ -164,7 +164,7 @@ See [quota tracking documentation](features/quota-tracking.md) for details.
 
 ```
 Cursor Settings → Models → Advanced:
-  OpenAI API Base URL: https://mars-router.com/v1
+  OpenAI API Base URL: https://9router.com/v1
   OpenAI API Key: [from dashboard]
   Model: cc/claude-opus-4-5-20251101
 ```
@@ -316,7 +316,7 @@ mars-router --version
 ```
 
 **Breaking changes:**
-- Check [CHANGELOG.md](https://github.com/MarsAI-org/mars-router/blob/main/CHANGELOG.md)
+- Check [CHANGELOG.md](https://github.com/MarsAI-org/mars-router/blob/master/CHANGELOG.md)
 - Backup `~/.mars-router` before major updates
 - Review migration guides for major versions
 
@@ -375,13 +375,13 @@ mars-router --version
 - Update documentation
 - Keep commits atomic and descriptive
 
-See [CONTRIBUTING.md](https://github.com/MarsAI-org/mars-router/blob/main/CONTRIBUTING.md) for details.
+See [CONTRIBUTING.md](https://github.com/MarsAI-org/mars-router/blob/master/CONTRIBUTING.md) for details.
 
 ---
 
 ## Need More Help?
 
-- **Documentation:** [mars-router.com/docs](https://mars-router.com/docs)
+- **Documentation:** [github.com/MarsAI-org/mars-router](https://github.com/MarsAI-org/mars-router)
 - **GitHub:** [github.com/MarsAI-org/mars-router](https://github.com/MarsAI-org/mars-router)
 - **Issues:** [github.com/MarsAI-org/mars-router/issues](https://github.com/MarsAI-org/mars-router/issues)
 - **Troubleshooting:** [troubleshooting.md](troubleshooting.md)
