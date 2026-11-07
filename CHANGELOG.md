@@ -1,3 +1,11 @@
+# v0.5.118 (2026-11-07)
+
+## Features
+- **Installers**: add `install.sh` (Linux/macOS) and `install.ps1` (Windows) — self-contained one-liners that check Node.js 20+, clone or update the repo, install deps, build and start the server, with `--docker` for a container install plus `--dir`/`--port`/`--ref`/`--no-start`.
+
+## Docs
+- **README**: add an Installer section (one-liners + options table), lead the Quick Start with the new installers, and surface the resell feature set (tiers/billing, per-key quota, upstream flow control, prompt injection, model catalog, test-all/uptime) in Why and a new "resell API access" use case. Note that the `~/.9router` data dir is kept for backward compatibility.
+
 # v0.5.117 (2026-11-07)
 
 ## Features

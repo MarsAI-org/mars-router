@@ -1,6 +1,6 @@
 {
   "name": "9router-app",
-  "version": "0.5.117",
+  "version": "0.5.118",
   "description": "Mars Router web dashboard",
   "private": true,
   "scripts": {

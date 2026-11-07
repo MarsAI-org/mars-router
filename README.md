@@ -15,7 +15,7 @@
 
 <a href="https://trendshift.io/repositories/22628" target="_blank"><img src="https://trendshift.io/api/badge/repositories/22628" alt="decolua%2F9router | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
 
-[🚀 Quick Start](#-quick-start) • [💡 Features](#-key-features) • [📖 Setup](#-setup-guide) • [🌐 Website](https://9router.com)
+[🚀 Quick Start](#-quick-start) • [💡 Features](#-key-features) • [📖 Setup](#-setup-guide) • [📦 Installer](#-installer) • [🌐 Website](https://9router.com)
 
 [🇧🇷 Português (Brasil)](./i18n/README.pt-BR.md) • [🇻🇳 Tiếng Việt](./i18n/README.vi.md) • [🇨🇳 中文](./i18n/README.zh-CN.md) • [🇯🇵 日本語](./i18n/README.ja-JP.md) • [🇷🇺 Русский](./i18n/README.ru.md) • [🇹🇭 ไทย](./i18n/README.th.md) • [🇮🇷 فارسی](./i18n/README.fa_IR.md) • [🇮🇩 Indonesia](./i18n/README.id-ID.md) • [🇪🇸 Español](./i18n/README.es.md) • [🇫🇷 Français](./i18n/README.fr.md)
 
@@ -41,6 +41,17 @@
 - ✅ **Multi-account** - Round-robin between accounts per provider
 - ✅ **Universal** - Works with Claude Code, Codex, Cursor, Cline, any CLI tool
 
+**And if you resell API access, it becomes a business in a box:**
+
+- 💳 **Reseller tiers** - Monthly plans, per-key subscriptions, MRR & margin analytics
+- 🚦 **Per-key quota & budget** - Cap RPM/tokens/cost per customer, auto-block on breach
+- 🧱 **Upstream flow control** - Respect the upstream's own max-concurrent + RPM so you never trip their limits
+- 💉 **Prompt injection** - Enforce tone/safety/persona globally or per combo
+- 📚 **Model catalog control** - Curate exactly what `/v1/models` exposes
+- 🩺 **Test all models & uptime** - Prove every model/combo works, track availability over time
+
+See [Reseller Tiers & Billing](#-reseller-tiers--billing), [Upstream Flow Control](#-upstream-flow-control-for-reselling) and [Prompt Injection](#-prompt-injection) below.
+
 ---
 
 ## 🔄 How It Works
@@ -53,11 +64,13 @@
        │ http://localhost:20128/v1
        ↓
 ┌─────────────────────────────────────────────┐
-│           Mars Router (Smart Router)            │
+│           Mars Router (Smart Router)        │
 │  • RTK Token Saver (cut tool_result tokens) │
 │  • Format translation (OpenAI ↔ Claude)     │
 │  • Quota tracking                           │
 │  • Auto token refresh                       │
+│  • Prompt injection, model catalog, uptime  │
+│  • Reseller tiers, per-key quota, flow ctrl │
 └──────┬──────────────────────────────────────┘
        │
        ├─→ [Tier 1: SUBSCRIPTION] Claude Code, Codex, GitHub Copilot
@@ -73,14 +86,31 @@ Result: Never stop coding, minimal cost + 20-40% token savings via RTK
 
 ## ⚡ Quick Start
 
-**1. Install globally:**
+**One-line install (Linux / macOS):**
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/MarsAI-org/mars-router/master/install.sh | sh
+```
+
+**Windows (PowerShell):**
+
+```powershell
+iwr -useb https://raw.githubusercontent.com/MarsAI-org/mars-router/master/install.ps1 | iex
+```
+
+The installer checks Node.js (20+), clones the repo, installs dependencies,
+builds, and starts the server. Options: `--docker` (run via container),
+`--dir <path>`, `--port <port>`, `--ref <tag>`, `--no-start`. See
+[Installer](#-installer) below.
+
+🎉 Dashboard opens at `http://localhost:20128/dashboard`
+
+**Or install the launcher from npm:**
 
 ```bash
 npm install -g 9router
 9router
 ```
-
-🎉 Dashboard opens at `http://localhost:20128`
 
 **2. Connect a FREE provider (no signup needed):**
 
@@ -97,7 +127,7 @@ Claude Code/Codex/OpenClaw/Cursor/Cline Settings:
 
 **That's it!** Start coding with FREE AI models.
 
-**Alternative: run from source (this repository):**
+**Alternative: run from source manually:**
 
 This repository package is private (`9router-app`), so source/Docker execution is the expected local development path.
 
@@ -133,6 +163,42 @@ Default URLs:
 
 - Dashboard: `http://localhost:20128/dashboard`
 - OpenAI-compatible API: `http://localhost:20128/v1`
+
+---
+
+## 📦 Installer
+
+Two self-contained installers live in the repo root and need no clone:
+
+| Platform | Command |
+| --- | --- |
+| Linux / macOS | `curl -fsSL https://raw.githubusercontent.com/MarsAI-org/mars-router/master/install.sh \| sh` |
+| Windows (PowerShell) | `iwr -useb https://raw.githubusercontent.com/MarsAI-org/mars-router/master/install.ps1 \| iex` |
+
+They check for Node.js 20+ (and git), clone or update the repository into
+`~/.mars-router`, install dependencies, build, and start the server. Re-running
+the same command updates an existing install.
+
+**Options** (`install.sh` / `install.ps1`):
+
+| Flag | Description |
+| --- | --- |
+| `--docker` / `-Docker` | Run via Docker instead of building from source |
+| `--dir <path>` / `-Dir <path>` | Install directory (default `~/.mars-router`) |
+| `--port <port>` / `-Port <port>` | Service port (default `20128`) |
+| `--ref <ref>` / `-Ref <ref>` | Git tag/branch/commit to install (default `master`) |
+| `--no-start` / `-NoStart` | Install only; do not start the server |
+
+```bash
+# Server deploy via Docker, custom port
+curl -fsSL https://raw.githubusercontent.com/MarsAI-org/mars-router/master/install.sh | sh -s -- --docker --port 8080
+
+# Install to a custom directory without starting
+curl -fsSL https://raw.githubusercontent.com/MarsAI-org/mars-router/master/install.sh | sh -s -- --dir /opt/mars-router --no-start
+```
+
+> The Docker installer pulls `ghcr.io/marsai-org/mars-router:latest` and persists
+> data in `<install-dir>/data`.
 
 ---
 
@@ -1032,6 +1098,31 @@ Monthly cost: $0
 Access via: WhatsApp, Telegram, Slack, Discord, iMessage, Signal...
 ```
 
+### Case 5: "I want to resell API access"
+
+**Problem:** You hold an upstream API (or several) and want to sell access to
+others, without letting one customer blow past the upstream's limits.
+
+**Solution — turn Mars Router into a mini API business:**
+
+1. **Define your upstream limits** in Dashboard → Flow Control (e.g. `glm`:
+   `maxConcurrent: 5`, `rpm: 60`) so total outbound traffic never trips their cap.
+   Excess requests queue instead of failing.
+2. **Create plans** in Dashboard → Billing & Sales — Free / Pro / Business with
+   their own RPM, tokens and cost caps and a monthly price.
+3. **Issue an API key per customer** and assign a plan. Each key is metered; a
+   breach returns `429`, a suspended subscription returns `403`.
+4. **Curate the catalog** in Model Catalog so customers only see the models you
+   want to sell.
+5. **Watch the numbers** — MRR, margin, per-key usage, and Uptime for every
+   model/combo you expose.
+
+```
+Revenue: 200 customers × $20/mo = $4,000 MRR
+Upstream cost: metered per key, capped by plan
+Enforcement: per-key quota + upstream flow control
+```
+
 ---
 
 ## ❓ Frequently Asked Questions
@@ -1518,6 +1609,10 @@ docker pull decolua/9router:latest   # update to latest
 **Data persistence:** `$HOME/.9router/db/data.sqlite` on host ↔ `/app/data/db/data.sqlite` in container.
 
 ### Environment Variables
+
+> The data directory is still named `~/.9router` for backward compatibility with
+> existing installs — the product is Mars Router, but the on-disk paths are
+> unchanged so an upgrade never loses data.
 
 | Variable                                             | Default                                  | Description                                                                         |
 | ---------------------------------------------------- | ---------------------------------------- | ----------------------------------------------------------------------------------- |
