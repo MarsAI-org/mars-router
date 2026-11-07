@@ -107,3 +107,4 @@ debug.log
 # Mars Router runtime (installer/service)
 mars-router.log
 .mars-router.pid
+.mars-router.state.json

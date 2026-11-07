@@ -206,19 +206,32 @@ PATH (`~/.local/bin/mars-router`, or `~/.local\bin\mars-router.cmd` on Windows):
 ```bash
 mars-router            # start in the foreground
 mars-router start -d   # start detached (background) + pidfile
-mars-router status     # is it listening?
-mars-router logs       # tail the log
-mars-router stop       # stop a detached server
+mars-router restart    # stop (if running) then start, keeping the same port/data dir
+mars-router status     # is it listening? (--json for machines)
+mars-router logs -f    # follow the log (logs -n 50 for the last 50 lines)
+mars-router stop       # stop a detached server (--force = SIGKILL)
+mars-router update     # git pull + npm install + build + restart
+mars-router version    # local version + latest on npm
+mars-router doctor     # check node / deps / build / port / data dir
+mars-router config     # show the effective runtime configuration
+mars-router open       # open the dashboard in a browser
 ```
 
-Set `PORT` to move the server (default **20128**):
+The detached server records its pid, port and data dir, so `status`, `stop` and
+`restart` work without repeating `--port`/`--data-dir`. Explicit flags or env
+always win:
 
 ```bash
+mars-router start -d --port 8080 --data-dir /var/lib/mars-router
 PORT=8080 mars-router
 curl http://localhost:8080/api/health   # {"ok":true}
 ```
 
-> If `curl localhost:20128` fails right after install, check `mars-router status`
+`update` is source-install only (it needs a git checkout with a clean working
+tree). Useful options: `--dry-run` (show what it would do), `--ref <tag>` (pin a
+release), `--no-install`, `--no-build`, `--no-restart`.
+
+> If `curl localhost:20128` fails right after install, run `mars-router doctor`
 > and `mars-router logs` first — the server may still be building, or bound to a
 > different `PORT`.
 

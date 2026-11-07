@@ -1,3 +1,12 @@
+# v0.5.123 (2026-11-07)
+
+## Features
+- **Complete `mars-router` command**: `scripts/mars-router.mjs` now supports `start [-d]`, `stop [--force]`, `restart [-d]`, `status [--json]`, `logs [-f] [-n N]`, `update`, `version [--json]`, `doctor [--json]`, `config [--json]`, `open`, and `help`, with flags accepted before or after the command (`--port`, `--data-dir`, `--ref`, `--dry-run`, `--no-install`, `--no-build`, `--no-restart`, `--json`, `--force`).
+- **`mars-router update`**: pull the latest source (`git fetch` + `--ff-only` merge), reinstall, rebuild, and restart — refuses to run on a dirty tree, and offers `--dry-run`/`--ref`/`--no-install`/`--no-build`/`--no-restart`. Non-git installs get a clear pointer back to the installer.
+- **Stateful service management**: the detached server records its pid, port and data dir in `.mars-router.state.json`, so `status`, `stop` and `restart` keep the same port/data dir without repeating flags; explicit flags/env still win.
+- **`doctor`** checks Node ≥ 20, the production build, `node_modules`, port reachability and data-dir writability, and prints concrete fixes.
+- Cross-platform `logs -f` without relying on `tail`, and `open` across Linux/macOS/Windows.
+
 # v0.5.122 (2026-11-07)
 
 ## Features
