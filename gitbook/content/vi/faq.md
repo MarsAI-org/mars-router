@@ -164,7 +164,7 @@ Xem [tài liệu quota tracking](features/quota-tracking.md) để biết chi ti
 
 ```
 Cursor Settings → Models → Advanced:
-  OpenAI API Base URL: https://9router.com/v1
+  OpenAI API Base URL: http://localhost:20128/v1
   OpenAI API Key: [from dashboard]
   Model: cc/claude-opus-4-5-20251101
 ```

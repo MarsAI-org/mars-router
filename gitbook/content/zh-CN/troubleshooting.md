@@ -164,7 +164,7 @@
 4. **使用云端 endpoint:**
    如果 localhost 不行(例如 Cursor IDE):
    ```
-   Endpoint: https://9router.com/v1
+   Endpoint: http://localhost:20128/v1
    ```
 
 ---

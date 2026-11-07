@@ -164,7 +164,7 @@ Các vấn đề và giải pháp phổ biến khi dùng Mars Router.
 4. **Dùng cloud endpoint:**
    Nếu localhost không hoạt động (ví dụ: Cursor IDE):
    ```
-   Endpoint: https://9router.com/v1
+   Endpoint: http://localhost:20128/v1
    ```
 
 ---

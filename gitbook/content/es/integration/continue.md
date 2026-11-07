@@ -6,7 +6,7 @@ Integra Mars Router con la extensión Continue para llevar la asistencia de IA d
 
 - Visual Studio Code instalado
 - Extensión Continue instalada desde el marketplace de VSCode
-- API key de Mars Router desde el [dashboard](https://9router.com/dashboard)
+- API key de Mars Router desde el [dashboard](http://localhost:20128/dashboard)
 - Mars Router ejecutándose (local o en la nube)
 
 ## Pasos de configuración
@@ -76,7 +76,7 @@ Agrega la siguiente configuración a tu `config.json`:
 **Para Mars Router en la nube:**
 Reemplaza `apiBase` con:
 ```json
-"apiBase": "https://9router.com/v1"
+"apiBase": "http://localhost:20128/v1"
 ```
 
 ### 3. Guardar y recargar

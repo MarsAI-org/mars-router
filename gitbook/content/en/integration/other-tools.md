@@ -24,7 +24,7 @@ Model: any Mars Router model (cc/*, cx/*, glm/*, etc.)
 
 **Cloud Mars Router:**
 ```
-Base URL: https://9router.com/v1
+Base URL: http://localhost:20128/v1
 API Key: your-api-key-from-dashboard
 Model: any Mars Router model (cc/*, cx/*, glm/*, etc.)
 ```

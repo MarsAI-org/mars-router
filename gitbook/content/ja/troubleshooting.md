@@ -164,7 +164,7 @@ Mars Router利用時の一般的な問題と解決策。
 4. **クラウドエンドポイントを使用:**
    localhostが動作しない場合(例: Cursor IDE):
    ```
-   Endpoint: https://9router.com/v1
+   Endpoint: http://localhost:20128/v1
    ```
 
 ---
