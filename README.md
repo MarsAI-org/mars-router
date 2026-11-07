@@ -1586,9 +1586,10 @@ pm2 startup
 
 ### Docker
 
-Published images (multi-platform `linux/amd64` + `linux/arm64`) on GHCR:
-
-- GHCR: [`ghcr.io/marsai-org/mars-router`](https://github.com/MarsAI-org/mars-router/releases)
+Published images (multi-platform `linux/amd64` + `linux/arm64`) on GHCR
+(`ghcr.io/marsai-org/mars-router`); the release workflow publishes them on each
+`v*` tag. New GHCR packages default to private — set the package to **Public**
+once in the org package settings so anonymous `docker pull` works.
 
 **Quick start (use published image):**
 
