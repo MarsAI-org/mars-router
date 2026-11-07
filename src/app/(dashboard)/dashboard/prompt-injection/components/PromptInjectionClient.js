@@ -25,7 +25,6 @@ export default function PromptInjectionClient() {
   const [error, setError] = useState("");
   const [saved, setSaved] = useState(false);
   const [query, setQuery] = useState("");
-  const [template, setTemplate] = useState("");
   const fileRef = useRef(null);
 
   useEffect(() => {
@@ -162,19 +161,23 @@ export default function PromptInjectionClient() {
       {error && <div className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm text-red-500">{error}</div>}
       {saved && !error && <div className="rounded-lg border border-green-500/30 bg-green-500/10 px-4 py-2 text-sm text-green-500">Saved.</div>}
 
+      <Card title="Start from a template" subtitle="One click adds a ready-made instruction — no typing needed." padding="sm">
+        <div className="flex flex-wrap gap-2">
+          {PROMPT_TEMPLATES.map((t) => (
+            <button
+              key={t.id}
+              type="button"
+              onClick={() => addFromTemplate(t.id)}
+              className="px-3 py-1.5 text-xs rounded-full border border-border-subtle text-text-muted hover:text-text-main hover:border-brand-500/40 transition-colors"
+            >
+              + {t.label}
+            </button>
+          ))}
+        </div>
+      </Card>
+
       <Card padding="sm">
         <div className="flex flex-wrap items-center gap-2 text-sm">
-          <span className="text-text-muted">Template:</span>
-          <select
-            className="bg-surface border border-border-subtle rounded-md px-3 py-1.5 text-sm"
-            value={template}
-            onChange={(e) => { setTemplate(e.target.value); if (e.target.value) addFromTemplate(e.target.value); setTemplate(""); }}
-          >
-            <option value="">Add from template…</option>
-            {PROMPT_TEMPLATES.map((t) => <option key={t.id} value={t.id}>{t.label}</option>)}
-          </select>
-
-          <span className="text-text-muted">·</span>
           <Button variant="outline" onClick={() => setAllEnabled(true)}>Enable all</Button>
           <Button variant="outline" onClick={() => setAllEnabled(false)}>Disable all</Button>
           <Button variant="outline" onClick={exportJson}>Export</Button>
