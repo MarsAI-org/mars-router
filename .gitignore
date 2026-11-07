@@ -103,3 +103,7 @@ mars-router-*
 start-dev-silent.cjs
 debug.log
 .scratch/
+
+# Mars Router runtime (installer/service)
+mars-router.log
+.mars-router.pid
