@@ -272,6 +272,28 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Make GHCR package public
+        if: env.PUBLISH_GHCR_PUBLIC != 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PACKAGE: ${{ github.event.repository.name }}
+          ORG: ${{ github.repository_owner }}
+        run: |
+          set -euo pipefail
+          # New GHCR packages default to private; make it publicly pullable.
+          # Try the org endpoint first (repo owner is an org), then the user one.
+          if gh api --method PATCH \
+               -H "Accept: application/vnd.github+json" \
+               "/orgs/${ORG}/packages/container/${PACKAGE}" -f visibility=public >/dev/null 2>&1; then
+            echo "GHCR package ${ORG}/${PACKAGE} set to public."
+          elif gh api --method PATCH \
+               -H "Accept: application/vnd.github+json" \
+               "/user/packages/container/${PACKAGE}" -f visibility=public >/dev/null 2>&1; then
+            echo "GHCR package ${PACKAGE} set to public."
+          else
+            echo "::warning::Could not set GHCR package visibility automatically; set it to public in the package settings."
+          fi
+
       - name: Create and verify version manifest
         env:
           GHCR_IMAGE: ${{ env.GHCR_IMAGE }}
