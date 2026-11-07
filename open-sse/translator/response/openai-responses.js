@@ -452,10 +452,31 @@ function recordCompletedOutputItem(state, outputIndex, item) {
 
 function collectCompletedOutputItems(state) {
   const recorded = state.completedOutputItems;
-  if (!(recorded instanceof Map) || recorded.size === 0) return [];
-  return [...recorded.entries()]
-    .sort((left, right) => left[0] - right[0])
-    .map(([, item]) => item);
+  if (recorded instanceof Map && recorded.size > 0) {
+    return [...recorded.entries()]
+      .sort((left, right) => left[0] - right[0])
+      .map(([, item]) => item);
+  }
+
+  // Fallback: a terminal event must never describe an empty turn when text was
+  // already streamed. Some paths emit response.completed before closeMessage()
+  // has recorded the item (or skip it entirely), which made /v1/responses answer
+  // `output: []` even though the client saw the text deltas. Rebuild the message
+  // items from the accumulated text buffers so the final Response is complete.
+  const out = [];
+  for (const [idx, text] of Object.entries(state.msgTextBuf || {})) {
+    if (typeof text !== "string" || text.length === 0) continue;
+    out.push({
+      index: Number(idx) || 0,
+      item: {
+        id: `msg_${state.responseId}_${idx}`,
+        type: RESPONSES_ITEM.MESSAGE,
+        content: [{ type: RESPONSES_ITEM.OUTPUT_TEXT, annotations: [], logprobs: [], text }],
+        role: ROLE.ASSISTANT,
+      },
+    });
+  }
+  return out.sort((a, b) => a.index - b.index).map((entry) => entry.item);
 }
 
 function sendCompleted(state, emit) {
