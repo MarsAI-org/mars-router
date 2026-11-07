@@ -62,12 +62,18 @@ export default function ProviderLimitsClient() {
           cfg[p] = { enabled: v.enabled, enforce: v.enforce, ...v.limits };
           live[p] = v.usage;
         }
-        setLimits(cfg);
-        setUsage(live);
         const ids = new Set();
         const conns = Array.isArray(provRes?.connections) ? provRes.connections : [];
         for (const c of conns) if (c?.provider) ids.add(c.provider);
         setConnected([...ids].sort());
+        // Auto-fill every connected provider so nothing has to be typed in by
+        // hand. They start disabled with a relaxed preset: turning one on is a
+        // single toggle, and nothing changes until it is saved.
+        for (const p of [...ids].sort()) {
+          if (!cfg[p]) cfg[p] = { ...emptyLimit(), enabled: false, ...LIMIT_PRESETS.relaxed.values };
+        }
+        setLimits(cfg);
+        setUsage(live);
         setError("");
       } catch (e) {
         if (!cancelled) setError(e.message || "Failed to load");

@@ -54,12 +54,18 @@ export default function FlowControlClient() {
           fetch("/api/providers").then((r) => r.json()).catch(() => ({})),
         ]);
         if (cancelled) return;
-        setProviders(cfg);
-        setLive(lv);
         const ids = new Set();
         const conns = Array.isArray(provRes?.connections) ? provRes.connections : [];
         for (const c of conns) if (c?.provider) ids.add(c.provider);
         setConnected([...ids].sort());
+        // Auto-fill every connected provider so nothing has to be typed in by
+        // hand. They start disabled with the balanced preset: enabling one is a
+        // single toggle, and nothing changes until it is saved.
+        for (const p of [...ids].sort()) {
+          if (!cfg[p]) cfg[p] = { ...emptyProvider(), enabled: false, ...FLOW_PRESETS.balanced.values };
+        }
+        setProviders(cfg);
+        setLive(lv);
         setError("");
       } catch (e) {
         if (!cancelled) setError(e.message || "Failed to load");
