@@ -1,4 +1,13 @@
+# v0.5.121 (2026-11-07)
+
+## Features
+- **Provider Limits page**: a dedicated **Dashboard → Provider Limits** menu to cap RPM/TPM and daily/monthly tokens & cost per provider, with live usage, Enforce toggle, **presets** (Unlimited/Relaxed/Balanced/Strict), a one-click **Raise all TPM → 20M/min**, and add-from-connected-providers.
+- **Larger TPM defaults**: shared presets (`src/lib/limits/presets.js`) default TPM to **20,000,000/min**, and the plan editor gains a preset selector plus a "Use large TPM" button. Keeps coding traffic from being throttled; `0` still means unlimited and there is no upper cap.
+- **Flow Control, more flexible**: presets (Conservative/Balanced/Aggressive/Unlimited), per-provider preset picker, "apply preset to all", Enable/Disable all, and one-click add of already-connected providers.
+- **Prompt Injection, easier**: one-click **templates**, **duplicate**, **enable/disable all**, **filter**, and **import/export JSON**; textarea enforces the 20k cap with a live counter.
+
 # v0.5.120 (2026-11-07)
+
 
 ## Fixes
 - **Docs/repo**: fix the dashboard image path (`images/mars-router.png`), all

@@ -728,17 +728,21 @@ Cap how much any single provider can be used, independent of combos. Limits are
 configured per provider in `settings.providerLimits` and are **fail-open**: an
 unset field is unlimited, and a limit that would error never blocks a request.
 
+Manage them at **Dashboard → Provider Limits**: add providers (or pick a
+connected one), apply a **preset** (Unlimited / Relaxed / Balanced / Strict), or
+hit **Raise all TPM** to lift every provider to a large TPM in one click.
+
 ```json
 {
   "providerLimits": {
     "glm": {
       "enabled": true,
-      "rpm": 60,
-      "tpm": 100000,
+      "rpm": 120,
+      "tpm": 5000000,
       "dailyRequests": 2000,
-      "dailyTokens": 5000000,
-      "dailyCost": 5,
-      "monthlyCost": 50,
+      "dailyTokens": 50000000,
+      "dailyCost": 25,
+      "monthlyCost": 300,
       "enforce": true
     }
   }
@@ -748,6 +752,11 @@ unset field is unlimited, and a limit that would error never blocks a request.
 - `enforce: true` returns `429` with a `Retry-After` when a cap is hit.
 - `enforce: false` logs a warning but lets the request through (monitor mode).
 - Live headroom is exposed at `GET /api/settings/limits/status`.
+
+> **TPM (tokens per minute)** is the limit people get wrong most often: a single
+> coding request can use tens of thousands of tokens, so a low TPM throttles
+> normal use. Keep it **large (≥ 1M)** — the presets and the plan editor default
+> to **20M/min**, and `0` means unlimited. There is no upper cap.
 
 ### 🔁 Flexible Retry & Fallback Policy
 
@@ -836,6 +845,8 @@ Manage it at **Dashboard → Prompt Injection** or via `PUT /api/prompt-injectio
 - `position: "prepend"` places the instruction before the existing system text;
   `"append"` adds it after. Prepend group runs first (by `priority`), then append.
 - Injections are idempotent per request; duplicates are never added twice.
+- The dashboard adds **templates** (one-click starting points), **duplicate**,
+  **enable/disable all**, **filter**, and **import/export JSON**.
 
 ### 📚 Model Catalog Control
 
@@ -906,6 +917,9 @@ queued, RPM used/remaining) at `GET /api/flow-control`.
 - `maxConcurrent: 0` and `rpm: 0` mean **unlimited**.
 - `enforce` is automatic; flow control is **fail-open** — a misconfigured or
   errored limiter lets the request through rather than blocking your gateway.
+- The dashboard offers **presets** (Conservative / Balanced / Aggressive /
+  Unlimited), auto-lists your connected providers, and can **apply a preset to
+  all** or toggle every provider's Enabled switch at once.
 
 > Note: the upstream's exact limits are not discoverable automatically — read
 > them from the upstream's docs/pricing and enter them here.

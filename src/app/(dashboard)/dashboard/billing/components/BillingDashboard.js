@@ -4,12 +4,15 @@ import { useCallback, useEffect, useState } from "react";
 import Card from "@/shared/components/Card";
 import Button from "@/shared/components/Button";
 import Input from "@/shared/components/Input";
+import { LIMIT_PRESETS, TPM_SCALE } from "@/lib/limits/presets.js";
 
 const PERIODS = [
   { value: 7, label: "7D" },
   { value: 30, label: "30D" },
   { value: 60, label: "60D" },
 ];
+
+const LIMIT_PRESETS_LIST = Object.entries(LIMIT_PRESETS);
 
 const LIMIT_FIELDS = [
   { key: "rpm", label: "RPM", type: "int" },
@@ -239,6 +242,26 @@ export default function BillingDashboard() {
                     Active
                   </label>
                 </div>
+                <div className="flex flex-wrap items-center gap-2 mt-3 text-sm">
+                  <span className="text-text-muted">Preset:</span>
+                  <select
+                    className="bg-surface border border-border-subtle rounded-md px-3 py-1.5 text-sm"
+                    value=""
+                    onChange={(e) => {
+                      const p = LIMIT_PRESETS[e.target.value];
+                      if (p) setForm((f) => ({ ...f, ...p.values }));
+                    }}
+                  >
+                    <option value="">Apply a preset…</option>
+                    {LIMIT_PRESETS_LIST.map(([key, p]) => <option key={key} value={key}>{p.label} — {p.description}</option>)}
+                  </select>
+                  <Button
+                    variant="outline"
+                    onClick={() => setForm((f) => ({ ...f, tpm: TPM_SCALE.xlarge, dailyTokens: f.dailyTokens || 0, monthlyTokens: f.monthlyTokens || 0 }))}
+                  >
+                    Use large TPM ({TPM_SCALE.xlarge.toLocaleString()}/min)
+                  </Button>
+                </div>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-3">
                   {LIMIT_FIELDS.map((f) => (
                     <Input
@@ -250,7 +273,10 @@ export default function BillingDashboard() {
                     />
                   ))}
                 </div>
-                <p className="text-xs text-text-muted mt-2">0 = unlimited for every field.</p>
+                <p className="text-xs text-text-muted mt-2">
+                  0 = unlimited for every field. TPM is tokens per minute — keep it large (≥ 1M) for coding, since a
+                  single request can use tens of thousands of tokens.
+                </p>
                 <div className="flex gap-2 mt-4">
                   <Button onClick={savePlan}>{editingId ? "Save" : "Create"}</Button>
                   {editingId && <Button variant="outline" onClick={() => { setEditingId(null); setForm(emptyPlan()); }}>Cancel</Button>}

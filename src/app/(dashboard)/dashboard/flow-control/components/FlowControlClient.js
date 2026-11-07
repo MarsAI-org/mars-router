@@ -1,10 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Card from "@/shared/components/Card";
 import Button from "@/shared/components/Button";
+import { FLOW_PRESETS } from "@/lib/limits/presets.js";
 
-const emptyProvider = () => ({ enabled: true, maxConcurrent: 0, rpm: 0, queueTimeoutMs: 30000, maxQueue: 200 });
+const emptyProvider = () => ({ enabled: true, maxConcurrent: 5, rpm: 120, queueTimeoutMs: 30000, maxQueue: 500 });
+
+const PRESET_KEYS = Object.entries(FLOW_PRESETS);
 
 export default function FlowControlClient() {
   const [providers, setProviders] = useState({});
@@ -14,6 +17,8 @@ export default function FlowControlClient() {
   const [error, setError] = useState("");
   const [saved, setSaved] = useState(false);
   const [newProvider, setNewProvider] = useState("");
+  const [knownProviders, setKnownProviders] = useState([]);
+  const [bulkPreset, setBulkPreset] = useState("balanced");
 
   const load = useCallback(async () => {
     const res = await fetch("/api/flow-control").then((r) => r.json());
@@ -32,8 +37,23 @@ export default function FlowControlClient() {
     const run = async () => {
       setLoading(true);
       try {
-        const { cfg, lv } = await load();
-        if (!cancelled) { setProviders(cfg); setLive(lv); setError(""); }
+        const [{ cfg, lv }, provRes] = await Promise.all([
+          load(),
+          fetch("/api/providers").then((r) => r.json()).catch(() => ({})),
+        ]);
+        if (cancelled) return;
+        setProviders(cfg);
+        setLive(lv);
+        setError("");
+        // Distinct provider ids already connected, for one-click add.
+        const ids = new Set();
+        for (const entry of Object.values(provRes || {})) {
+          if (entry?.provider) ids.add(entry.provider);
+        }
+        if (Array.isArray(provRes?.connections)) {
+          for (const c of provRes.connections) if (c?.provider) ids.add(c.provider);
+        }
+        setKnownProviders([...ids].sort());
       } catch (e) {
         if (!cancelled) setError(e.message || "Failed to load");
       } finally {
@@ -59,10 +79,16 @@ export default function FlowControlClient() {
     setSaved(false);
   };
 
-  const addProvider = () => {
-    const p = newProvider.trim();
-    if (!p || providers[p]) return;
-    setProviders((prev) => ({ ...prev, [p]: emptyProvider() }));
+  const applyPreset = (provider, presetKey) => {
+    const preset = FLOW_PRESETS[presetKey];
+    if (!preset) return;
+    update(provider, preset.values);
+  };
+
+  const addProvider = (p) => {
+    const name = String(p || "").trim();
+    if (!name || providers[name]) return;
+    setProviders((prev) => ({ ...prev, [name]: emptyProvider() }));
     setNewProvider("");
     setSaved(false);
   };
@@ -73,6 +99,22 @@ export default function FlowControlClient() {
       delete next[p];
       return next;
     });
+    setSaved(false);
+  };
+
+  const applyPresetToAll = () => {
+    const preset = FLOW_PRESETS[bulkPreset];
+    if (!preset) return;
+    setProviders((prev) =>
+      Object.fromEntries(Object.entries(prev).map(([p, cfg]) => [p, { ...cfg, ...preset.values }]))
+    );
+    setSaved(false);
+  };
+
+  const enableAll = (enabled) => {
+    setProviders((prev) =>
+      Object.fromEntries(Object.entries(prev).map(([p, cfg]) => [p, { ...cfg, enabled }]))
+    );
     setSaved(false);
   };
 
@@ -98,6 +140,12 @@ export default function FlowControlClient() {
       setSaving(false);
     }
   };
+
+  const unconfigured = useMemo(
+    () => knownProviders.filter((p) => !providers[p]),
+    [knownProviders, providers]
+  );
+  const count = Object.keys(providers).length;
 
   return (
     <div className="space-y-6">
@@ -126,15 +174,47 @@ export default function FlowControlClient() {
             placeholder="provider id (e.g. openai, glm, claude)"
             value={newProvider}
             onChange={(e) => setNewProvider(e.target.value)}
+            onKeyDown={(e) => { if (e.key === "Enter") addProvider(newProvider); }}
           />
-          <Button variant="outline" onClick={addProvider}>Add provider</Button>
-          <span className="text-xs text-text-muted ml-auto">0 = unlimited. Requests wait in the queue up to the timeout.</span>
+          <Button variant="outline" onClick={() => addProvider(newProvider)}>Add provider</Button>
+
+          {unconfigured.length > 0 && (
+            <select
+              className="bg-surface border border-border-subtle rounded-md px-3 py-1.5 text-sm"
+              value=""
+              onChange={(e) => addProvider(e.target.value)}
+            >
+              <option value="">Add connected provider…</option>
+              {unconfigured.map((p) => <option key={p} value={p}>{p}</option>)}
+            </select>
+          )}
+
+          <span className="text-xs text-text-muted ml-auto">0 = unlimited · requests wait in the queue up to the timeout.</span>
         </div>
       </Card>
 
+      {count > 0 && (
+        <Card padding="sm">
+          <div className="flex flex-wrap items-center gap-2 text-sm">
+            <span className="text-text-muted">Apply to all:</span>
+            <select
+              className="bg-surface border border-border-subtle rounded-md px-3 py-1.5 text-sm"
+              value={bulkPreset}
+              onChange={(e) => setBulkPreset(e.target.value)}
+            >
+              {PRESET_KEYS.map(([key, p]) => <option key={key} value={key}>{p.label} — {p.description}</option>)}
+            </select>
+            <Button variant="outline" onClick={applyPresetToAll}>Apply</Button>
+            <Button variant="outline" onClick={() => enableAll(true)}>Enable all</Button>
+            <Button variant="outline" onClick={() => enableAll(false)}>Disable all</Button>
+            <span className="text-xs text-text-muted ml-auto">{count} provider(s) configured</span>
+          </div>
+        </Card>
+      )}
+
       {loading ? (
         <Card><p className="text-sm text-text-muted">Loading…</p></Card>
-      ) : Object.keys(providers).length === 0 ? (
+      ) : count === 0 ? (
         <Card><p className="text-sm text-text-muted">No providers configured. Add one to start enforcing upstream limits.</p></Card>
       ) : (
         <div className="space-y-4">
@@ -150,7 +230,17 @@ export default function FlowControlClient() {
                       Enabled
                     </label>
                   </div>
-                  <button className="text-xs text-red-500" onClick={() => removeProvider(provider)}>Remove</button>
+                  <div className="flex items-center gap-2">
+                    <select
+                      className="bg-surface border border-border-subtle rounded-md px-2 py-1 text-xs"
+                      value=""
+                      onChange={(e) => applyPreset(provider, e.target.value)}
+                    >
+                      <option value="">Preset…</option>
+                      {PRESET_KEYS.map(([key, p]) => <option key={key} value={key}>{p.label}</option>)}
+                    </select>
+                    <button className="text-xs text-red-500" onClick={() => removeProvider(provider)}>Remove</button>
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-3">
@@ -181,9 +271,10 @@ function Field({ label, value, onChange }) {
       <span className="block mb-1 text-text-muted">{label}</span>
       <input
         type="number"
+        min="0"
         className="w-full bg-surface border border-border-subtle rounded-md px-3 py-2"
         value={value ?? 0}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => onChange(e.target.value === "" ? 0 : Number(e.target.value))}
       />
     </label>
   );
