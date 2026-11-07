@@ -1,6 +1,6 @@
 {
   "name": "mars-router",
-  "version": "0.5.121",
+  "version": "0.5.122",
   "description": "Mars Router CLI - Start and manage Mars Router server",
   "bin": {
     "mars-router": "./cli.js",

@@ -1,3 +1,9 @@
+# v0.5.122 (2026-11-07)
+
+## Features
+- **Easier Provider Limits & Flow Control**: both pages redesigned into a guided flow — pick a provider from the connected list (or type an id), choose a preset, then save. Providers are shown as compact, collapsible cards with an on/off badge, a live summary line, clear field labels with units, quick value chips (e.g. TPM Unlimited/250k/1M/5M/20M), and a sticky "unsaved changes" save bar. Advanced fields stay hidden until a card is expanded, so the default view is simple.
+- Shared UI: `PresetChips` component and `src/lib/limits/format.js` (compact `20M`/`1M` formatting) used by both menus.
+
 # v0.5.121 (2026-11-07)
 
 ## Features
