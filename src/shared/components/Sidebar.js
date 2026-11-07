@@ -24,6 +24,7 @@ const navItems = [
   { href: "/dashboard/combos", label: "Combo & Vision Adapter", icon: "layers" },
   { href: "/dashboard/model-catalog", label: "Model Catalog", icon: "list_alt" },
   { href: "/dashboard/prompt-injection", label: "Prompt Injection", icon: "syringe" },
+  { href: "/dashboard/flow-control", label: "Flow Control", icon: "speed" },
   { href: "/dashboard/usage", label: "Usage", icon: "bar_chart" },
   { href: "/dashboard/quota", label: "Quota Tracker", icon: "data_usage" },
   { href: "/dashboard/uptime", label: "Uptime & Health", icon: "monitor_heart" },

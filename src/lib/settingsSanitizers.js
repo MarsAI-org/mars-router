@@ -154,3 +154,21 @@ export function sanitizeUptimeMonitor(input) {
     retentionDays: input.retentionDays == null ? defaults.retentionDays : Math.max(1, Math.floor(toNonNegativeNumber(input.retentionDays)) || defaults.retentionDays),
   };
 }
+
+// Upstream flow control (reselling): enforce the upstream's own max concurrent
+// + RPM globally per provider. Map of providerId -> config.
+export function sanitizeUpstreamLimits(input) {
+  if (!input || typeof input !== "object" || Array.isArray(input)) return {};
+  const out = {};
+  for (const [provider, entry] of Object.entries(input)) {
+    if (!entry || typeof entry !== "object" || Array.isArray(entry)) continue;
+    out[String(provider)] = {
+      enabled: entry.enabled === true,
+      maxConcurrent: Math.floor(toNonNegativeNumber(entry.maxConcurrent)),
+      rpm: Math.floor(toNonNegativeNumber(entry.rpm)),
+      queueTimeoutMs: entry.queueTimeoutMs == null ? 30000 : Math.max(0, Math.floor(toNonNegativeNumber(entry.queueTimeoutMs))),
+      maxQueue: entry.maxQueue == null ? 200 : Math.floor(toNonNegativeNumber(entry.maxQueue)),
+    };
+  }
+  return out;
+}

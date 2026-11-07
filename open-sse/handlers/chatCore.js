@@ -26,6 +26,7 @@ import { injectCaveman } from "../rtk/caveman.js";
 import { injectPonytail } from "../rtk/ponytail.js";
 import { injectCustomPrompt } from "../rtk/customPrompt.js";
 import { selectInjections, applyInjections } from "../rtk/promptInjections.js";
+import { acquireFlow } from "@/lib/flowControl/engine.js";
 import { compressMessages, formatRtkLog } from "../rtk/index.js";
 import { compressWithHeadroom, formatHeadroomLog, formatHeadroomSizeLog, isHeadroomPhantomSavings } from "../rtk/headroom.js";
 import { compressWithPxpipe } from "../rtk/pxpipe.js";
@@ -62,7 +63,7 @@ export function stripContinuityFields(body) {
   return body;
 }
 
-export async function handleChatCore({ body, modelInfo, credentials, log, onCredentialsRefreshed, onRequestSuccess, onDisconnect, clientRawRequest, connectionId, userAgent, apiKey, ccFilterNaming, rtkEnabled, headroomEnabled, headroomUrl, headroomCompressUserMessages, headroomTimeoutMs, cavemanEnabled, cavemanLevel, ponytailEnabled, ponytailLevel, customPromptEnabled, customPrompt, pxpipeEnabled, pxpipeMinChars, pxpipeTimeoutMs, pxpipeTransform, onPxpipeEvent, sourceFormatOverride, providerThinking, providerOverrides, retryOverrides = null, promptInjections = null, comboName = null }) {
+export async function handleChatCore({ body, modelInfo, credentials, log, onCredentialsRefreshed, onRequestSuccess, onDisconnect, clientRawRequest, connectionId, userAgent, apiKey, ccFilterNaming, rtkEnabled, headroomEnabled, headroomUrl, headroomCompressUserMessages, headroomTimeoutMs, cavemanEnabled, cavemanLevel, ponytailEnabled, ponytailLevel, customPromptEnabled, customPrompt, pxpipeEnabled, pxpipeMinChars, pxpipeTimeoutMs, pxpipeTransform, onPxpipeEvent, sourceFormatOverride, providerThinking, providerOverrides, retryOverrides = null, promptInjections = null, comboName = null, upstreamLimit = null }) {
   const { provider, model } = modelInfo;
   const requestStartTime = Date.now();
   // Stable per-session color so all lines of one CLI conversation share a tag
@@ -350,12 +351,17 @@ export async function handleChatCore({ body, modelInfo, credentials, log, onCred
   const msgCount = translatedBody.messages?.length || translatedBody.input?.length || translatedBody.contents?.length || translatedBody.request?.contents?.length || 0;
   log?.debug?.("REQUEST", `${provider.toUpperCase()} | ${model} | ${msgCount} msgs`);
 
+  // Upstream flow-control slot for this request. Released when the response is
+  // fully consumed (stream end / non-stream completion / error / disconnect).
+  let flowRelease = () => {};
+
   const streamController = createStreamController({
     onDisconnect: (reason) => {
       trackPendingRequest(model, provider, connectionId, false);
       if (onDisconnect) onDisconnect(reason);
     },
     onError: () => trackPendingRequest(model, provider, connectionId, false),
+    onComplete: () => flowRelease(),
     log, provider, model, reqTag
   });
 
@@ -401,7 +407,21 @@ export async function handleChatCore({ body, modelInfo, credentials, log, onCred
   // Most executors return their registry format. Cursor AgentService is an
   // exception: it is decoded by the executor into OpenAI-compatible output.
   let providerResponseFormat = targetFormat;
+  // Upstream flow control (reselling): hold a slot until the response is fully
+  // consumed (stream end / non-stream completion), not just until headers.
   try {
+    const gate = await acquireFlow(provider, upstreamLimit);
+    if (!gate.ok) {
+      const err = new Error(
+        gate.reason === "queue_full"
+          ? `Upstream ${provider} is at capacity (queue full). Try again shortly.`
+          : `Upstream ${provider} is busy; request timed out waiting for a slot.`
+      );
+      err.code = gate.reason === "queue_full" ? "UPSTREAM_QUEUE_FULL" : "UPSTREAM_QUEUE_TIMEOUT";
+      err.retryAfterMs = gate.waitMs;
+      throw err;
+    }
+    flowRelease = gate.release;
     const result = await executor.execute({
       model,
       body: translatedBody,
@@ -427,6 +447,22 @@ export async function handleChatCore({ body, modelInfo, credentials, log, onCred
     reqLogger.logTargetRequest(providerUrl, providerHeaders, finalBody);
   } catch (error) {
     trackPendingRequest(model, provider, connectionId, false, true);
+    flowRelease();
+
+    // Upstream flow control rejected the request (queue full / wait timeout).
+    // Surface a 429 with a Retry-After hint instead of a generic 502.
+    if (error?.code === "UPSTREAM_QUEUE_FULL" || error?.code === "UPSTREAM_QUEUE_TIMEOUT") {
+      const retryAfterSec = Math.max(1, Math.ceil((error.retryAfterMs || 5000) / 1000));
+      log?.warn?.("FLOW", `⛔ ${provider} ${error.code} → 429 retry-after ${retryAfterSec}s`);
+      appendRequestLog({ model, provider, connectionId, status: "FAILED 429" }).catch(() => { });
+      return createErrorResult(
+        HTTP_STATUS.RATE_LIMITED,
+        error.message,
+        undefined,
+        { "Retry-After": String(retryAfterSec) }
+      );
+    }
+
     appendRequestLog({ model, provider, connectionId, status: `FAILED ${error.name === "AbortError" ? 499 : HTTP_STATUS.BAD_GATEWAY}` }).catch(() => { });
     saveRequestDetail(buildRequestDetail({
       provider, model, connectionId,
@@ -520,6 +556,7 @@ export async function handleChatCore({ body, modelInfo, credentials, log, onCred
       log.errorLine(reqTag, "✗", `ERROR ${statusCode} · ${provider}/${model} · ${Date.now() - requestStartTime}ms${urlStr}\n    ${errMsg}`);
     }
     reqLogger.logError(new Error(message), finalBody || translatedBody);
+    flowRelease();
     return createErrorResult(statusCode, errMsg, resetsAtMs, upstreamResponseHeaders(providerResponse.headers));
   }
 

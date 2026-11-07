@@ -1,3 +1,11 @@
+# v0.5.117 (2026-11-07)
+
+## Features
+- **Upstream flow control (reselling)**: enforce the upstream's own limits globally per provider — a max-concurrent semaphore plus a rolling one-minute RPM window — so total outbound traffic never exceeds what the upstream allows. Excess requests **queue (FIFO)** instead of failing; only a request that outlasts `queueTimeoutMs` or lands on a full queue is rejected with `429 + Retry-After`.
+- Engine `src/lib/flowControl/engine.js`: pure, clock-injectable controller (acquire/release/status) + a process-wide manager and a fail-open `withFlowControl()` wrapper. Applied at the outbound `executor.execute` call in chatCore, so every chat/responses endpoint is covered.
+- Config `settings.upstreamLimits` (`{ [provider]: { enabled, maxConcurrent, rpm, queueTimeoutMs, maxQueue } }`); 0 = unlimited. Managed at **Dashboard → Flow Control** with live status (in-flight, queued, RPM used/remaining) via `GET/PUT /api/flow-control`.
+- **Settings API**: sanitize `upstreamLimits` on `PATCH /api/settings`.
+
 # v0.5.116 (2026-11-07)
 
 ## Features

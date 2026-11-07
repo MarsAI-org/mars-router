@@ -329,6 +329,10 @@ async function handleSingleModelChat(body, modelStr, clientRawRequest = null, re
     ? limitSettings.promptInjections
     : null;
 
+  // Upstream flow control for reselling: enforce the upstream's own max
+  // concurrent + RPM globally per provider (queue excess).
+  const upstreamLimit = limitSettings?.upstreamLimits?.[provider] || null;
+
   // Extract userAgent from request
   const userAgent = request?.headers?.get("user-agent") || "";
 
@@ -408,6 +412,8 @@ async function handleSingleModelChat(body, modelStr, clientRawRequest = null, re
       // Operator prompt injections (global + active combo)
       promptInjections,
       comboName: activeCombo,
+      // Upstream flow control (max concurrent + RPM) for this provider
+      upstreamLimit,
       // Detect source format by endpoint + body
       sourceFormatOverride: request?.url ? detectFormatByEndpoint(new URL(request.url).pathname, body) : null,
       onCredentialsRefreshed: async (newCreds) => {

@@ -546,6 +546,7 @@ a third party under a provider named "Self-hosted".
 | 💉 **Prompt Injection**                                                           | Operator instructions injected into the system message — global or per-combo             | Enforce tone, safety, persona without touching clients |
 | 📚 **Model Catalog Control**                                                      | Choose what `/v1/models` publishes: hide entries, rename, reorder                        | Curate the catalog your customers see              |
 | 🩺 **Test All Models & Uptime**                                                   | One-click health check of every model/combo + availability & latency history             | Prove your API works before customers do           |
+| 🚦 **Upstream Flow Control**                                                      | Enforce the upstream's max concurrent + RPM per provider; excess queues                    | Resell safely without tripping upstream limits     |
 | 📊 **Real-Time Quota Tracking**                                                   | Live token count + reset countdown                                                       | Maximize subscription value                       |
 | 🔄 **Format Translation**                                                         | OpenAI ↔ Claude ↔ Gemini ↔ Cursor ↔ Kiro ↔ Vertex                                        | Works with any CLI tool                           |
 | 👥 **Multi-Account Support**                                                      | Multiple accounts per provider                                                           | Load balancing + redundancy                       |
@@ -787,6 +788,39 @@ curl -X POST localhost:20128/api/uptime -H 'Content-Type: application/json' -d '
 # Read the last 7 days of uptime
 curl 'localhost:20128/api/uptime?days=7'
 ```
+
+### 🚦 Upstream Flow Control (for reselling)
+
+When you resell an upstream API, that upstream has its **own** limits — a max
+number of concurrent requests and an RPM cap. Exceed them and every customer
+gets 429s (or you break their ToS). Flow control enforces those limits **on your
+side, globally per provider**, so your total outbound traffic never goes over.
+
+- **Max concurrent** — a global semaphore per provider. A request waits until a
+  slot frees up.
+- **RPM** — a rolling one-minute window per provider.
+- Excess requests **queue (FIFO)** instead of failing. Only a request that waits
+  longer than `queueTimeoutMs` (or arrives when the queue is full) is rejected,
+  with `429 + Retry-After`.
+
+Configured per provider (`settings.upstreamLimits`), managed at
+**Dashboard → Flow Control** or `PUT /api/flow-control`. Live status (in-flight,
+queued, RPM used/remaining) at `GET /api/flow-control`.
+
+```json
+{
+  "upstreamLimits": {
+    "glm": { "enabled": true, "maxConcurrent": 5, "rpm": 60, "queueTimeoutMs": 30000, "maxQueue": 200 }
+  }
+}
+```
+
+- `maxConcurrent: 0` and `rpm: 0` mean **unlimited**.
+- `enforce` is automatic; flow control is **fail-open** — a misconfigured or
+  errored limiter lets the request through rather than blocking your gateway.
+
+> Note: the upstream's exact limits are not discoverable automatically — read
+> them from the upstream's docs/pricing and enter them here.
 
 ### 📊 Real-Time Quota Tracking
 

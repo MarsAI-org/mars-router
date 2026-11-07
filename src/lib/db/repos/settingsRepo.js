@@ -87,6 +87,11 @@ const DEFAULT_SETTINGS = {
   // Uptime monitor: periodic health probes of models/combos.
   // Shape: { enabled, intervalMinutes, kinds, concurrency, retentionDays }
   uptimeMonitor: { enabled: false, intervalMinutes: 30, kinds: ["llm"], concurrency: 6, retentionDays: 30 },
+  // Upstream flow control for RESELLING: enforce the upstream's own limits
+  // (max concurrent + RPM) globally per provider so total outbound traffic never
+  // exceeds what the upstream allows. Excess requests queue instead of failing.
+  // Shape: { [providerId]: { enabled, maxConcurrent, rpm, queueTimeoutMs, maxQueue } }
+  upstreamLimits: {},
 };
 
 async function readRaw() {

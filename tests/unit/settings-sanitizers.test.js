@@ -7,6 +7,7 @@ import {
   sanitizePromptInjections,
   sanitizeModelCatalog,
   sanitizeUptimeMonitor,
+  sanitizeUpstreamLimits,
   toNonNegativeNumber,
 } from "../../src/lib/settingsSanitizers.js";
 
@@ -169,5 +170,25 @@ describe("sanitizeUptimeMonitor", () => {
     expect(out.intervalMinutes).toBe(15);
     expect(out.concurrency).toBe(20);
     expect(out.kinds).toEqual(["llm", "image"]);
+  });
+});
+
+describe("sanitizeUpstreamLimits", () => {
+  it("returns {} for garbage", () => {
+    expect(sanitizeUpstreamLimits(null)).toEqual({});
+    expect(sanitizeUpstreamLimits([])).toEqual({});
+  });
+
+  it("coerces fields and applies defaults", () => {
+    const out = sanitizeUpstreamLimits({ openai: { enabled: true, maxConcurrent: "5", rpm: -3 } });
+    expect(out.openai).toEqual({
+      enabled: true, maxConcurrent: 5, rpm: 0, queueTimeoutMs: 30000, maxQueue: 200,
+    });
+  });
+
+  it("skips malformed entries", () => {
+    expect(sanitizeUpstreamLimits({ bad: 5, good: { enabled: true } })).toEqual({
+      good: expect.objectContaining({ enabled: true }),
+    });
   });
 });
