@@ -238,6 +238,9 @@ export async function proxy(request) {
   }
 
   if (isPublicLlmApi(pathname)) {
+    // CORS preflight carries no credentials by design; let the route's OPTIONS
+    // handler answer it. Blocking it with 401 breaks every browser client.
+    if (request.method === "OPTIONS") return NextResponse.next();
     if (await canAccessPublicLlmApi(request)) return NextResponse.next();
     return NextResponse.json({ error: "API key required for remote API access" }, { status: 401 });
   }

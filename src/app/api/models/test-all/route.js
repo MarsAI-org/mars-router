@@ -7,8 +7,13 @@ export const maxDuration = 300;
 
 /**
  * POST /api/models/test-all
- * Body (optional): { kinds?: string[], providers?: string[], concurrency?: number, persist?: boolean }
+ * Body (optional): { kinds?: string[], providers?: string[], concurrency?: number, persist?: boolean, timeoutMs?: number }
  * Tests every model the gateway publishes and returns per-model results.
+ *
+ * A whole-run deadline (default 120s, capped by the platform maxDuration) keeps
+ * a large catalog from hanging the request: models not reached before the
+ * deadline are reported as `{ ok:false, error:"skipped: deadline" }` instead of
+ * leaving the client with no response at all.
  */
 export async function POST(request) {
   try {
@@ -19,6 +24,7 @@ export async function POST(request) {
     const providerFilter = Array.isArray(opts.providers) && opts.providers.length
       ? new Set(opts.providers.map((p) => String(p).toLowerCase()))
       : null;
+    const deadlineMs = Math.min(Number(opts.timeoutMs) || 120000, 290000);
 
     // Resolve the published catalog for each requested kind, then dedupe by id.
     const entriesById = new Map();
@@ -40,6 +46,7 @@ export async function POST(request) {
     const results = await runModelChecks(entries, {
       concurrency: Number(opts.concurrency) || 6,
       persist: opts.persist !== false,
+      deadlineMs,
     });
 
     const ok = results.filter((r) => r.ok).length;

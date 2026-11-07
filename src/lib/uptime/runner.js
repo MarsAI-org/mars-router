@@ -40,16 +40,24 @@ export async function mapWithConcurrency(items, limit, worker) {
 
 /**
  * Test a list of model entries (from buildModelsList) and persist the results.
+ * A `deadlineMs` bounds the whole run: entries not started before it are
+ * reported as skipped instead of hanging the caller past the platform timeout.
  * @param {Array<{id:string, owned_by?:string, kind?:string}>} entries
- * @param {{ concurrency?:number, persist?:boolean }} [opts]
+ * @param {{ concurrency?:number, persist?:boolean, deadlineMs?:number }} [opts]
  */
 export async function runModelChecks(entries, opts = {}) {
   const list = Array.isArray(entries) ? entries : [];
   const concurrency = opts.concurrency || DEFAULT_CONCURRENCY;
+  const deadline = opts.deadlineMs ? Date.now() + opts.deadlineMs : Infinity;
   const url = baseUrl();
 
-  // Warm-up with the first model to absorb a token refresh before parallel calls.
   const out = await mapWithConcurrency(list, concurrency, async (entry) => {
+    if (Date.now() >= deadline) {
+      return {
+        target: "model", targetId: entry.id, provider: entry.owned_by || null,
+        ok: false, latencyMs: 0, status: null, error: "skipped: deadline",
+      };
+    }
     const result = await pingModelByKind(entry.id, kindOfEntry(entry), url);
     return {
       target: "model",

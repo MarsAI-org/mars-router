@@ -355,10 +355,49 @@ export async function handleNonStreamingResponse({ providerResponse, provider, m
     console.error("[RequestDetail] Failed to save:", err.message);
   });
 
+  // A client that asked for `stream:false` must receive a single valid JSON body.
+  // Some upstreams answer a non-streaming request with SSE framing (JSON followed
+  // by `data: [DONE]`); if that contamination ever reaches here, the serialized
+  // body is no longer parseable and strict JSON clients break with "Extra data".
+  // Guard the serialization so this path can only ever emit valid JSON.
+  const responseJson = JSON.stringify(restoreToolNames(translatedResponse, toolNameMap));
   return {
     success: true,
-    response: new Response(JSON.stringify(restoreToolNames(translatedResponse, toolNameMap)), {
+    response: new Response(ensureSingleJsonBody(responseJson), {
       headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*", ...upstreamResponseHeaders(providerResponse.headers) }
     })
   };
+}
+
+/**
+ * Return `text` as a single valid JSON value. If a stray SSE trailer
+ * (`data: [DONE]`, `data: {...}` lines) was appended to a JSON body, keep only
+ * the first JSON value so `JSON.parse` on the client cannot fail with
+ * "Unexpected non-whitespace character after JSON".
+ */
+export function ensureSingleJsonBody(text) {
+  if (typeof text !== "string") return text;
+  let depth = 0;
+  let start = -1;
+  let inString = false;
+  let escaped = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (inString) {
+      if (escaped) escaped = false;
+      else if (ch === "\\") escaped = true;
+      else if (ch === '"') inString = false;
+      continue;
+    }
+    if (ch === '"') { inString = true; continue; }
+    if (ch === "{" || ch === "[") { if (depth === 0 && start === -1) start = i; depth++; continue; }
+    if (ch === "}" || ch === "]") {
+      depth--;
+      if (depth === 0 && start !== -1) {
+        const candidate = text.slice(start, i + 1);
+        try { JSON.parse(candidate); return candidate; } catch { start = -1; }
+      }
+    }
+  }
+  return text;
 }

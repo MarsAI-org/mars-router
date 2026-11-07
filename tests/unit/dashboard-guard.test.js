@@ -70,6 +70,20 @@ describe("dashboard guard public LLM API access", () => {
     expect(mocks.validateApiKey).not.toHaveBeenCalled();
   });
 
+  it("lets a CORS preflight (OPTIONS) through without credentials", async () => {
+    const req = request("/v1/chat/completions", {
+      origin: "https://app.example.com",
+      "access-control-request-method": "POST",
+    });
+    req.method = "OPTIONS";
+
+    const response = await proxy(req);
+
+    // Must reach the route's OPTIONS handler, not be blocked with 401.
+    expect(response).toBe(mocks.nextResponse);
+    expect(mocks.validateApiKey).not.toHaveBeenCalled();
+  });
+
   it("rejects remote Host-spoof when real peer IP is non-loopback", async () => {
     const response = await proxy(localRequest("/v1/chat/completions", {
       host: "localhost",

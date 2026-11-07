@@ -522,11 +522,41 @@ async function testApiKeyConnection(connection, effectiveProxy = null) {
   if (isOpenAICompatibleProvider(connection.provider)) {
     const modelsBase = connection.providerSpecificData?.baseUrl;
     if (!modelsBase) return { valid: false, error: "Missing base URL" };
+    const base = modelsBase.replace(/\/$/, "");
+    // Prefer GET /models, but many OpenAI-compatible upstreams do not implement
+    // it (or are slow), which made a perfectly working provider show as
+    // "error" with a 15s timeout. Fall back to a 1-token chat completion —
+    // the same call real traffic uses — before declaring the key bad.
     try {
-      const res = await fetchWithConnectionProxy(`${modelsBase.replace(/\/$/, "")}/models`, {
+      const res = await fetchWithConnectionProxy(`${base}/models`, {
         headers: { "Authorization": `Bearer ${connection.apiKey}` },
       }, effectiveProxy);
-      return { valid: res.ok, error: res.ok ? null : "Invalid API key or base URL" };
+      if (res.ok) return { valid: true, error: null };
+      // 401/403 on /models is authoritative: the key is bad.
+      if (res.status === 401 || res.status === 403) {
+        return { valid: false, error: "Invalid API key" };
+      }
+      // Any other status (404 = no /models route, 5xx, …): confirm via chat.
+    } catch {
+      // Network/timeout on /models is not proof of a bad key — confirm via chat.
+    }
+
+    try {
+      const model = connection.defaultModel || connection.providerSpecificData?.defaultModel || "";
+      const res = await fetchWithConnectionProxy(`${base}/chat/completions`, {
+        method: "POST",
+        headers: { "Authorization": `Bearer ${connection.apiKey}`, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...(model ? { model } : {}),
+          messages: [{ role: "user", content: "ping" }],
+          max_tokens: 1,
+          stream: false,
+        }),
+      }, effectiveProxy);
+      // 401/403 = bad key; 404/400 = reachable+authenticated but no such
+      // model/route, which still proves connectivity and a valid credential.
+      const valid = res.status !== 401 && res.status !== 403;
+      return { valid, error: valid ? null : "Invalid API key or base URL" };
     } catch (err) {
       return { valid: false, error: err.message };
     }
