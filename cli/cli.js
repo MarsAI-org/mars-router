@@ -94,6 +94,109 @@ if (args[0] === "connect" || args[0] === "show") {
   return;
 }
 
+// Service subcommands for npm installs. The installer ships scripts/mars-router.mjs
+// with the same surface; these never start the server.
+if (["update", "version", "doctor", "status", "help"].includes(args[0])) {
+  const sub = args[0];
+  // These run before the launcher constants below are initialised, so use locals.
+  const SERVICE_DEFAULT_PORT = 20128;
+  const SERVICE_DEFAULT_HOST = "0.0.0.0";
+  const SERVICE_INSTALL_CMD = `npm i -g ${pkg.name}@latest --prefer-online`;
+  const dataDir = process.env.DATA_DIR || getAppDataDir();
+  const portIdx = args.findIndex((a) => a === "-p" || a === "--port");
+  const port = portIdx >= 0 ? parseInt(args[portIdx + 1], 10) || SERVICE_DEFAULT_PORT : Number(process.env.PORT) || SERVICE_DEFAULT_PORT;
+  const dryRun = args.includes("--dry-run");
+
+  const isPortOpen = (p, timeoutMs = 800) => new Promise((resolve) => {
+    const s = net.connect({ host: "127.0.0.1", port: Number(p) });
+    const done = (ok) => { s.destroy(); resolve(ok); };
+    s.once("connect", () => done(true));
+    s.once("error", () => done(false));
+    s.setTimeout(timeoutMs, () => done(false));
+  });
+
+  const canWrite = (dir) => {
+    try { fs.mkdirSync(dir, { recursive: true }); fs.accessSync(dir, fs.constants.W_OK); return true; }
+    catch { return false; }
+  };
+
+  (async () => {
+    if (sub === "version") {
+      console.log(pkg.version);
+      return;
+    }
+
+    if (sub === "help") {
+      console.log(`Usage: ${pkg.name} [command] [options]
+
+Commands:
+  (none)              Start the server (launcher flow)
+  connect <url>       Configure local CLI tools for a remote server
+  show [tool...]      Show each CLI tool's current config
+  xai video ...       Generate a video via the running gateway
+  update              Update the global npm package to the latest version
+  version             Print the CLI version
+  status              Report whether the server is listening
+  doctor              Check node / package files / port / data dir
+  help                Show this help
+
+Options:
+  -p, --port <port>   Port (default: ${SERVICE_DEFAULT_PORT})
+  -H, --host <host>   Bind host (default: ${SERVICE_DEFAULT_HOST})
+  -h, --help          Show the launcher help
+  -v, --version       Print the CLI version`);
+      return;
+    }
+
+    if (sub === "status") {
+      const up = await isPortOpen(port);
+      console.log(`${pkg.name} ${pkg.version}`);
+      console.log(`  state: ${up ? "listening" : "not reachable"}`);
+      console.log(`  url:   http://localhost:${port}`);
+      console.log(`  data:  ${dataDir}`);
+      return;
+    }
+
+    if (sub === "doctor") {
+      const appDir = path.join(__dirname, "app");
+      const serverOk = fs.existsSync(path.join(appDir, "custom-server.js")) || fs.existsSync(path.join(appDir, "server.js"));
+      const nodeMajor = Number(process.versions.node.split(".")[0]);
+      const checks = [
+        ["Node.js >= 18", nodeMajor >= 18, process.version],
+        ["server bundle present", serverOk, appDir],
+        ["port reachable", await isPortOpen(port), `http://localhost:${port}`],
+        ["data dir writable", canWrite(dataDir), dataDir],
+      ];
+      console.log("Mars Router doctor");
+      for (const [name, ok, detail] of checks) console.log(`  ${ok ? "✓" : "✗"} ${name}  (${detail})`);
+      if (checks.some(([, ok]) => !ok)) {
+        console.log("\nProblems found:");
+        if (!serverOk) console.log("  - reinstall: npm i -g " + pkg.name + "@latest");
+        if (!checks[0][1]) console.log("  - install Node.js 18+: https://nodejs.org/");
+        if (!checks[2][1]) console.log("  - start it: " + pkg.name + "");
+      } else {
+        console.log("\nAll checks passed.");
+      }
+      return;
+    }
+
+    if (sub === "update") {
+      const cmd = SERVICE_INSTALL_CMD;
+      if (dryRun) { console.log(`Would run: ${cmd}`); return; }
+      console.log(`Updating ${pkg.name} (current ${pkg.version})…`);
+      try {
+        execSync(cmd, { stdio: "inherit" });
+        console.log(`\nUpdated. Restart the server to use the new version.`);
+      } catch (err) {
+        console.error(`Update failed: ${err?.message || err}`);
+        process.exit(1);
+      }
+      return;
+    }
+  })();
+  return;
+}
+
 // Self-heal SQLite runtime deps (sql.js + better-sqlite3) into ~/.mars-router/runtime
 // so the server can resolve them via NODE_PATH. Best-effort — sql.js is required,
 // better-sqlite3 is optional. Logs to stderr only on failure.
