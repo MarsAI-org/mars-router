@@ -9,7 +9,7 @@ let tempDir;
 const originalDataDir = process.env.DATA_DIR;
 
 beforeEach(() => {
-  tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "9router-billing-"));
+  tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "mars-router-billing-"));
   process.env.DATA_DIR = tempDir;
   delete global._dbAdapter;
   delete global._keyQuotaState;

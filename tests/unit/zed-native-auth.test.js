@@ -29,7 +29,7 @@ let generateAuthData, exchangeTokens;
 // Importing the OAuth + DB module graph after vi.resetModules() exceeds the 10s default
 // hook timeout under full-suite load (it passes in isolation), so allow 30s.
 beforeAll(async () => {
-  process.env.DATA_DIR = fs.mkdtempSync(path.join(os.tmpdir(), "9router-zed-auth-"));
+  process.env.DATA_DIR = fs.mkdtempSync(path.join(os.tmpdir(), "mars-router-zed-auth-"));
   vi.resetModules();
   ({ startZedProxy, stopZedProxy, registerZedSession, getZedSessionStatus, clearZedSession } =
     await import("@/lib/oauth/utils/server.js"));

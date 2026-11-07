@@ -245,8 +245,8 @@ describe("hermes config.yaml helpers", () => {
     });
   });
 
-  describe("9router detection", () => {
-    it("recognises a local 9router endpoint", () => {
+  describe("Mars Router detection", () => {
+    it("recognises a local Mars Router endpoint", () => {
       expect(hasMarsRouterConfig({ provider: "custom", base_url: "http://127.0.0.1:20128/v1" })).toBe(true);
       expect(hasMarsRouterConfig({ provider: "custom", base_url: "http://localhost:20128/v1" })).toBe(true);
     });

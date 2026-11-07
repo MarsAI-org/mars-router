@@ -130,7 +130,7 @@ describe("connect tool writers", () => {
     expect(readJson(f).customModels.map((m) => m.id)).toEqual(["mine"]);
   });
 
-  it("serverModel extractors read only Mars Router-owned model ids", async () => {
+  it("serverModel extractors read only mars-router-owned model ids", async () => {
     expect(await tool("codex").serverModel({ config: 'model = "a"\nmodel_provider = "mars-router"\n' })).toBe("a");
     // A model belonging to another provider is not ours to inherit.
     expect(await tool("codex").serverModel({ config: 'model = "gpt-6"\nmodel_provider = "openai"\n' })).toBeNull();

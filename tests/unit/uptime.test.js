@@ -119,7 +119,7 @@ const originalDataDir = process.env.DATA_DIR;
 
 describe("uptimeRepo", () => {
   beforeEach(() => {
-    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "9router-uptime-"));
+    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "mars-router-uptime-"));
     process.env.DATA_DIR = tempDir;
     delete global._dbAdapter;
     vi.resetModules();

@@ -146,7 +146,7 @@ describe("hermes profile resolution", () => {
       expect(profiles[2]).toMatchObject({ name: "research", model: null, hasMarsRouter: false });
     });
 
-    it("reports 9router config in a named profile", async () => {
+    it("reports Mars Router config in a named profile", async () => {
       const coder = path.join(tmpRoot, "profiles", "coder");
       await fs.mkdir(coder, { recursive: true });
       await write(coder, "config.yaml", MARS_ROUTER_MODEL);

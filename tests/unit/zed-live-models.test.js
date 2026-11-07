@@ -79,7 +79,7 @@ let GET;
 let createProviderConnection;
 
 beforeAll(async () => {
-  process.env.DATA_DIR = fs.mkdtempSync(path.join(os.tmpdir(), "9router-zed-live-"));
+  process.env.DATA_DIR = fs.mkdtempSync(path.join(os.tmpdir(), "mars-router-zed-live-"));
   vi.resetModules();
   ({ GET } = await import("@/app/api/providers/[id]/models/route.js"));
   ({ createProviderConnection } = await import("@/models/index.js"));

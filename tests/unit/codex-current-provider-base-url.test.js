@@ -26,15 +26,15 @@ base_url = "https://omniroute.example/v1"
 Authorization = "Bearer placeholder-omniroute-key"
 
 [model_providers.mars-router]
-base_url = "https://9router.example/v1/"
+base_url = "https://Mars Router.example/v1/"
 
 [model_providers.mars-router.http_headers]
-Authorization = "Bearer placeholder-9router-key"
+Authorization = "Bearer placeholder-mars-router-key"
 `;
 
     expect(getCurrentCodexProviderSettings(config)).toEqual({
-      baseUrl: "https://9router.example/v1/",
-      apiKey: "placeholder-9router-key",
+      baseUrl: "https://Mars Router.example/v1/",
+      apiKey: "placeholder-mars-router-key",
     });
   });
 

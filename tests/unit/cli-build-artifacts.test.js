@@ -23,7 +23,7 @@ const {
 const tempDirs = [];
 
 function createTempDir() {
-  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "9router-cli-build-"));
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "mars-router-cli-build-"));
   tempDirs.push(tempDir);
   return tempDir;
 }
