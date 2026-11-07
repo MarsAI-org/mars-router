@@ -1,6 +1,6 @@
 {
-  "name": "9router-app",
-  "version": "0.5.118",
+  "name": "mars-router-app",
+  "version": "0.5.119",
   "description": "Mars Router web dashboard",
   "private": true,
   "scripts": {
@@ -9,7 +9,7 @@
     "build": "next build --webpack",
     "postbuild": "node scripts/copy-standalone-assets.mjs",
     "postbuild:bun": "node scripts/copy-standalone-assets.mjs",
-    "start": "node custom-server.js --port 20127",
+    "start": "node scripts/start.mjs",
     "dev:bun": "bun --bun next dev --webpack --port 20127",
     "build:bun": "bun --bun next build --webpack",
     "start:bun": "bun ./.next/standalone/custom-server.js",
@@ -49,9 +49,9 @@
     "zustand": "^5.0.10"
   },
   "optionalDependencies": {
-    "@aws-sdk/credential-providers": "^3.1135.0",
+    "@aws-sdk/credential-providers": "^3.1164.0",
     "ajv": "^8.17.1",
-    "better-sqlite3": "^12.6.2",
+    "better-sqlite3": "^12.11.1",
     "ws": "^8.18.0"
   },
   "comment_better_sqlite3": "kept in optionalDependencies so npm install doesn't fail on systems without build tools — sql.js is used as fallback at runtime",

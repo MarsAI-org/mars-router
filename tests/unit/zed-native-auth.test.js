@@ -1,6 +1,6 @@
 // Acceptance suite for the Zed native-app auth fix.
 // Self-isolating: DATA_DIR points at a temp dir before the DB layer loads,
-// so criterion 3's connection save never reaches the real ~/.9router DB.
+// so criterion 3's connection save never reaches the real ~/.mars-router DB.
 //
 // Covers criteria:
 //   1. Zed proxy starts

@@ -1,0 +1,9 @@
+▲ Next.js 16.4.5
+- Local:         http://localhost:8080
+- Network:       http://0.0.0.0:8080
+✓ Ready in 0ms
+✓ Running next.config took 4ms
+(node:604362) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///root/workspace/mars-router/.next/standalone/src/sse/services/backgroundTokenRefresh.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /root/workspace/mars-router/.next/standalone/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)

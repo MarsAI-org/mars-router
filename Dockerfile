@@ -33,7 +33,7 @@ COPY . ./
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
 
-# https://github.com/decolua/9router/issues/5245
+# https://github.com/MarsAI-org/mars-router/issues/5245
 # wreq-js and playwright-core are lazy runtime dependencies (loaded by
 # lazyRuntime.js via createRequire). Next standalone tracing does not include
 # them, so OpenCode Free fails with HTTP 502 ("resolve is undefined").
@@ -60,7 +60,7 @@ RUN if [ "$ALPINE_MIRROR" != "dl-cdn.alpinelinux.org" ]; then \
       sed -i "s|dl-cdn.alpinelinux.org|${ALPINE_MIRROR}|g" /etc/apk/repositories; \
     fi
 
-LABEL org.opencontainers.image.title="9router" \
+LABEL org.opencontainers.image.title="mars-router" \
       org.opencontainers.image.version="${APP_VERSION}"
 
 ENV NODE_ENV=production
@@ -86,12 +86,12 @@ COPY --from=builder /app/node_modules/sql.js ./node_modules/sql.js
 # node-machine-id is createRequire-loaded at runtime; tracing omits it.
 COPY --from=builder /app/node_modules/node-machine-id ./node_modules/node-machine-id
 # wreq-js + playwright-core (and deps) are lazy-loaded at runtime and omitted by
-# tracing. See https://github.com/decolua/9router/issues/5245
+# tracing. See https://github.com/MarsAI-org/mars-router/issues/5245
 COPY --from=builder /opt/lazy-runtime/node_modules/. ./node_modules/
 
 RUN mkdir -p /app/data && chown -R node:node /app && \
   mkdir -p /app/data-home && chown node:node /app/data-home && \
-  ln -sf /app/data-home /root/.9router 2>/dev/null || true
+  ln -sf /app/data-home /root/.mars-router 2>/dev/null || true
 
 # Avoid a full distribution upgrade in the runtime image. It makes builds less
 # reproducible and is unrelated to installing the runtime entrypoint helper.

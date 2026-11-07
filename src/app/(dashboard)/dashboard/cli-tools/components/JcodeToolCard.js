@@ -36,12 +36,13 @@ export default function JcodeToolCard({
   const [customBaseUrl, setCustomBaseUrl] = useState("");
   const hasInitializedModel = useRef(false);
 
-  const currentBaseUrl = jcodeStatus?.config?.providers?.["9router"]?.base_url || "";
+  const jcProvider = jcodeStatus?.config?.providers?.["mars-router"] || jcodeStatus?.config?.providers?.["9router"];
+  const currentBaseUrl = jcProvider?.base_url || "";
 
   const getConfigStatus = () => {
     if (!jcodeStatus?.installed) return null;
-    if (!jcodeStatus?.has9Router) return "not_configured";
-    const currentProvider = jcodeStatus.config?.providers?.["9router"];
+    if (!jcodeStatus?.hasMarsRouter) return "not_configured";
+    const currentProvider = jcProvider;
     if (!currentProvider) return "not_configured";
     return matchKnownEndpoint(currentProvider.base_url, { tunnelPublicUrl, tailscaleUrl }) ? "configured" : "other";
   };
@@ -78,7 +79,7 @@ export default function JcodeToolCard({
   useEffect(() => {
     if (jcodeStatus?.installed && !hasInitializedModel.current) {
       hasInitializedModel.current = true;
-      const provider = jcodeStatus.config?.providers?.["9router"];
+      const provider = jcProvider;
       if (provider) {
         if (provider.default_model) {
           setSelectedModel(provider.default_model);
@@ -130,7 +131,7 @@ export default function JcodeToolCard({
     try {
       const keyToUse = selectedApiKey?.trim()
         || (apiKeys?.length > 0 ? apiKeys[0].key : null)
-        || (!cloudEnabled ? "sk_9router" : null);
+        || (!cloudEnabled ? "sk_mars_router" : null);
 
       const res = await fetch("/api/cli-tools/jcode-settings", {
         method: "POST",
@@ -186,18 +187,18 @@ export default function JcodeToolCard({
   const getManualConfigs = () => {
     const keyToUse = (selectedApiKey && selectedApiKey.trim())
       ? selectedApiKey
-      : (!cloudEnabled ? "sk_9router" : "<API_KEY_FROM_DASHBOARD>");
+      : (!cloudEnabled ? "sk_mars_router" : "<API_KEY_FROM_DASHBOARD>");
 
-    const configToml = `[providers.9router]
+    const configToml = `[providers.mars-router]
 type = "openai-compatible"
 base_url = "${getEffectiveBaseUrl()}"
 auth = "bearer"
 api_key_env = "JCODE_9ROUTER_API_KEY"
-env_file = "provider-9router.env"
+env_file = "provider-mars-router.env"
 default_model = "${selectedModel || "cc/claude-opus-4-7"}"
 requires_api_key = true
 
-[[providers.9router.models]]
+[[providers.mars-router.models]]
 id = "${selectedModel || "cc/claude-opus-4-7"}"`;
 
     const envContent = `JCODE_9ROUTER_API_KEY="${keyToUse}"`;
@@ -208,7 +209,7 @@ id = "${selectedModel || "cc/claude-opus-4-7"}"`;
         content: configToml,
       },
       {
-        filename: "~/.config/jcode/provider-9router.env",
+        filename: "~/.config/jcode/provider-mars-router.env",
         content: envContent,
       },
     ];
@@ -305,12 +306,12 @@ id = "${selectedModel || "cc/claude-opus-4-7"}"`;
                 </div>
 
                 {/* Current configured */}
-                {jcodeStatus?.config?.providers?.["9router"]?.base_url && (
+                {jcProvider?.base_url && (
                   <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-[8rem_auto_1fr_auto] sm:items-center sm:gap-2">
                     <span className="text-xs font-semibold text-text-main sm:text-right sm:text-sm">Current</span>
                     <span className="material-symbols-outlined hidden text-text-muted text-[14px] sm:inline">arrow_forward</span>
                     <span className="min-w-0 truncate rounded bg-surface/40 px-2 py-2 text-xs text-text-muted sm:py-1.5">
-                      {jcodeStatus.config.providers["9router"].base_url}
+                      {jcProvider.base_url}
                     </span>
                   </div>
                 )}
@@ -336,8 +337,8 @@ id = "${selectedModel || "cc/claude-opus-4-7"}"`;
                 {/* Usage hint */}
                 <div className="flex flex-col gap-1 p-3 bg-blue-500/5 border border-blue-500/20 rounded-lg">
                   <p className="text-xs font-medium text-blue-600 dark:text-blue-400">Usage:</p>
-                  <code className="text-xs font-mono text-text-muted">jcode --provider-profile 9router</code>
-                  <code className="text-xs font-mono text-text-muted">jcode --provider-profile 9router --model {selectedModel || "cc/claude-opus-4-7"}</code>
+                  <code className="text-xs font-mono text-text-muted">jcode --provider-profile mars-router</code>
+                  <code className="text-xs font-mono text-text-muted">jcode --provider-profile mars-router --model {selectedModel || "cc/claude-opus-4-7"}</code>
                 </div>
               </div>
 
@@ -352,7 +353,7 @@ id = "${selectedModel || "cc/claude-opus-4-7"}"`;
                 <Button variant="primary" size="sm" onClick={handleApplySettings} disabled={!selectedModel} loading={applying}>
                   <span className="material-symbols-outlined text-[14px] mr-1">save</span>Apply
                 </Button>
-                <Button variant="outline" size="sm" onClick={handleResetSettings} disabled={!jcodeStatus?.has9Router} loading={restoring}>
+                <Button variant="outline" size="sm" onClick={handleResetSettings} disabled={!jcodeStatus?.hasMarsRouter} loading={restoring}>
                   <span className="material-symbols-outlined text-[14px] mr-1">restore</span>Reset
                 </Button>
                 <Button variant="ghost" size="sm" onClick={() => setShowManualConfigModal(true)}>

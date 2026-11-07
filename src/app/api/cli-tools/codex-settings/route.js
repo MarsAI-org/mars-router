@@ -73,10 +73,13 @@ const readConfig = async () => {
   }
 };
 
-// Check if config has Mars Router settings
-const has9RouterConfig = (config) => {
+// Check if config has Mars Router settings (new or legacy section name)
+const hasMarsRouterConfig = (config) => {
   if (!config) return false;
-  return config.includes("model_provider = \"9router\"") || config.includes("[model_providers.9router]");
+  return config.includes("model_provider = \"mars-router\"")
+    || config.includes("model_provider = \"9router\"")
+    || config.includes("[model_providers.mars-router]")
+    || config.includes("[model_providers.mars-router]");
 };
 
 // GET - Check codex CLI and read current settings
@@ -97,7 +100,7 @@ export async function GET() {
     return NextResponse.json({
       installed: true,
       config,
-      has9Router: has9RouterConfig(config),
+      hasMarsRouter: hasMarsRouterConfig(config),
       configPath: getCodexConfigPath(),
     });
   } catch (error) {
@@ -130,13 +133,13 @@ export async function POST(request) {
 
     // Update only Mars Router related fields (api_key goes to auth.json, not config.toml)
     parsed.model = model;
-    parsed.model_provider = "9router";
+    parsed.model_provider = "mars-router";
 
-    // Update or create 9router provider section (no api_key - Codex reads from auth.json)
+    // Update or create the mars-router provider section (no api_key - Codex reads from auth.json)
     // Ensure /v1 suffix is added only once
     const normalizedBaseUrl = baseUrl.endsWith("/v1") ? baseUrl : `${baseUrl}/v1`;
     // Custom providers ignore auth.json - the key must travel as a static header
-    setNestedSection(parsed, "model_providers.9router", {
+    setNestedSection(parsed, "model_providers.mars-router", {
       name: "Mars Router",
       base_url: normalizedBaseUrl,
       wire_api: "responses",
@@ -182,14 +185,15 @@ export async function DELETE() {
       throw error;
     }
 
-    // Remove Mars Router related root fields only if they point to 9router
-    if (parsed.model_provider === "9router") {
+    // Remove Mars Router related root fields only if they point to mars-router (or legacy Mars Router)
+    if (parsed.model_provider === "mars-router" || parsed.model_provider === "mars-router") {
       delete parsed.model;
       delete parsed.model_provider;
     }
 
-    // Remove 9router provider section
-    deleteNestedSection(parsed, "model_providers.9router");
+    // Remove provider sections (current + legacy name)
+    deleteNestedSection(parsed, "model_providers.mars-router");
+    deleteNestedSection(parsed, "model_providers.mars-router");
 
     // Remove subagent configuration (both the current key and the legacy role form)
     deleteNestedSection(parsed, "agents.default_subagent_model");

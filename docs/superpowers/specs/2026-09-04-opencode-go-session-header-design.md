@@ -106,7 +106,7 @@ the full offline test suite, the application build, and the CLI package build.
 
 Build the CLI with `npm --prefix cli run build`, create a package with
 `npm --prefix cli pack`, and install the generated tarball globally to replace
-the current npm-installed `9router@0.5.65`. Verify the installed package version
+the current npm-installed `mars-router@0.5.65`. Verify the installed package version
 and packaged source contains the new executor.
 
 Upstream issue #3759 already tracks the problem, so no duplicate issue will be

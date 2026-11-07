@@ -1,6 +1,6 @@
 # Docker
 
-Run Mars Router in a container. Published image: [`decolua/9router`](https://hub.docker.com/r/decolua/9router) — multi-platform `linux/amd64` + `linux/arm64`.
+Run Mars Router in a container. Published image: [`marsai/mars-router`](https://hub.docker.com/r/marsai/mars-router) — multi-platform `linux/amd64` + `linux/arm64`.
 
 ---
 
@@ -11,10 +11,10 @@ Run Mars Router in a container. Published image: [`decolua/9router`](https://hub
 ```bash
 docker run -d \
   -p 20128:20128 \
-  -v "$HOME/.9router:/app/data" \
+  -v "$HOME/.mars-router:/app/data" \
   -e DATA_DIR=/app/data \
-  --name 9router \
-  decolua/9router:latest
+  --name mars-router \
+  marsai/mars-router:latest
 ```
 
 App listens on port `20128`. Open: http://localhost:20128
@@ -22,20 +22,20 @@ App listens on port `20128`. Open: http://localhost:20128
 ## Manage container
 
 ```bash
-docker logs -f 9router        # view logs
-docker stop 9router           # stop
-docker start 9router          # start again
-docker rm -f 9router          # remove
+docker logs -f mars-router        # view logs
+docker stop mars-router           # stop
+docker start mars-router          # start again
+docker rm -f mars-router          # remove
 ```
 
 ## Data persistence
 
 ```bash
--v "$HOME/.9router:/app/data" \
+-v "$HOME/.mars-router:/app/data" \
 -e DATA_DIR=/app/data
 ```
 
-Without `DATA_DIR`, the app falls back to `~/.9router/` (macOS/Linux) or `%APPDATA%\9router\` (Windows). In the container, `DATA_DIR=/app/data` makes the bind mount work.
+Without `DATA_DIR`, the app falls back to `~/.mars-router/` (macOS/Linux) or `%APPDATA%\mars-router\` (Windows). In the container, `DATA_DIR=/app/data` makes the bind mount work.
 
 Data layout under `$DATA_DIR/`:
 
@@ -47,7 +47,7 @@ $DATA_DIR/
 └── ...                   # certs, logs, runtime configs
 ```
 
-Host path: `$HOME/.9router/db/data.sqlite`
+Host path: `$HOME/.mars-router/db/data.sqlite`
 Container path: `/app/data/db/data.sqlite`
 
 ## Optional env vars
@@ -55,13 +55,13 @@ Container path: `/app/data/db/data.sqlite`
 ```bash
 docker run -d \
   -p 20128:20128 \
-  -v "$HOME/.9router:/app/data" \
+  -v "$HOME/.mars-router:/app/data" \
   -e DATA_DIR=/app/data \
   -e PORT=20128 \
   -e HOSTNAME=0.0.0.0 \
   -e DEBUG=true \
-  --name 9router \
-  decolua/9router:latest
+  --name mars-router \
+  marsai/mars-router:latest
 ```
 
 ## Optional Headroom sidecar
@@ -70,12 +70,12 @@ The Mars Router image does not bundle Python or Headroom. To use Headroom in Doc
 
 ```yaml
 services:
-  9router:
-    image: decolua/9router:latest
+  mars-router:
+    image: marsai/mars-router:latest
     ports:
       - "20128:20128"
     volumes:
-      - "$HOME/.9router:/app/data"
+      - "$HOME/.mars-router:/app/data"
     environment:
       DATA_DIR: /app/data
       HEADROOM_URL: http://headroom:8787
@@ -95,15 +95,15 @@ If Headroom runs on the Docker host instead of as a sidecar, use `http://host.do
 ## Update to latest
 
 ```bash
-docker pull decolua/9router:latest
-docker rm -f 9router
+docker pull marsai/mars-router:latest
+docker rm -f mars-router
 # re-run the quick start command
 ```
 
 To pin a specific version instead of following `latest`, use a numbered image tag:
 
 ```bash
-docker pull decolua/9router:0.5.81
+docker pull marsai/mars-router:0.5.81
 ```
 
 ---
@@ -113,12 +113,12 @@ docker pull decolua/9router:0.5.81
 ## Build image locally (test)
 
 ```bash
-docker build -t 9router .
+docker build -t mars-router .
 
 docker run --rm -p 20128:20128 \
-  -v "$HOME/.9router:/app/data" \
+  -v "$HOME/.mars-router:/app/data" \
   -e DATA_DIR=/app/data \
-  9router
+  mars-router
 ```
 
 The Dockerfile uses the official Alpine and npm registries by default. Regional mirrors can be supplied when needed:
@@ -127,15 +127,15 @@ The Dockerfile uses the official Alpine and npm registries by default. Regional 
 docker build \
   --build-arg ALPINE_MIRROR=mirrors.aliyun.com \
   --build-arg NPM_REGISTRY=https://registry.npmmirror.com/ \
-  -t 9router .
+  -t mars-router .
 ```
 
 ## Publish (automatic via CI)
 
 Push a Docker-safe semver git tag `vX.Y.Z` (or a prerelease such as `vX.Y.Z-rc.1`) → GitHub Actions builds `linux/amd64` and `linux/arm64` on native runners, health-checks each platform image, verifies the resulting manifest and `/api/health`, then publishes:
 
-- `ghcr.io/decolua/9router:X.Y.Z` + `:latest`
-- `decolua/9router:X.Y.Z` + `:latest`
+- `ghcr.io/marsai/mars-router:X.Y.Z` + `:latest`
+- `marsai/mars-router:X.Y.Z` + `:latest`
 
 The `v` prefix is used only for the git tag; image tags omit it. A stable tag push promotes `latest`, but a prerelease tag such as `vX.Y.Z-rc.1` publishes only its numbered image by default. Prereleases require an explicit manual `promote_latest` opt-in. Promotion happens only after both native platform builds, both platform health checks, manifest inspection, and the resolved-manifest smoke test succeed. A failed or timed-out platform build therefore cannot move `latest`.
 
@@ -166,7 +166,7 @@ promote_latest:  true
 Numbered image tags are mutable because a republish can replace their manifest. For a deployment that must be immutable, pin the image digest instead:
 
 ```bash
-docker pull decolua/9router@sha256:<verified-digest>
+docker pull marsai/mars-router@sha256:<verified-digest>
 ```
 
 The release workflow runs `/api/health` on each native `amd64` and `arm64` platform image before it uploads the digest artifact or assembles the multi-platform manifest. It then runs a second health check against the resolved version manifest before any requested `latest` promotion.
@@ -180,7 +180,7 @@ The upstream repository needs these repository secrets for Docker Hub publishing
 - `DOCKERHUB_USERNAME`
 - `DOCKERHUB_TOKEN`
 
-GHCR publishing uses the workflow's `GITHUB_TOKEN` with package write permission. Forks can publish to their own GHCR namespace, but Docker Hub publication is restricted to the upstream `decolua/9router` repository.
+GHCR publishing uses the workflow's `GITHUB_TOKEN` with package write permission. Forks can publish to their own GHCR namespace, but Docker Hub publication is restricted to the upstream `marsai/mars-router` repository.
 
 The optional repository variables `ALPINE_MIRROR` and `NPM_REGISTRY` can override the default package mirrors used by the CI Docker build.
 

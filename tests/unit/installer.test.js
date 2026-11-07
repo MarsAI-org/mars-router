@@ -33,6 +33,12 @@ describe("install.sh", () => {
   it("checks for a Node.js version floor", () => {
     expect(sh).toMatch(/REQUIRED_NODE_MAJOR=\d+/);
   });
+
+  it("installs a mars-router command and starts through it", () => {
+    expect(sh).toContain("mars-router");
+    expect(sh).toContain("scripts/mars-router.mjs");
+    expect(sh).toContain(".local/bin");
+  });
 });
 
 describe("install.ps1", () => {

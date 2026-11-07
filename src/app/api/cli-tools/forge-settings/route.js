@@ -30,7 +30,7 @@ const checkForgeInstalled = async () => {
   }
 };
 
-const has9RouterConfig = (content) => {
+const hasMarsRouterConfig = (content) => {
   if (!content) return false;
   return content.includes("managed by Mars Router") || content.includes("localhost:20128");
 };
@@ -63,7 +63,7 @@ export async function GET() {
     return NextResponse.json({
       installed: true,
       config,
-      has9Router: has9RouterConfig(content),
+      hasMarsRouter: hasMarsRouterConfig(content),
       configPath: getForgeConfigPath(),
     });
   } catch (err) {

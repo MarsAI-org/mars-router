@@ -46,10 +46,12 @@ const readSettings = async () => {
   }
 };
 
-// Check if settings has Mars Router customModels
-const has9RouterConfig = (settings) => {
+// Check if settings has Mars Router customModels (current or legacy id prefix)
+const isRouterCustomId = (id) =>
+  typeof id === "string" && (id.startsWith("custom:mars-router") || id.startsWith("custom:9Router"));
+const hasMarsRouterConfig = (settings) => {
   if (!settings || !settings.customModels) return false;
-  return settings.customModels.some(m => m.id?.startsWith("custom:9Router"));
+  return settings.customModels.some(m => isRouterCustomId(m.id));
 };
 
 // GET - Check droid CLI and read current settings
@@ -70,7 +72,7 @@ export async function GET() {
     return NextResponse.json({
       installed: true,
       settings,
-      has9Router: has9RouterConfig(settings),
+      hasMarsRouter: hasMarsRouterConfig(settings),
       settingsPath: getDroidSettingsPath(),
     });
   } catch (error) {
@@ -112,7 +114,7 @@ export async function POST(request) {
     }
 
     // Remove all existing Mars Router configs
-    settings.customModels = settings.customModels.filter(m => !m.id?.startsWith("custom:9Router"));
+    settings.customModels = settings.customModels.filter(m => !isRouterCustomId(m.id));
 
     // Normalize baseUrl to ensure /v1 suffix
     const normalizedBaseUrl = baseUrl.endsWith("/v1") ? baseUrl : `${baseUrl}/v1`;
@@ -137,7 +139,7 @@ export async function POST(request) {
       if (!m || typeof m !== "string") continue;
       settings.customModels.push({
         model: m,
-        id: `custom:9Router-${i}`,
+        id: `custom:mars-router-${i}`,
         index: i,
         baseUrl: normalizedBaseUrl,
         apiKey: keyToUse,
@@ -193,7 +195,7 @@ export async function DELETE() {
 
     // Remove Mars Router customModels
     if (settings.customModels) {
-      settings.customModels = settings.customModels.filter(m => !m.id?.startsWith("custom:9Router"));
+      settings.customModels = settings.customModels.filter(m => !isRouterCustomId(m.id));
       
       // Remove customModels array if empty
       if (settings.customModels.length === 0) {

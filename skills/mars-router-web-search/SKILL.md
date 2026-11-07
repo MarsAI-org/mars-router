@@ -1,25 +1,25 @@
 ---
-name: 9router-web-search
+name: mars-router-web-search
 description: Web and X search via Mars Router /v1/search using Tavily / Exa / Brave / Serper / SearXNG / Google PSE / Linkup / SearchAPI / You.com / Perplexity / Xquik. Use when the user wants to search the web, find articles, or search public X posts.
 ---
 
 # Mars Router — Web Search
 
-Requires `NINEROUTER_URL` (and `NINEROUTER_KEY` if auth enabled). See https://raw.githubusercontent.com/decolua/9router/refs/heads/master/skills/9router/SKILL.md for setup.
+Requires `MARS_ROUTER_URL` (and `MARS_ROUTER_KEY` if auth enabled). See https://raw.githubusercontent.com/MarsAI-org/mars-router/refs/heads/master/skills/mars-router/SKILL.md for setup.
 
 ## Discover
 
 ```bash
-curl $NINEROUTER_URL/v1/models/web | jq '.data[] | select(.kind=="webSearch") | .id'
+curl $MARS_ROUTER_URL/v1/models/web | jq '.data[] | select(.kind=="webSearch") | .id'
 # Per-provider params (searchTypes, maxResults, required options like cx for google-pse)
-curl "$NINEROUTER_URL/v1/models/info?id=tavily/search"
+curl "$MARS_ROUTER_URL/v1/models/info?id=tavily/search"
 ```
 
 IDs end in `/search` (e.g. `tavily/search`). Combos (`owned_by:"combo"`) chain providers with auto-fallback.
 
 ## Endpoint
 
-`POST $NINEROUTER_URL/v1/search`
+`POST $MARS_ROUTER_URL/v1/search`
 
 | Field | Required | Notes |
 |---|---|---|
@@ -32,8 +32,8 @@ IDs end in `/search` (e.g. `tavily/search`). Combos (`owned_by:"combo"`) chain p
 ## Examples
 
 ```bash
-curl -X POST $NINEROUTER_URL/v1/search \
-  -H "Authorization: Bearer $NINEROUTER_KEY" \
+curl -X POST $MARS_ROUTER_URL/v1/search \
+  -H "Authorization: Bearer $MARS_ROUTER_KEY" \
   -H "Content-Type: application/json" \
   -d '{"model":"tavily","query":"Mars Router open source","max_results":5}'
 ```
@@ -41,9 +41,9 @@ curl -X POST $NINEROUTER_URL/v1/search \
 JS:
 
 ```js
-const r = await fetch(`${process.env.NINEROUTER_URL}/v1/search`, {
+const r = await fetch(`${process.env.MARS_ROUTER_URL}/v1/search`, {
   method: "POST",
-  headers: { "Authorization": `Bearer ${process.env.NINEROUTER_KEY}`, "Content-Type": "application/json" },
+  headers: { "Authorization": `Bearer ${process.env.MARS_ROUTER_KEY}`, "Content-Type": "application/json" },
   body: JSON.stringify({ model: "search-combo", query: "latest LLM benchmarks", max_results: 10 }),
 });
 console.log(await r.json());
@@ -52,8 +52,8 @@ console.log(await r.json());
 X search with Xquik:
 
 ```bash
-curl -X POST $NINEROUTER_URL/v1/search \
-  -H "Authorization: Bearer $NINEROUTER_KEY" \
+curl -X POST $MARS_ROUTER_URL/v1/search \
+  -H "Authorization: Bearer $MARS_ROUTER_KEY" \
   -H "Content-Type: application/json" \
   -d '{"model":"xquik","query":"from:github release","max_results":10,"provider_options":{"queryType":"Latest"}}'
 ```

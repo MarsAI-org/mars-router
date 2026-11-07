@@ -10,7 +10,7 @@
 // demand; closing the connection does not stop the shared server. Set
 // OBSCURA_CDP_ENDPOINT to point at an already-running Obscura instead of
 // spawning one here (the process is then not owned by this module). The
-// module is also disabled entirely when NINEROUTER_BROWSER_POOL=off.
+// module is also disabled entirely when MARS_ROUTER_BROWSER_POOL=off.
 
 import { spawn } from "node:child_process";
 import { loadRuntimeDep } from "./lazyRuntime.js";
@@ -20,7 +20,7 @@ let shared = null;
 let starting = null;
 
 export function isObscuraUsable() {
-  const flag = process.env.NINEROUTER_BROWSER_POOL;
+  const flag = process.env.MARS_ROUTER_BROWSER_POOL || process.env.NINEROUTER_BROWSER_POOL;
   if (flag === undefined) return true;
   return flag !== "off" && flag !== "0" && flag !== "false";
 }

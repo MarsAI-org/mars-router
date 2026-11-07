@@ -25,7 +25,7 @@ const capOptions = (values, current) =>
   values.includes(current) ? values : [...values, current].sort((a, b) => a - b);
 
 const readPiModels = (cfg) => {
-  const list = cfg?.providers?.["9router"]?.models;
+  const list = (cfg?.providers?.["mars-router"] || cfg?.providers?.["9router"])?.models;
   if (!Array.isArray(list) || list.length === 0) return null;
   const caps = {};
   const ids = list.map((m) => {
@@ -64,7 +64,7 @@ export default function GenericCliToolCard({
   const [selectedApiKey, setSelectedApiKey] = useState(() => apiKeys?.[0]?.key || "");
   const [selectedModel, setSelectedModel] = useState(() => {
     const cfg = initialStatus?.config;
-    return cfg?.model || cfg?.openai?.model || cfg?.providers?.["9router"]?.models?.[0]?.id || "";
+    return cfg?.model || cfg?.openai?.model || (cfg?.providers?.["mars-router"] || cfg?.providers?.["9router"])?.models?.[0]?.id || "";
   });
   const initialPi = readPiModels(initialStatus?.config);
   const [selectedModels, setSelectedModels] = useState(() => initialPi?.ids || []);
@@ -91,7 +91,7 @@ export default function GenericCliToolCard({
                 setModelCaps(pi.caps);
               }
             } else {
-              const mod = cfg?.model || cfg?.openai?.model || cfg?.providers?.["9router"]?.models?.[0]?.id;
+              const mod = cfg?.model || cfg?.openai?.model || (cfg?.providers?.["mars-router"] || cfg?.providers?.["9router"])?.models?.[0]?.id;
               if (mod) setSelectedModel((prev) => prev || mod);
             }
           }
@@ -119,7 +119,7 @@ export default function GenericCliToolCard({
           setModelCaps(pi.caps);
         }
       } else {
-        const mod = cfg?.model || cfg?.openai?.model || cfg?.providers?.["9router"]?.models?.[0]?.id;
+        const mod = cfg?.model || cfg?.openai?.model || (cfg?.providers?.["mars-router"] || cfg?.providers?.["9router"])?.models?.[0]?.id;
         if (mod && !selectedModel) setSelectedModel(mod);
       }
     } catch (error) {
@@ -139,6 +139,8 @@ export default function GenericCliToolCard({
     const cfg = status.config;
     if (typeof cfg.baseUrl === "string") return cfg.baseUrl;
     if (typeof cfg.openai?.base_url === "string") return cfg.openai.base_url;
+    if (typeof cfg.providers?.["mars-router"]?.base_url === "string") return cfg.providers["mars-router"].base_url;
+    if (typeof cfg.providers?.["mars-router"]?.baseUrl === "string") return cfg.providers["mars-router"].baseUrl;
     if (typeof cfg.providers?.["9router"]?.base_url === "string") return cfg.providers["9router"].base_url;
     if (typeof cfg.providers?.["9router"]?.baseUrl === "string") return cfg.providers["9router"].baseUrl;
     return "";
@@ -148,7 +150,7 @@ export default function GenericCliToolCard({
 
   const getConfigStatus = () => {
     if (!status?.installed) return null;
-    if (!status.has9Router) return "not_configured";
+    if (!status.hasMarsRouter) return "not_configured";
     if (currentBaseUrl && matchKnownEndpoint(currentBaseUrl, { tunnelPublicUrl, tailscaleUrl })) {
       return "configured";
     }
@@ -163,7 +165,7 @@ export default function GenericCliToolCard({
     try {
       const keyToUse = (selectedApiKey && selectedApiKey.trim())
         ? selectedApiKey
-        : (!cloudEnabled ? "sk_9router" : selectedApiKey);
+        : (!cloudEnabled ? "sk_mars_router" : selectedApiKey);
 
       const payload = {
         baseUrl: getEffectiveBaseUrl(),
@@ -293,7 +295,7 @@ export default function GenericCliToolCard({
 
   const getManualConfigContent = () => {
     const effectiveUrl = getEffectiveBaseUrl();
-    const key = selectedApiKey || "sk_9router";
+    const key = selectedApiKey || "sk_mars_router";
     const mod = selectedModel || "provider/model-id";
 
     switch (tool.id) {
@@ -305,7 +307,7 @@ export default function GenericCliToolCard({
             content: JSON.stringify(
               {
                 providers: {
-                  "9router": {
+                  "mars-router": {
                     baseUrl: effectiveUrl,
                     apiKey: key,
                     api: "openai-completions",
@@ -328,7 +330,7 @@ export default function GenericCliToolCard({
         return [
           {
             filename: "~/.omp/agent/models.yml",
-            content: `providers:\n  9router:\n    baseUrl: ${effectiveUrl}\n    apiKey: ${key}\n    api: openai-completions\n    authHeader: true\n    disableStrictTools: true\n    discovery:\n      type: proxy`,
+            content: `providers:\n  mars-router:\n    baseUrl: ${effectiveUrl}\n    apiKey: ${key}\n    api: openai-completions\n    authHeader: true\n    disableStrictTools: true\n    discovery:\n      type: proxy`,
           },
         ];
       case "crush":
@@ -338,7 +340,7 @@ export default function GenericCliToolCard({
             content: JSON.stringify(
               {
                 providers: {
-                  "9router": {
+                  "mars-router": {
                     type: "openai-compat",
                     base_url: effectiveUrl,
                     api_key: key,
@@ -362,7 +364,7 @@ export default function GenericCliToolCard({
         return [
           {
             filename: "~/.smelt/config.json",
-            content: JSON.stringify({ baseUrl: effectiveUrl, apiKey: key, model: mod, _managedBy: "9router" }, null, 2),
+            content: JSON.stringify({ baseUrl: effectiveUrl, apiKey: key, model: mod, _managedBy: "mars-router" }, null, 2),
           },
         ];
       case "codewhale":
@@ -669,7 +671,7 @@ export default function GenericCliToolCard({
                   >
                     {applying ? "Applying..." : "Apply Settings"}
                   </Button>
-                  {status?.has9Router && (
+                  {status?.hasMarsRouter && (
                     <Button
                       variant="outline"
                       size="sm"

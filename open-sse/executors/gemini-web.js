@@ -695,7 +695,7 @@ export class GeminiWebExecutor extends BaseExecutor {
         return {
           response: errorResponse(
             503,
-            "Gemini Web needs a Chrome/Chromium binary. Install Google Chrome, set NINEROUTER_BROWSER_BIN " +
+            "Gemini Web needs a Chrome/Chromium binary. Install Google Chrome, set MARS_ROUTER_BROWSER_BIN " +
               "or CHROME_PATH to an existing Chrome, or run `npx playwright-core install chromium`."
           ),
           url: GEMINI_URL,

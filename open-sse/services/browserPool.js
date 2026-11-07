@@ -19,7 +19,7 @@
 //
 // Opt-in: pool only launches Chromium when an executor explicitly asks for a
 // context, so users who never use the browser-backed path pay zero startup
-// cost. Set NINEROUTER_BROWSER_POOL=off to fully disable.
+// cost. Set MARS_ROUTER_BROWSER_POOL=off to fully disable.
 
 import { Buffer } from "node:buffer";
 import { loadRuntimeDep } from "./lazyRuntime.js";
@@ -32,7 +32,7 @@ export const DEFAULT_USER_AGENT =
   "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36";
 
 export function isPoolEnabled() {
-  const flag = process.env.NINEROUTER_BROWSER_POOL;
+  const flag = process.env.MARS_ROUTER_BROWSER_POOL || process.env.NINEROUTER_BROWSER_POOL;
   if (flag === undefined) return true;
   return flag !== "off" && flag !== "0" && flag !== "false";
 }
@@ -339,7 +339,7 @@ async function createWarmupPage(context, warmupUrl) {
 export async function acquireBrowserContext(key, options) {
   if (!isPoolEnabled()) {
     throw new Error(
-      "browserPool: NINEROUTER_BROWSER_POOL=off — context requested but pool is disabled"
+      "browserPool: MARS_ROUTER_BROWSER_POOL=off — context requested but pool is disabled"
     );
   }
   const headless = options.headless !== false;

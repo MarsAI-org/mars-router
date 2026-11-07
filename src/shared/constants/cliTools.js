@@ -420,11 +420,11 @@ amp --model "{{model}}"
     notes: [
       {
         type: "info",
-        text: "Grok Build uses ~/.grok/config.toml. Mars Router writes a [model.9router] custom model and sets it as the default.",
+        text: "Grok Build uses ~/.grok/config.toml. Mars Router writes a [model.mars-router] custom model and sets it as the default.",
       },
       {
         type: "info",
-        text: "After Apply, run grok (or /model 9router) to use the routed model. Switch back anytime with /model grok-build.",
+        text: "After Apply, run grok (or /model mars-router) to use the routed model. Switch back anytime with /model grok-build.",
       },
       {
         type: "warning",
@@ -508,7 +508,7 @@ gemini extensions install https://github.com/manalkaff/opendesign
     notes: [
       {
         type: "info",
-        text: "Pi uses ~/.pi/agent/models.json. Mars Router is configured under providers.9router as an OpenAI-compatible endpoint.",
+        text: "Pi uses ~/.pi/agent/models.json. Mars Router is configured under providers.mars-router as an OpenAI-compatible endpoint.",
       },
     ],
   },

@@ -6,7 +6,7 @@ Mars RouterをContinue拡張機能と統合し、Visual Studio Codeに直接AI�
 
 - Visual Studio Codeがインストール済み
 - VSCodeマーケットプレイスからContinue拡張機能がインストール済み
-- [ダッシュボード](https://9router.com/dashboard)からのMars Router APIキー
+- [ダッシュボード](https://mars-router.com/dashboard)からのMars Router APIキー
 - Mars Routerが動作中 (ローカルまたはクラウド)
 
 ## 設定手順
@@ -76,7 +76,7 @@ Mars RouterをContinue拡張機能と統合し、Visual Studio Codeに直接AI�
 **クラウドMars Router用:**
 `apiBase` を以下に置き換え:
 ```json
-"apiBase": "https://9router.com/v1"
+"apiBase": "https://mars-router.com/v1"
 ```
 
 ### 3. 保存してリロード

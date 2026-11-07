@@ -11,7 +11,7 @@ import {
 } from "../../src/app/api/cli-tools/hermes-settings/hermesProfiles.js";
 
 const BASE = "http://127.0.0.1:20128/v1";
-const NINE_ROUTER_MODEL = `model:\n  default: "anthropic/claude-sonnet-4-6"\n  provider: "custom"\n  base_url: "${BASE}"\n  api_key: \${OPENAI_API_KEY}\n`;
+const MARS_ROUTER_MODEL = `model:\n  default: "anthropic/claude-sonnet-4-6"\n  provider: "custom"\n  base_url: "${BASE}"\n  api_key: \${OPENAI_API_KEY}\n`;
 
 let tmpRoot;
 
@@ -106,7 +106,7 @@ describe("hermes profile resolution", () => {
     });
 
     it("lists recognised profiles and skips bare/invalid directories", async () => {
-      await write(tmpRoot, "config.yaml", NINE_ROUTER_MODEL);
+      await write(tmpRoot, "config.yaml", MARS_ROUTER_MODEL);
 
       const coder = path.join(tmpRoot, "profiles", "coder");
       await fs.mkdir(coder, { recursive: true });
@@ -123,14 +123,14 @@ describe("hermes profile resolution", () => {
 
       const invalid = path.join(tmpRoot, "profiles", "Bad.Name");
       await fs.mkdir(invalid, { recursive: true });
-      await write(invalid, "config.yaml", NINE_ROUTER_MODEL);
+      await write(invalid, "config.yaml", MARS_ROUTER_MODEL);
 
       const profiles = await listProfiles(tmpRoot);
       const names = profiles.map((p) => p.name);
       expect(names).toEqual(["default", "coder", "research"]);
 
       const defaultEntry = profiles[0];
-      expect(defaultEntry).toMatchObject({ isDefault: true, has9Router: true, model: "anthropic/claude-sonnet-4-6", baseUrl: BASE });
+      expect(defaultEntry).toMatchObject({ isDefault: true, hasMarsRouter: true, model: "anthropic/claude-sonnet-4-6", baseUrl: BASE });
 
       const coderEntry = profiles[1];
       expect(coderEntry).toMatchObject({
@@ -140,20 +140,20 @@ describe("hermes profile resolution", () => {
         command: "hermes -p coder",
         alias: "coder",
         model: "anthropic/claude-opus-4.7",
-        has9Router: false,
+        hasMarsRouter: false,
       });
 
-      expect(profiles[2]).toMatchObject({ name: "research", model: null, has9Router: false });
+      expect(profiles[2]).toMatchObject({ name: "research", model: null, hasMarsRouter: false });
     });
 
     it("reports 9router config in a named profile", async () => {
       const coder = path.join(tmpRoot, "profiles", "coder");
       await fs.mkdir(coder, { recursive: true });
-      await write(coder, "config.yaml", NINE_ROUTER_MODEL);
+      await write(coder, "config.yaml", MARS_ROUTER_MODEL);
 
       const profiles = await listProfiles(tmpRoot);
       const coderEntry = profiles.find((p) => p.name === "coder");
-      expect(coderEntry.has9Router).toBe(true);
+      expect(coderEntry.hasMarsRouter).toBe(true);
       expect(coderEntry.baseUrl).toBe(BASE);
     });
   });

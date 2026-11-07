@@ -48,7 +48,7 @@ Dashboard → API Keys → Create New
 **ステップ3: Mars Routerに追加**
 
 ```bash
-9router
+mars-router
 # Dashboard → Providers → Add API Key
 
 Provider: glm
@@ -120,7 +120,7 @@ Dashboard → API Management → Create Key
 **ステップ3: Mars Routerに追加**
 
 ```bash
-9router
+mars-router
 # Dashboard → Providers → Add API Key
 
 Provider: minimax
@@ -193,7 +193,7 @@ Dashboard → API Keys → Create New
 **ステップ3: Mars Routerに追加**
 
 ```bash
-9router
+mars-router
 # Dashboard → Providers → Add API Key
 
 Provider: kimi
@@ -255,7 +255,7 @@ Model: kimi/kimi-latest
 ```
 Settings → Models → Advanced:
   OpenAI API Base URL: http://localhost:20128/v1
-  OpenAI API Key: [9routerダッシュボードから取得]
+  OpenAI API Key: [mars-routerダッシュボードから取得]
   Model: glm/glm-4.7
 ```
 

@@ -99,15 +99,27 @@ Info "Building (production)"
 npm run build
 
 Info "Install complete -> $Dir"
+
+# Install the `mars-router` command onto PATH (user-level bin dir).
+$binDir = if ($env:MARS_ROUTER_BIN_DIR) { $env:MARS_ROUTER_BIN_DIR } else { Join-Path $HOME ".local\bin" }
+New-Item -ItemType Directory -Force -Path $binDir | Out-Null
+$cmdPath = Join-Path $binDir "mars-router.cmd"
+Set-Content -Path $cmdPath -Encoding ascii -Value "@echo off`r`nnode `"$Dir\scripts\mars-router.mjs`" %*"
+Info "Installed command: $cmdPath"
+$userPath = [Environment]::GetEnvironmentVariable("Path", "User")
+if ($userPath -notlike "*$binDir*") {
+  [Environment]::SetEnvironmentVariable("Path", "$userPath;$binDir", "User")
+  Warn "Added $binDir to your PATH (restart the terminal to use 'mars-router')."
+}
+
 if (-not $NoStart) {
   Info "Starting Mars Router on port $Port"
   $env:PORT = "$Port"
-  $env:NEXT_PUBLIC_BASE_URL = "http://localhost:$Port"
-  Start-Process -FilePath "npm" -ArgumentList "run", "start" -WorkingDirectory $Dir `
+  Start-Process -FilePath "node" -ArgumentList "$Dir\scripts\mars-router.mjs", "start" -WorkingDirectory $Dir `
     -RedirectStandardOutput (Join-Path $Dir "mars-router.log") `
     -RedirectStandardError (Join-Path $Dir "mars-router.err.log")
   Info "Started. Dashboard: http://localhost:$Port/dashboard"
-  Info "Logs: $Dir\mars-router.log"
+  Info "Manage it with: mars-router status | logs | stop"
 } else {
-  Info "Skipped start. To run later: cd $Dir; `$env:PORT=$Port; npm run start"
+  Info "Skipped start. To run later: cd $Dir; `$env:PORT=$Port; mars-router"
 }

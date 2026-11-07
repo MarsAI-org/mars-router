@@ -103,7 +103,7 @@ Nếu gặp lỗi "model not found":
 Để dùng Mars Router cloud endpoint thay vì localhost:
 
 ```bash
-export ANTHROPIC_BASE_URL="https://9router.com"
+export ANTHROPIC_BASE_URL="https://mars-router.com"
 ```
 
 Đảm bảo bạn đã cấu hình API key trong Mars Router cloud dashboard.

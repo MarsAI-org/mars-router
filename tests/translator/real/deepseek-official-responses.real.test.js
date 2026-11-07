@@ -28,7 +28,7 @@ const CRED_ISSUE = [401, 402, 403, 429];
 function readApiKey() {
   const Database = require("better-sqlite3");
   const path = require("path");
-  const dbPath = path.join(process.env.APPDATA, "9router", "db", "data.sqlite");
+  const dbPath = path.join(process.env.APPDATA, "mars-router", "db", "data.sqlite");
   const db = new Database(dbPath, { readonly: true });
   const rows = db.prepare(
     "SELECT data FROM providerConnections WHERE provider = ? AND isActive = 0 ORDER BY updatedAt DESC LIMIT 1"

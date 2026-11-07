@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="../images/9router.png?1" alt="Mars Router Dashboard" width="800"/>
+  <img src="../images/mars-router.png?1" alt="Mars Router Dashboard" width="800"/>
 
   # Mars Router - Router AI Gratis
 
@@ -7,11 +7,11 @@
 
   **Hubungkan semua tool AI coding (Claude Code, Cursor, Antigravity, Copilot, Codex, Gemini, OpenCode, Cline, OpenClaw...) ke 40+ provider AI dan 100+ model.**
 
-  [![npm](https://img.shields.io/npm/v/9router.svg)](https://www.npmjs.com/package/9router)
-  [![Downloads](https://img.shields.io/npm/dm/9router.svg)](https://www.npmjs.com/package/9router)
-  [![License](https://img.shields.io/npm/l/9router.svg)](https://github.com/decolua/9router/blob/main/LICENSE)
+  [![npm](https://img.shields.io/npm/v/mars-router.svg)](https://www.npmjs.com/package/mars-router)
+  [![Downloads](https://img.shields.io/npm/dm/mars-router.svg)](https://www.npmjs.com/package/mars-router)
+  [![License](https://img.shields.io/npm/l/mars-router.svg)](https://github.com/MarsAI-org/mars-router/blob/main/LICENSE)
 
-  [🚀 Mulai Cepat](#-mulai-cepat) • [💡 Fitur](#-fitur-utama) • [📖 Setup](#-panduan-setup) • [🌐 Website](https://9router.com)
+  [🚀 Mulai Cepat](#-mulai-cepat) • [💡 Fitur](#-fitur-utama) • [📖 Setup](#-panduan-setup) • [🌐 Website](https://mars-router.com)
 
   [🇻🇳 Tiếng Việt](./README.vi.md) • [🇨🇳 中文](./README.zh-CN.md) • [🇯🇵 日本語](./README.ja-JP.md) • [🇮🇩 Bahasa Indonesia](./README.id-ID.md)
 </div>
@@ -68,8 +68,8 @@ Hasil: ngoding tanpa berhenti, biaya minimum
 **1. Install secara global:**
 
 ```bash
-npm install -g 9router
-9router
+npm install -g mars-router
+mars-router
 ```
 
 🎉 Dashboard terbuka di `http://localhost:20128`
@@ -91,7 +91,7 @@ Konfigurasi Claude Code/Codex/Gemini CLI/OpenClaw/Cursor/Cline:
 
 **Alternatif: jalankan dari source (repo ini):**
 
-Paket repo ini bersifat privat (`9router-app`), jadi menjalankan dari source/Docker adalah jalur yang diharapkan untuk pengembangan lokal.
+Paket repo ini bersifat privat (`mars-router-app`), jadi menjalankan dari source/Docker adalah jalur yang diharapkan untuk pengembangan lokal.
 
 ```bash
 cp .env.example .env
@@ -871,12 +871,12 @@ Biaya bulanan: $0
 
 ```bash
 docker run -d \
-  --name 9router \
+  --name mars-router \
   -p 20128:20128 \
-  -v 9router-data:/app/data \
+  -v mars-router-data:/app/data \
   -e PORT=20128 \
   -e BASE_URL=http://localhost:20128 \
-  ghcr.io/decolua/9router:latest
+  ghcr.io/MarsAI-org/mars-router:latest
 ```
 
 Dashboard: `http://localhost:20128/dashboard`
@@ -887,8 +887,8 @@ Dashboard: `http://localhost:20128/dashboard`
 <summary><b>VPS / Cloud</b></summary>
 
 ```bash
-npm install -g 9router
-PORT=20128 HOSTNAME=0.0.0.0 BASE_URL=https://your-domain.com 9router
+npm install -g mars-router
+PORT=20128 HOSTNAME=0.0.0.0 BASE_URL=https://your-domain.com mars-router
 ```
 
 Disarankan menaruhnya di belakang reverse proxy (Nginx/Caddy) dengan HTTPS, dan membatasi akses hanya untuk dirimu sendiri.
@@ -938,14 +938,14 @@ Kontribusi sangat diterima!
 
 ## 📄 Lisensi
 
-MIT License — lihat [LICENSE](https://github.com/decolua/9router/blob/main/LICENSE) untuk detailnya.
+MIT License — lihat [LICENSE](https://github.com/MarsAI-org/mars-router/blob/main/LICENSE) untuk detailnya.
 
 ---
 
 <div align="center">
 
-**Kalau Mars Router membantumu, kasih ⭐ di [GitHub](https://github.com/decolua/9router)!**
+**Kalau Mars Router membantumu, kasih ⭐ di [GitHub](https://github.com/MarsAI-org/mars-router)!**
 
-[🌐 Website](https://9router.com) • [📦 npm](https://www.npmjs.com/package/9router) • [🐛 Laporkan Bug](https://github.com/decolua/9router/issues)
+[🌐 Website](https://mars-router.com) • [📦 npm](https://www.npmjs.com/package/mars-router) • [🐛 Laporkan Bug](https://github.com/MarsAI-org/mars-router/issues)
 
 </div>

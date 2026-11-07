@@ -1,11 +1,23 @@
 import { UPDATER_CONFIG } from "@/shared/constants/config";
 
 // Browser-local preset stores (endpoints, API keys) shared by every CLI tool card
-function createStore({ storageKey, changeEvent, itemField, normalize = (v) => v, defaultName = (v) => v }) {
+function createStore({ storageKey, legacyKeys = [], changeEvent, itemField, normalize = (v) => v, defaultName = (v) => v }) {
   const read = () => {
     if (typeof window === "undefined") return [];
     try {
-      const raw = JSON.parse(window.localStorage.getItem(storageKey) || "[]");
+      let stored = window.localStorage.getItem(storageKey);
+      // Migrate from a legacy key (pre-rename) once.
+      if (stored === null) {
+        for (const legacy of legacyKeys) {
+          const old = window.localStorage.getItem(legacy);
+          if (old !== null) {
+            window.localStorage.setItem(storageKey, old);
+            stored = old;
+            break;
+          }
+        }
+      }
+      const raw = JSON.parse(stored || "[]");
       if (!Array.isArray(raw)) return [];
       return raw.filter((p) => p?.name && p?.[itemField]);
     } catch {
@@ -50,8 +62,9 @@ function createStore({ storageKey, changeEvent, itemField, normalize = (v) => v,
 const stripSlash = (url) => (url || "").replace(/\/+$/, "");
 
 const endpoints = createStore({
-  storageKey: "9router.cliToolEndpointPresets",
-  changeEvent: "9router:endpoint-presets-changed",
+  storageKey: "mars-router.cliToolEndpointPresets",
+  legacyKeys: ["9router.cliToolEndpointPresets"],
+  changeEvent: "mars-router:endpoint-presets-changed",
   itemField: "baseUrl",
   normalize: stripSlash,
   defaultName: (url) => {
@@ -60,8 +73,9 @@ const endpoints = createStore({
 });
 
 const apiKeys = createStore({
-  storageKey: "9router.cliToolApiKeyPresets",
-  changeEvent: "9router:api-key-presets-changed",
+  storageKey: "mars-router.cliToolApiKeyPresets",
+  legacyKeys: ["9router.cliToolApiKeyPresets"],
+  changeEvent: "mars-router:api-key-presets-changed",
   itemField: "key",
 });
 

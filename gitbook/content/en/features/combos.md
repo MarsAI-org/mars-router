@@ -404,7 +404,7 @@ Edit `~/.claude/config.json`:
 ```json
 {
   "anthropic_api_base": "http://localhost:20128/v1",
-  "anthropic_api_key": "your-9router-api-key",
+  "anthropic_api_key": "your-mars-router-api-key",
   "model": "budget-combo"
 }
 ```
@@ -413,7 +413,7 @@ Edit `~/.claude/config.json`:
 
 ```bash
 export OPENAI_BASE_URL="http://localhost:20128"
-export OPENAI_API_KEY="your-9router-api-key"
+export OPENAI_API_KEY="your-mars-router-api-key"
 
 codex --model quality-first "your prompt"
 ```

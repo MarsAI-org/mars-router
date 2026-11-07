@@ -4,7 +4,7 @@ import { getConsistentMachineId } from "@/shared/utils/machineId";
 import { verifyDashboardAuthToken } from "@/lib/auth/dashboardSession";
 import { hasTrustedPeerHeaders } from "@/lib/auth/trustedPeer";
 
-const CLI_TOKEN_HEADER = "x-9r-cli-token";
+const CLI_TOKEN_HEADER = "x-mr-cli-token";
 const CLI_TOKEN_SALT = "9r-cli-auth";
 
 let cachedCliToken = null;
@@ -13,8 +13,20 @@ async function getCliToken() {
   return cachedCliToken;
 }
 
+// Accept both the new and legacy header names so a client/CLI built before the
+// rename still authenticates.
+function headerCompat(request, name, ...legacyNames) {
+  const v = request.headers.get(name);
+  if (v) return v;
+  for (const legacy of legacyNames) {
+    const lv = request.headers.get(legacy);
+    if (lv) return lv;
+  }
+  return null;
+}
+
 async function hasValidCliToken(request) {
-  const token = request.headers.get(CLI_TOKEN_HEADER);
+  const token = headerCompat(request, CLI_TOKEN_HEADER, "x-9r-cli-token");
   if (!token) return false;
   return token === await getCliToken();
 }
@@ -114,7 +126,7 @@ function isLoopbackHostname(h) {
 
 function isLoopbackPeer(request) {
   if (hasTrustedPeerHeaders(request)) {
-    return isLoopbackHostname(request.headers.get("x-9r-real-ip"));
+    return isLoopbackHostname(request.headers.get("x-mr-real-ip") || request.headers.get("x-9r-real-ip"));
   }
   // Bare `next dev` forks its server, so the wrapper never loads and no peer address
   // reaches us. Host is spoofable, so this stays confined to development.
@@ -127,7 +139,7 @@ function isLoopbackPeer(request) {
 export function isLocalRequest(request) {
   // Stamped by custom-server.js when forwarding headers exist: request came through
   // a reverse proxy, so the loopback socket is the proxy hop, not the end-user.
-  if (request.headers.get("x-9r-via-proxy")) return false;
+  if (request.headers.get("x-mr-via-proxy") || request.headers.get("x-9r-via-proxy")) return false;
   if (!isLoopbackPeer(request)) return false;
   const origin = request.headers.get("origin");
   if (origin) {

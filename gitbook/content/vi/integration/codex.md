@@ -19,7 +19,7 @@ Tích hợp Mars Router với OpenAI Codex CLI để định tuyến request API
 export OPENAI_BASE_URL="http://localhost:20128/v1"
 
 # API Key from Mars Router dashboard
-export OPENAI_API_KEY="your-9router-api-key"
+export OPENAI_API_KEY="your-mars-router-api-key"
 ```
 
 ### 2. Reload Shell Configuration
@@ -77,7 +77,7 @@ Bạn cũng có thể cấu hình Codex CLI qua file cấu hình. Tạo hoặc s
 ```json
 {
   "baseUrl": "http://localhost:20128/v1",
-  "apiKey": "your-9router-api-key",
+  "apiKey": "your-mars-router-api-key",
   "defaultModel": "cx/gpt-5.2-codex"
 }
 ```
@@ -113,7 +113,7 @@ Nếu gặp lỗi "model not available":
 Để dùng Mars Router cloud endpoint thay vì localhost:
 
 ```bash
-export OPENAI_BASE_URL="https://9router.com"
+export OPENAI_BASE_URL="https://mars-router.com"
 ```
 
 Đảm bảo bạn đã cấu hình API key trong Mars Router cloud dashboard.

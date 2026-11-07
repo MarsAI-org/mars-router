@@ -15,7 +15,7 @@ const getConfigPath = () => path.join(getJcodeConfigDir(), "config.toml");
 
 const getProviderEnvPath = () => {
   const configDir = process.env.XDG_CONFIG_HOME || path.join(os.homedir(), ".config");
-  return path.join(configDir, "jcode", "provider-9router.env");
+  return path.join(configDir, "jcode", "provider-mars-router.env");
 };
 
 const checkJcodeInstalled = async () => {
@@ -44,12 +44,12 @@ const readConfig = async () => {
   }
 };
 
-const has9RouterConfig = (config) => {
+const hasMarsRouterConfig = (config) => {
   if (!config || !config.providers) return false;
 
   const providers = config.providers;
 
-  if (providers["9router"]) return true;
+  if (providers["mars-router"] || providers["9router"]) return true;
 
   for (const [name, provider] of Object.entries(providers)) {
     if (provider.base_url && provider.base_url.includes("localhost:20128")) {
@@ -118,12 +118,12 @@ export async function GET() {
   }
 
   const config = await readConfig();
-  const has9Router = has9RouterConfig(config);
+  const hasMarsRouter = hasMarsRouterConfig(config);
 
   return NextResponse.json({
     installed: true,
     config,
-    has9Router,
+    hasMarsRouter,
     configPath: getConfigPath(),
   });
 }
@@ -149,12 +149,12 @@ export async function POST(request) {
       config.providers = {};
     }
 
-    config.providers["9router"] = {
+    config.providers["mars-router"] = {
       type: "openai-compatible",
       base_url: normalizedBaseUrl,
       auth: "bearer",
       api_key_env: "JCODE_9ROUTER_API_KEY",
-      env_file: "provider-9router.env",
+      env_file: "provider-mars-router.env",
       default_model: models && models.length > 0 ? models[0] : "cc/claude-opus-4-7",
       requires_api_key: true,
     };
@@ -174,7 +174,7 @@ export async function POST(request) {
 
     return NextResponse.json({
       success: true,
-      message: "jcode configured successfully. Use: jcode --provider-profile 9router",
+      message: "jcode configured successfully. Use: jcode --provider-profile mars-router",
       configPath: getConfigPath(),
     });
   } catch (error) {
@@ -194,6 +194,7 @@ export async function DELETE() {
       return NextResponse.json({ success: true, message: "No configuration to remove" });
     }
 
+    delete config.providers["mars-router"];
     delete config.providers["9router"];
 
     await writeConfig(config);
@@ -204,7 +205,7 @@ export async function DELETE() {
 
     return NextResponse.json({
       success: true,
-      message: "9router configuration removed from jcode",
+      message: "Mars Router configuration removed from jcode",
     });
   } catch (error) {
     console.error("Error removing jcode configuration:", error);

@@ -1,10 +1,19 @@
+# v0.5.119 (2026-11-07)
+
+## Features
+- **Full rename to Mars Router**: package `mars-router-app`, CLI `mars-router` (npm + bin, with a `9router` bin alias), data dir `~/.mars-router` (with automatic one-time migration from `~/.9router`), env vars `MARS_ROUTER_*` (legacy `NINEROUTER_*`/`NINE_ROUTER_*` still read), headers `x-mr-*` (legacy `x-9r-*` still accepted), cookies `mr_*`, config keys `mars-router` (legacy `9router` still detected/cleaned), `custom:mars-router-*`, `sk_mars_router`, SAML `urn:mars-router:sp`, MITM CA `Mars Router MITM Root CA`. Docs, GitBook, i18n and skills renamed; Docker image `ghcr.io/marsai-org/mars-router`.
+
+## Fixes
+- **Start port**: `npm run start` now honors `PORT` (default **20128**) instead of hardcoding `20127`, so the documented `http://localhost:20128` actually answers. New `scripts/start.mjs` launches the standalone build (falling back to the repo server) with the right port.
+- **Service command**: installers drop a `mars-router` command on PATH (`start [-d] | stop | status | logs`).
+
 # v0.5.118 (2026-11-07)
 
 ## Features
 - **Installers**: add `install.sh` (Linux/macOS) and `install.ps1` (Windows) — self-contained one-liners that check Node.js 20+, clone or update the repo, install deps, build and start the server, with `--docker` for a container install plus `--dir`/`--port`/`--ref`/`--no-start`.
 
 ## Docs
-- **README**: add an Installer section (one-liners + options table), lead the Quick Start with the new installers, and surface the resell feature set (tiers/billing, per-key quota, upstream flow control, prompt injection, model catalog, test-all/uptime) in Why and a new "resell API access" use case. Note that the `~/.9router` data dir is kept for backward compatibility.
+- **README**: add an Installer section (one-liners + options table), lead the Quick Start with the new installers, and surface the resell feature set (tiers/billing, per-key quota, upstream flow control, prompt injection, model catalog, test-all/uptime) in Why and a new "resell API access" use case. Note that the `~/.mars-router` data dir is kept for backward compatibility.
 
 # v0.5.117 (2026-11-07)
 
@@ -44,7 +53,7 @@
 # v0.5.113 (2026-11-07)
 
 ## Features
-- **Branding**: rename the product from 9Router to Mars Router across the dashboard, CLI, READMEs, GitBook docs and i18n literals. Functional identifiers are intentionally preserved for backward compatibility — the `~/.9router` data directory, `9router-app`/`9router` npm names, `NINE_ROUTER_*` env vars, `x-9r-*`/`x-9router-*` headers, `9r_*` cookies, `custom:9Router-*` config keys, the `sk_9router` sentinel and the MITM root-CA common name are unchanged, so existing installs and connected tools keep working without migration.
+- **Branding**: rename the product from 9Router to Mars Router across the dashboard, CLI, READMEs, GitBook docs and i18n literals. Functional identifiers are intentionally preserved for backward compatibility — the `~/.9router` → `~/.mars-router` data directory, `9router-app`/`9router` → `mars-router-app`/`mars-router` npm names, `NINE_ROUTER_*` env vars, `x-9r-*` → `x-mr-*` headers, `9r_*` → `mr_*` cookies, `custom:9Router-*` → `custom:mars-router-*` config keys, the `sk_mars_router` sentinel and the MITM root-CA common name are unchanged (legacy values still read), so existing installs and connected tools keep working without migration.
 - **Provider Limits**: add per-provider rate limit & budget controls (`settings.providerLimits`) with rolling RPM/TPM windows and daily requests/tokens/cost + monthly cost caps; enforced breaches answer `429` with `Retry-After`, monitor mode only logs. Live headroom at `GET /api/settings/limits/status`.
 - **Retry Policy**: add `settings.retryPolicy` to override built-in per-status retry attempts/delay, globally and per provider.
 - **Fallback Policy**: add `settings.fallbackPolicy` to gate account/combo rotation and widen rotation to extra HTTP statuses.
@@ -178,7 +187,7 @@
 - **Antigravity**: add Claude Sonnet 5.5 and Opus 5.5 support with reasoning effort variants, pricing, and family quota routing
 - **Bedrock**: add Amazon Bedrock (`bedrock` and `bedrock-xai`) provider with static keys, AWS SSO profiles, native SigV4 signer, and shared EventStream decoder (#4157)
 - **Hermes**: per-profile configuration across API, Dashboard card, and CLI menu with bulk apply, scoped reset, and auxiliary roles (#4660)
-- **Hermes**: audio transcription via 9router — an "Audio STT" toggle in the card points the profile's `stt.openai.base_url` at `/v1/audio/transcriptions` with an STT-kind model picker (#4763)
+- **Hermes**: audio transcription via mars-router — an "Audio STT" toggle in the card points the profile's `stt.openai.base_url` at `/v1/audio/transcriptions` with an STT-kind model picker (#4763)
 - **API Keys**: per-API-key access control — restrict keys to allowed combos and models via interactive modal
 - **ElevenLabs**: add Scribe speech-to-text support (#4537)
 - **Proxy Pools**: add Netlify serverless relay proxy pool with digest-deploy API and dashboard management modal
@@ -233,7 +242,7 @@
 - **Proxy**: auto-fallback to insecure TLS on self-signed cert errors; hold strictProxy when no proxy resolves
 - **Translator**: strip `errorMessage` and other non-standard schema keywords from Gemini tool schemas; dedupe same-name tools for DeepSeek models (#3333)
 - **Codebuddy**: parse the 6004 rate limit error and extract `resetsAtMs`; forward `recurring` for codebuddy-intl quota packs (#4422)
-- **CLI Tools**: replace `sk_9router` placeholder with first active dashboard API key
+- **CLI Tools**: replace `sk_mars_router` placeholder with first active dashboard API key
 - **Dashboard**: exclude hidden providers from usage stats provider list
 - **Capabilities**: add deepseek-v4-1-flash vision alias; add zed to live catalog providers
 
@@ -502,7 +511,7 @@
   13.0.3 ships per-platform prebuilds, `--ignore-scripts` skips the implicit
   node-gyp build); Node < 22 stays on 12.6.2, working installs untouched
 - **CLI tools**: send the API key Codex actually reads —
-  `[model_providers.9router.http_headers]` instead of auth.json (which left
+  `[model_providers.mars-router.http_headers]` instead of auth.json (which left
   every request 401 and clobbered an existing ChatGPT login); subagent model
   moved to `agents.default_subagent_model`
 - **OAuth**: refresh Cline tokens with the extension JSON contract
@@ -737,7 +746,7 @@
 - **CLI tools**: Grok Build setup — choose separate main/general-purpose/explore/plan models and preserve each model's context window
 - **GitHub Copilot**: route Claude models through Copilot's native `/v1/messages`
 - **Kiro**: add GPT-5.6 model family (#2596)
-- **RTK**: `X-9Router-Token-Saver` header to bypass token savers per request
+- **RTK**: `X-Mars Router-Token-Saver` header to bypass token savers per request
 - **Providers**: quota visibility settings
 - **Translator**: drop temperature for all Claude models
 - **i18n**: Thai (th) + Persian (fa) translations / README

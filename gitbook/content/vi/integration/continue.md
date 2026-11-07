@@ -6,7 +6,7 @@ Tích hợp Mars Router với extension Continue để mang trợ lý AI trực 
 
 - Visual Studio Code đã cài đặt
 - Extension Continue đã cài đặt từ VSCode marketplace
-- Mars Router API key từ [dashboard](https://9router.com/dashboard)
+- Mars Router API key từ [dashboard](https://mars-router.com/dashboard)
 - Mars Router đang chạy (cục bộ hoặc cloud)
 
 ## Các bước Cấu hình
@@ -76,7 +76,7 @@ Thêm cấu hình sau vào `config.json`:
 **Cho Cloud Mars Router:**
 Thay `apiBase` bằng:
 ```json
-"apiBase": "https://9router.com/v1"
+"apiBase": "https://mars-router.com/v1"
 ```
 
 ### 3. Lưu và Reload

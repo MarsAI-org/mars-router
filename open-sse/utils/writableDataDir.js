@@ -1,4 +1,5 @@
-// Resolve a writable data directory: DATA_DIR first, then ~/.9router, then
+// Resolve a writable data directory: DATA_DIR first, then ~/.mars-router
+// (falling back to the legacy ~/.Mars Router for un-migrated installs), then
 // tmpdir. Some installs point DATA_DIR at root-owned paths (e.g. /var/lib) that
 // the server process cannot write browser profiles or runtime installs into.
 
@@ -12,8 +13,9 @@ export function getWritableDataDir() {
   if (cached) return cached;
   const candidates = [
     process.env.DATA_DIR,
+    path.join(os.homedir(), ".mars-router"),
     path.join(os.homedir(), ".9router"),
-    path.join(os.tmpdir(), "9router"),
+    path.join(os.tmpdir(), "mars-router"),
   ].filter(Boolean);
   for (const base of candidates) {
     try {

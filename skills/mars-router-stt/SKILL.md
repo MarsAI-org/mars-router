@@ -1,25 +1,25 @@
 ---
-name: 9router-stt
+name: mars-router-stt
 description: Speech-to-text via Mars Router /v1/audio/transcriptions using OpenAI Whisper / Groq / Gemini / Deepgram / AssemblyAI / NVIDIA / HuggingFace models. Use when the user wants to transcribe audio, convert speech to text, or get subtitles from audio files.
 ---
 
 # Mars Router — Speech-to-Text
 
-Requires `NINEROUTER_URL` (and `NINEROUTER_KEY` if auth enabled). See https://raw.githubusercontent.com/decolua/9router/refs/heads/master/skills/9router/SKILL.md for setup.
+Requires `MARS_ROUTER_URL` (and `MARS_ROUTER_KEY` if auth enabled). See https://raw.githubusercontent.com/MarsAI-org/mars-router/refs/heads/master/skills/mars-router/SKILL.md for setup.
 
 ## Discover
 
 ```bash
-curl $NINEROUTER_URL/v1/models/stt | jq '.data[].id'
+curl $MARS_ROUTER_URL/v1/models/stt | jq '.data[].id'
 # Per-model params (language, response_format, prompt, temperature support)
-curl "$NINEROUTER_URL/v1/models/info?id=openai/whisper-1"
+curl "$MARS_ROUTER_URL/v1/models/info?id=openai/whisper-1"
 ```
 
 `model` = STT model ID (e.g. `openai/whisper-1`, `groq/whisper-large-v3`, `deepgram/nova-3`, `gemini/gemini-2.5-flash`).
 
 ## Endpoint
 
-`POST $NINEROUTER_URL/v1/audio/transcriptions` (OpenAI Whisper compatible, `multipart/form-data`)
+`POST $MARS_ROUTER_URL/v1/audio/transcriptions` (OpenAI Whisper compatible, `multipart/form-data`)
 
 | Field | Required | Notes |
 |---|---|---|
@@ -33,8 +33,8 @@ curl "$NINEROUTER_URL/v1/models/info?id=openai/whisper-1"
 ## Examples
 
 ```bash
-curl -X POST "$NINEROUTER_URL/v1/audio/transcriptions" \
-  -H "Authorization: Bearer $NINEROUTER_KEY" \
+curl -X POST "$MARS_ROUTER_URL/v1/audio/transcriptions" \
+  -H "Authorization: Bearer $MARS_ROUTER_KEY" \
   -F "model=openai/whisper-1" \
   -F "file=@audio.mp3" \
   -F "language=vi"
@@ -47,9 +47,9 @@ import { createReadStream } from "node:fs";
 const form = new FormData();
 form.append("model", "groq/whisper-large-v3-turbo");
 form.append("file", new Blob([await (await import("node:fs/promises")).readFile("audio.mp3")]), "audio.mp3");
-const r = await fetch(`${process.env.NINEROUTER_URL}/v1/audio/transcriptions`, {
+const r = await fetch(`${process.env.MARS_ROUTER_URL}/v1/audio/transcriptions`, {
   method: "POST",
-  headers: { "Authorization": `Bearer ${process.env.NINEROUTER_KEY}` },
+  headers: { "Authorization": `Bearer ${process.env.MARS_ROUTER_KEY}` },
   body: form,
 });
 const { text } = await r.json();

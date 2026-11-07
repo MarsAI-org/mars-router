@@ -33,9 +33,9 @@ const checkCrushInstalled = async () => {
   }
 };
 
-const has9RouterConfig = (settings) => {
+const hasMarsRouterConfig = (settings) => {
   if (!settings || !settings.providers) return false;
-  const p = settings.providers["9router"];
+  const p = settings.providers["mars-router"];
   if (p && p.base_url) return true;
   for (const prov of Object.values(settings.providers)) {
     if (prov.base_url && prov.base_url.includes("20128")) return true;
@@ -68,7 +68,7 @@ export async function GET() {
     return NextResponse.json({
       installed: true,
       config,
-      has9Router: has9RouterConfig(config),
+      hasMarsRouter: hasMarsRouterConfig(config),
       configPath: getCrushConfigPath(),
     });
   } catch (err) {
@@ -106,7 +106,7 @@ export async function POST(request) {
     const normalizedBaseUrl = baseUrl.endsWith("/v1") ? baseUrl : `${baseUrl}/v1`;
     const modelId = model || "provider/model-id";
 
-    existing.providers["9router"] = {
+    existing.providers["mars-router"] = {
       type: "openai-compat",
       base_url: normalizedBaseUrl,
       api_key: await resolveCliApiKey(apiKey),
@@ -142,8 +142,8 @@ export async function DELETE() {
       return NextResponse.json({ success: true, message: "No config file to reset" });
     }
 
-    if (existing.providers && existing.providers["9router"]) {
-      delete existing.providers["9router"];
+    if (existing.providers && existing.providers["mars-router"]) {
+      delete existing.providers["mars-router"];
       if (Object.keys(existing.providers).length === 0) delete existing.providers;
       await fs.writeFile(configPath, JSON.stringify(existing, null, 2), "utf-8");
     }

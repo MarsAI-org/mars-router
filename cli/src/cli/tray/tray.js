@@ -233,7 +233,7 @@ function initUnixTray(options) {
       // failures (binary crash, EACCES, etc.) so users can see why the icon
       // didn't appear instead of getting a misleading "running in tray" log.
       trayInstance.ready().catch((err) => {
-        process.stderr.write(`[9router] tray failed to start: ${err && err.message ? err.message : err}\n`);
+        process.stderr.write(`[mars-router] tray failed to start: ${err && err.message ? err.message : err}\n`);
       });
     } else {
       trayInstance.onReady(() => {});
@@ -242,7 +242,7 @@ function initUnixTray(options) {
 
     return trayInstance;
   } catch (err) {
-    process.stderr.write(`[9router] tray init error: ${err.message}\n`);
+    process.stderr.write(`[mars-router] tray init error: ${err.message}\n`);
     return null;
   }
 }

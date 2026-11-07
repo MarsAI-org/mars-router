@@ -15,7 +15,7 @@ const DEFAULT_CONFIG = {
 
 const CLI_TOKEN_HEADER = "x-9r-cli-token";
 const CLI_TOKEN_SALT = "9r-cli-auth";
-const APP_NAME = "9router";
+const APP_NAME = "mars-router";
 
 function getDataDir() {
   if (process.env.DATA_DIR) return process.env.DATA_DIR;
@@ -365,7 +365,7 @@ async function deleteCombo(id) {
  * Get CLI tool settings
  * @param {string} tool - Tool name: claude | codex | droid | openclaw
  * @param {string} [profile] - Hermes profile name (defaults to the default profile)
- * @returns {Promise<Object>} { success, data: { installed, has9Router, ... } }
+ * @returns {Promise<Object>} { success, data: { installed, hasMarsRouter, ... } }
  */
 async function getCliToolSettings(tool, profile) {
   const qs = profile ? `?profile=${encodeURIComponent(profile)}` : "";

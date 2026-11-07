@@ -132,16 +132,30 @@ install_native() {
   log "Building (production)"
   npm run build
 
+  # Install the `mars-router` command onto PATH.
+  BIN_DIR="${MARS_ROUTER_BIN_DIR:-$HOME/.local/bin}"
+  mkdir -p "$BIN_DIR"
+  cat > "$BIN_DIR/mars-router" <<EOF
+#!/bin/sh
+exec node "$INSTALL_DIR/scripts/mars-router.mjs" "\$@"
+EOF
+  chmod +x "$BIN_DIR/mars-router"
+  log "Installed command: $BIN_DIR/mars-router"
+  case ":$PATH:" in
+    *":$BIN_DIR:"*) ;;
+    *) warn "Add $BIN_DIR to your PATH to run 'mars-router' from anywhere:
+    export PATH=\"$BIN_DIR:\$PATH\"" ;;
+  esac
+
   log "Install complete → $INSTALL_DIR"
   if [ "$START" -eq 1 ]; then
     log "Starting Mars Router on port $PORT"
-    PORT="$PORT" HOSTNAME="${HOSTNAME:-0.0.0.0}" NEXT_PUBLIC_BASE_URL="http://localhost:$PORT" \
-      nohup npm run start > "$INSTALL_DIR/mars-router.log" 2>&1 &
+    PORT="$PORT" nohup node "$INSTALL_DIR/scripts/mars-router.mjs" start > "$INSTALL_DIR/mars-router.log" 2>&1 &
     log "Started (pid $!). Dashboard: http://localhost:$PORT/dashboard"
-    log "Logs: $INSTALL_DIR/mars-router.log"
+    log "Manage it with: mars-router status | logs | stop"
   else
     log "Skipped start. To run later:"
-    echo "  cd $INSTALL_DIR && PORT=$PORT npm run start"
+    echo "  cd $INSTALL_DIR && PORT=$PORT mars-router"
   fi
 }
 

@@ -34,7 +34,7 @@ http://localhost:20128/v1
 
 **Cho Mars Router cloud:**
 ```
-https://9router.com
+https://mars-router.com
 ```
 
 **Các bước:**
@@ -45,7 +45,7 @@ https://9router.com
 
 1. Trong field **API Key**, nhập API key Mars Router của bạn
 2. Bạn có thể tìm API key trong Mars Router dashboard tại **Settings → API Keys**
-3. Key bắt đầu bằng `sk-9router-`
+3. Key bắt đầu bằng `sk-mars-router-`
 
 ### 5. Chọn Model
 
@@ -71,7 +71,7 @@ Cline settings của bạn nên trông như sau:
 ```
 API Provider: Ollama
 Base URL: http://localhost:20128/v1
-API Key: sk-9router-xxxxxxxxxxxxx
+API Key: sk-mars-router-xxxxxxxxxxxxx
 Model: gpt-4
 ```
 
@@ -126,7 +126,7 @@ Bạn có thể dùng bất kỳ model nào đã cấu hình trong Mars Router d
 ### Lỗi "Invalid API Key"
 
 1. Xác minh API key trong Mars Router dashboard
-2. Đảm bảo bạn sao chép đầy đủ key bao gồm prefix `sk-9router-`
+2. Đảm bảo bạn sao chép đầy đủ key bao gồm prefix `sk-mars-router-`
 3. Kiểm tra API key chưa hết hạn
 4. Thử tạo API key mới
 
@@ -150,7 +150,7 @@ Bạn có thể dùng bất kỳ model nào đã cấu hình trong Mars Router d
 
 Để dùng Mars Router cloud endpoint thay vì localhost:
 
-1. Trong Cline settings, đặt Base URL: `https://9router.com`
+1. Trong Cline settings, đặt Base URL: `https://mars-router.com`
 2. Đảm bảo bạn đã cấu hình API key trong Mars Router cloud dashboard
 3. Đảm bảo cloud endpoint đang hoạt động và truy cập được
 

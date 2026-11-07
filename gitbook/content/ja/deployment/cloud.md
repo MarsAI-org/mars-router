@@ -16,8 +16,8 @@
 ### ステップ1: リポジトリをクローン
 
 ```bash
-git clone https://github.com/decolua/9router.git
-cd 9router/app
+git clone https://github.com/MarsAI-org/mars-router.git
+cd mars-router/app
 ```
 
 ### ステップ2: 依存関係をインストール
@@ -39,7 +39,7 @@ npm run build
 ```bash
 export JWT_SECRET="your-secure-secret-change-this-to-random-string"
 export INITIAL_PASSWORD="your-secure-password"
-export DATA_DIR="/var/lib/9router"
+export DATA_DIR="/var/lib/mars-router"
 export NODE_ENV="production"
 ```
 
@@ -49,15 +49,15 @@ export NODE_ENV="production"
 |----------|---------|-------------|
 | `JWT_SECRET` | 自動生成 | **本番環境では必ず変更!** JWTトークンの署名に使用 |
 | `INITIAL_PASSWORD` | `123456` | ダッシュボードログインパスワード |
-| `DATA_DIR` | `~/.9router` | データベースとデータの保存パス |
+| `DATA_DIR` | `~/.mars-router` | データベースとデータの保存パス |
 | `NODE_ENV` | `development` | デプロイ時は `production` に設定 |
 | `ENABLE_REQUEST_LOGS` | `false` | デバッグリクエスト/レスポンスログを有効化 |
 
 ### ステップ5: データディレクトリを作成
 
 ```bash
-sudo mkdir -p /var/lib/9router
-sudo chown $USER:$USER /var/lib/9router
+sudo mkdir -p /var/lib/mars-router
+sudo chown $USER:$USER /var/lib/mars-router
 ```
 
 ### ステップ6: アプリケーションを起動
@@ -75,7 +75,7 @@ PM2はアプリケーションを稼働させ続け、クラッシュ時に再�
 npm install -g pm2
 
 # PM2でMars Routerを起動
-pm2 start npm --name 9router -- start
+pm2 start npm --name mars-router -- start
 
 # PM2設定を保存
 pm2 save
@@ -89,13 +89,13 @@ pm2 startup
 
 ```bash
 # ログを表示
-pm2 logs 9router
+pm2 logs mars-router
 
 # アプリケーションを再起動
-pm2 restart 9router
+pm2 restart mars-router
 
 # アプリケーションを停止
-pm2 stop 9router
+pm2 stop mars-router
 
 # ステータスを表示
 pm2 status
@@ -147,17 +147,17 @@ CMD ["npm", "run", "start"]
 
 ```bash
 # イメージをビルド
-docker build -t 9router .
+docker build -t mars-router .
 
 # コンテナを実行
 docker run -d \
-  --name 9router \
+  --name mars-router \
   -p 3000:3000 \
   -p 20128:20128 \
   -e JWT_SECRET="your-secure-secret-change-this" \
   -e INITIAL_PASSWORD="your-secure-password" \
-  -v 9router-data:/app/data \
-  9router
+  -v mars-router-data:/app/data \
+  mars-router
 ```
 
 ### オプション2: Docker Compose
@@ -168,9 +168,9 @@ docker run -d \
 version: '3.8'
 
 services:
-  9router:
+  mars-router:
     build: .
-    container_name: 9router
+    container_name: mars-router
     ports:
       - "3000:3000"
       - "20128:20128"
@@ -180,11 +180,11 @@ services:
       - INITIAL_PASSWORD=your-secure-password
       - DATA_DIR=/app/data
     volumes:
-      - 9router-data:/app/data
+      - mars-router-data:/app/data
     restart: unless-stopped
 
 volumes:
-  9router-data:
+  mars-router-data:
 ```
 
 **Docker Composeで実行:**
@@ -223,7 +223,7 @@ sudo apt install nginx
 
 ### ステップ2: Nginxを設定
 
-`/etc/nginx/sites-available/9router` を作成:
+`/etc/nginx/sites-available/mars-router` を作成:
 
 ```nginx
 server {
@@ -284,7 +284,7 @@ server {
 
 ```bash
 # シンボリックリンクを作成
-sudo ln -s /etc/nginx/sites-available/9router /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/mars-router /etc/nginx/sites-enabled/
 
 # 設定をテスト
 sudo nginx -t
@@ -364,21 +364,21 @@ ssh -L 3000:localhost:3000 user@your-server.com
 sudo apt update && sudo apt upgrade -y
 
 # Mars Routerを更新
-cd /path/to/9router/app
+cd /path/to/mars-router/app
 git pull
 npm install
 npm run build
-pm2 restart 9router
+pm2 restart mars-router
 ```
 
 ### 5. バックアップ戦略
 
 ```bash
 # データディレクトリをバックアップ
-tar -czf 9router-backup-$(date +%Y%m%d).tar.gz /var/lib/9router
+tar -czf mars-router-backup-$(date +%Y%m%d).tar.gz /var/lib/mars-router
 
 # 自動毎日バックアップ (crontabに追加)
-0 2 * * * tar -czf /backups/9router-$(date +\%Y\%m\%d).tar.gz /var/lib/9router
+0 2 * * * tar -czf /backups/mars-router-$(date +\%Y\%m\%d).tar.gz /var/lib/mars-router
 ```
 
 ---
@@ -392,7 +392,7 @@ tar -czf 9router-backup-$(date +%Y%m%d).tar.gz /var/lib/9router
 pm2 status
 
 # ログを表示
-pm2 logs 9router --lines 100
+pm2 logs mars-router --lines 100
 
 # リソースをモニタリング
 pm2 monit
@@ -429,14 +429,14 @@ netstat -tulpn | grep -E '3000|20128'
 
 ```bash
 # ログを確認
-pm2 logs 9router
+pm2 logs mars-router
 
 # ポートが使用中か確認
 sudo lsof -i :3000
 sudo lsof -i :20128
 
 # 環境変数を確認
-pm2 env 9router
+pm2 env mars-router
 ```
 
 ### Nginx 502 Bad Gateway
@@ -460,8 +460,8 @@ SSEサポート用にNginx設定で `proxy_buffering off` が設定されてい�
 
 ```bash
 # データディレクトリ権限を修正
-sudo chown -R $USER:$USER /var/lib/9router
-chmod 755 /var/lib/9router
+sudo chown -R $USER:$USER /var/lib/mars-router
+chmod 755 /var/lib/mars-router
 ```
 
 ---

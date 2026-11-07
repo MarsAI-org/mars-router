@@ -1,6 +1,6 @@
 // Route-level acceptance for the Zed live-model wiring:
 //   GET /api/providers/[connectionId]/models  →  resolveZedModels  →  UI rows
-// Self-isolating: DATA_DIR points at a temp dir so seeding never touches ~/.9router.
+// Self-isolating: DATA_DIR points at a temp dir so seeding never touches ~/.mars-router.
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";

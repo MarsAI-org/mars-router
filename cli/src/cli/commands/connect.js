@@ -1,8 +1,8 @@
 /**
- * `9router connect <server-url>` — point local CLI tools (Claude Code, Codex, …) at a
- * REMOTE 9router server. Nothing runs locally: we log in with the dashboard
+ * `mars-router connect <server-url>` — point local CLI tools (Claude Code, Codex, …) at a
+ * REMOTE Mars Router server. Nothing runs locally: we log in with the dashboard
  * password, reuse/create an API key for this machine, then write the tool's
- * settings files (see connectTools.js). Works via `npx 9router connect …` with no global install.
+ * settings files (see connectTools.js). Works via `npx mars-router connect …` with no global install.
  *
  * The password and API key are never printed (key is masked).
  */
@@ -13,22 +13,22 @@ const path = require("path");
 const { TOOL_IDS, CLAUDE_MODELS, resolveTools } = require("./connectTools");
 
 const HELP = `
-Usage: 9router connect <server-url> [options]
+Usage: mars-router connect <server-url> [options]
 
-Configure CLI tools on THIS machine to use a remote 9router server.
+Configure CLI tools on THIS machine to use a remote Mars Router server.
 No local server is started. Run without installing:
 
-  npx 9router connect http://<server-host>:20128
-  npx 9router connect http://<server-host>:20128 --tools claude,codex,opencode
+  npx mars-router connect http://<server-host>:20128
+  npx mars-router connect http://<server-host>:20128 --tools claude,codex,opencode
 
 Options:
   --tools <list>         Comma-separated tools to configure (prompted if omitted
                          in a terminal; default: claude). Supported:
                          ${TOOL_IDS.join(", ")}, all
-  --password <pw>        Dashboard password (or env NINE_ROUTER_PASSWORD;
+  --password <pw>        Dashboard password (or env MARS_ROUTER_PASSWORD;
                          prompted if omitted — preferred, keeps it out of shell history)
   --save                 After a successful login, save the password for this server
-                         to ~/.9router/connect.env (plain text, mode 600) so later
+                         to ~/.mars-router/connect.env (plain text, mode 600) so later
                          runs skip the prompt. Delete that file to forget it.
   --key-name <name>      API key name to reuse/create (default: cli-<hostname>)
   --api-key <key>        Use this API key, skip login + key lookup
@@ -38,20 +38,20 @@ Options:
   --fable|--opus|--sonnet|--haiku <model>
                          Override a Claude Code tier (default: the server's value)
   --print-env            Also print OpenAI-compatible env vars for other CLIs
-  --reset                Remove 9router settings from the selected tools and exit
+  --reset                Remove Mars Router settings from the selected tools and exit
   -h, --help             Show this help
 
 Models come from the server's own CLI-tools config (set on its dashboard).
 Nothing is hardcoded: a Claude tier the server leaves unset is left unset,
 and a non-Claude tool with no model anywhere is skipped. Flags override:
 
-  npx 9router connect http://<server-host>:20128 --tools claude --sonnet cc/claude-sonnet-5-5
-  npx 9router connect http://<server-host>:20128 --tools codex,opencode --model ocg/deepseek-flash
+  npx mars-router connect http://<server-host>:20128 --tools claude --sonnet cc/claude-sonnet-5-5
+  npx mars-router connect http://<server-host>:20128 --tools codex,opencode --model ocg/deepseek-flash
 `;
 
 function parseArgs(argv) {
   const opts = {
-    password: process.env.NINE_ROUTER_PASSWORD || null,
+    password: process.env.MARS_ROUTER_PASSWORD || process.env.NINE_ROUTER_PASSWORD || null,
     keyName: `cli-${os.hostname()}`.slice(0, 64),
     apiKey: null,
     models: {},
@@ -96,10 +96,18 @@ function maskKey(key) {
 // password is never sent to a different host.
 function savedEnvPath() {
   if (process.env.DATA_DIR) return path.join(process.env.DATA_DIR, "connect.env");
-  const base = process.platform === "win32"
+  const current = process.platform === "win32"
+    ? path.join(process.env.APPDATA || path.join(os.homedir(), "AppData", "Roaming"), "mars-router")
+    : path.join(os.homedir(), ".mars-router");
+  const legacy = process.platform === "win32"
     ? path.join(process.env.APPDATA || path.join(os.homedir(), "AppData", "Roaming"), "9router")
     : path.join(os.homedir(), ".9router");
-  return path.join(base, "connect.env");
+  // Prefer the new dir; read the legacy one only if the new one is absent and
+  // the legacy file exists (un-migrated install).
+  if (fs.existsSync(path.join(current, "connect.env")) || !fs.existsSync(path.join(legacy, "connect.env"))) {
+    return path.join(current, "connect.env");
+  }
+  return path.join(legacy, "connect.env");
 }
 
 function loadSavedPassword(server) {
@@ -113,13 +121,15 @@ function loadSavedPassword(server) {
     // rather than crashing the whole command on JSON.parse.
     try { env[m[1]] = JSON.parse(m[2]); } catch { env[m[1]] = m[2]; }
   }
-  return env.NINE_ROUTER_SERVER === server && env.NINE_ROUTER_PASSWORD ? env.NINE_ROUTER_PASSWORD : null;
+  const serverVal = env.MARS_ROUTER_SERVER || env.NINE_ROUTER_SERVER;
+  const passwordVal = env.MARS_ROUTER_PASSWORD || env.NINE_ROUTER_PASSWORD;
+  return serverVal === server && passwordVal ? passwordVal : null;
 }
 
 function savePassword(server, password) {
   const file = savedEnvPath();
   fs.mkdirSync(path.dirname(file), { recursive: true });
-  const body = `NINE_ROUTER_SERVER=${JSON.stringify(server)}\nNINE_ROUTER_PASSWORD=${JSON.stringify(password)}\n`;
+  const body = `MARS_ROUTER_SERVER=${JSON.stringify(server)}\nMARS_ROUTER_PASSWORD=${JSON.stringify(password)}\n`;
   fs.writeFileSync(file, body, { mode: 0o600 });
   fs.chmodSync(file, 0o600); // mode only applies on create; tighten a pre-existing file too
   return file;
@@ -130,9 +140,9 @@ class Cancelled extends Error {}
 const prompt = (p) => p.run().catch((err) => { throw err || new Cancelled("Cancelled"); });
 
 async function promptPassword() {
-  if (!process.stdin.isTTY) throw new Error("Password required: pass --password or set NINE_ROUTER_PASSWORD");
+  if (!process.stdin.isTTY) throw new Error("Password required: pass --password or set MARS_ROUTER_PASSWORD");
   const { Password } = require("enquirer");
-  return prompt(new Password({ message: "9router dashboard password" }));
+  return prompt(new Password({ message: "Mars Router dashboard password" }));
 }
 
 async function request(url, { method = "GET", body, cookie, apiKey } = {}) {
@@ -290,7 +300,7 @@ async function runConnect(argv) {
     for (const t of tools) {
       try {
         const files = await t.reset();
-        console.log(files.length ? `✅ ${t.name}: removed 9router settings (${files.join(", ")})` : `• ${t.name}: nothing to reset`);
+        console.log(files.length ? `✅ ${t.name}: removed Mars Router settings (${files.join(", ")})` : `• ${t.name}: nothing to reset`);
       } catch (err) {
         failed++;
         console.log(`❌ ${t.name}: ${err.message}`);
@@ -394,8 +404,8 @@ async function runConnect(argv) {
     }
   }
   for (const [id, m] of Object.entries(toolModels)) if (m) console.log(`   ${id} model: ${m}`);
-  if (tools.some((t) => t.id === "omp")) console.log("   omp models: every server model, listed under 9router in /model");
-  console.log(`   Restart the tools to apply. Undo: npx 9router connect --reset --tools ${tools.map((t) => t.id).join(",")}`);
+  if (tools.some((t) => t.id === "omp")) console.log("   omp models: every server model, listed under mars-router in /model");
+  console.log(`   Restart the tools to apply. Undo: npx mars-router connect --reset --tools ${tools.map((t) => t.id).join(",")}`);
 
   if (opts.printEnv) {
     console.log("\nOpenAI-compatible CLIs (codex, opencode, aider, …):");

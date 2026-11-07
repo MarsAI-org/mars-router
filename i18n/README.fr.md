@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="../images/9router.png?1" alt="Tableau de bord Mars Router" width="800"/>
+  <img src="../images/mars-router.png?1" alt="Tableau de bord Mars Router" width="800"/>
   
   # Mars Router - Routeur IA GRATUIT et économiseur de tokens
   
@@ -7,15 +7,15 @@
   
   **Connectez tous vos outils de codage IA (Claude Code, Cursor, Antigravity, Copilot, Codex, Gemini, OpenCode, Cline, OpenClaw...) à plus de 40 fournisseurs d'IA et plus de 100 modèles.**
   
-  [![npm](https://img.shields.io/npm/v/9router.svg)](https://www.npmjs.com/package/9router)
-  [![Downloads](https://img.shields.io/npm/dm/9router.svg)](https://www.npmjs.com/package/9router)
-  [![Docker Pulls](https://img.shields.io/docker/pulls/decolua/9router.svg?logo=docker&label=Docker%20pulls)](https://hub.docker.com/r/decolua/9router)
-  [![GHCR](https://img.shields.io/badge/GHCR-decolua%2F9router-blue?logo=github)](https://github.com/decolua/9router/pkgs/container/9router)
-  [![License](https://img.shields.io/npm/l/9router.svg)](https://github.com/decolua/9router/blob/main/LICENSE)
+  [![npm](https://img.shields.io/npm/v/mars-router.svg)](https://www.npmjs.com/package/mars-router)
+  [![Downloads](https://img.shields.io/npm/dm/mars-router.svg)](https://www.npmjs.com/package/mars-router)
+  [![Docker Pulls](https://img.shields.io/docker/pulls/MarsAI-org/mars-router.svg?logo=docker&label=Docker%20pulls)](https://hub.docker.com/r/MarsAI-org/mars-router)
+  [![GHCR](https://img.shields.io/badge/GHCR-marsai-org%2Fmars-router-blue?logo=github)](https://github.com/MarsAI-org/mars-router/pkgs/container/mars-router)
+  [![License](https://img.shields.io/npm/l/mars-router.svg)](https://github.com/MarsAI-org/mars-router/blob/main/LICENSE)
 
-<a href="https://trendshift.io/repositories/22628" target="_blank"><img src="https://trendshift.io/api/badge/repositories/22628" alt="decolua%2F9router | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
+<a href="https://trendshift.io/repositories/22628" target="_blank"><img src="https://trendshift.io/api/badge/repositories/22628" alt="marsai-org%2Fmars-router | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
 
-[🚀 Démarrage rapide](#-démarrage-rapide) • [💡 Fonctionnalités](#-fonctionnalités-clés) • [📖 Configuration](#-guide-dinstallation) • [🌐 Site web](https://9router.com)
+[🚀 Démarrage rapide](#-démarrage-rapide) • [💡 Fonctionnalités](#-fonctionnalités-clés) • [📖 Configuration](#-guide-dinstallation) • [🌐 Site web](https://mars-router.com)
 
 [🇻🇳 Tiếng Việt](./README.vi.md) • [🇨🇳 中文](./README.zh-CN.md) • [🇯🇵 日本語](./README.ja-JP.md) • [🇷🇺 Русский](./README.ru.md) • [🇹🇭 ไทย](./README.th.md) • [🇮🇷 فارسی](./README.fa_IR.md) • [🇮🇩 Indonesia](./README.id-ID.md) • [🇪🇸 Español](./README.es.md) • [🇫🇷 Français](./README.fr.md)
 
@@ -76,8 +76,8 @@ Result: Never stop coding, minimal cost + 20-40% token savings via RTK
 **1. Installez globalement :**
 
 ```bash
-npm install -g 9router
-9router
+npm install -g mars-router
+mars-router
 ```
 
 🎉 Le tableau de bord s'ouvre sur `http://localhost:20128`
@@ -99,7 +99,7 @@ Paramètres de Claude Code/Codex/OpenClaw/Cursor/Cline :
 
 **Alternative : exécuter depuis le code source (ce dépôt) :**
 
-Le paquet de ce dépôt est privé (`9router-app`), donc l'exécution depuis le code source/Docker est le chemin de développement local attendu.
+Le paquet de ce dépôt est privé (`mars-router-app`), donc l'exécution depuis le code source/Docker est le chemin de développement local attendu.
 
 ```bash
 cp .env.example .env
@@ -213,7 +213,7 @@ URL par défaut :
 
 </div>
 
-> 🎬 **Vous avez réalisé une vidéo sur Mars Router ?** Envoyez une [Pull Request](https://github.com/decolua/9router/pulls) en ajoutant votre vidéo à cette section — nous la fusionnerons !
+> 🎬 **Vous avez réalisé une vidéo sur Mars Router ?** Envoyez une [Pull Request](https://github.com/MarsAI-org/mars-router/pulls) en ajoutant votre vidéo à cette section — nous la fusionnerons !
 
 ---
 
@@ -1044,7 +1044,7 @@ Coût : 0 $ pour toujours (+ 20 à 40 % d'économie de tokens via RTK) !
 ```
 Settings → Models → Advanced :
   OpenAI API Base URL : http://localhost:20128/v1
-  OpenAI API Key : [depuis le tableau de bord 9router]
+  OpenAI API Key : [depuis le tableau de bord mars-router]
   Model : cc/claude-opus-4-7
 ```
 
@@ -1057,7 +1057,7 @@ Modifiez `~/.claude/config.json` :
 ```json
 {
   "anthropic_api_base": "http://localhost:20128/v1",
-  "anthropic_api_key": "votre-clé-api-9router"
+  "anthropic_api_key": "votre-clé-api-mars-router"
 }
 ```
 
@@ -1065,7 +1065,7 @@ Modifiez `~/.claude/config.json` :
 
 ```bash
 export OPENAI_BASE_URL="http://localhost:20128"
-export OPENAI_API_KEY="votre-clé-api-9router"
+export OPENAI_API_KEY="votre-clé-api-mars-router"
 
 codex "votre prompt"
 ```
@@ -1085,15 +1085,15 @@ Tableau de bord → CLI Tools → OpenClaw → Sélectionnez le modèle → Appl
   "agents": {
     "defaults": {
       "model": {
-        "primary": "9router/kr/claude-sonnet-4.5"
+        "primary": "mars-router/kr/claude-sonnet-4.5"
       }
     }
   },
   "models": {
     "providers": {
-      "9router": {
+      "mars-router": {
         "baseUrl": "http://127.0.0.1:20128/v1",
-        "apiKey": "sk_9router",
+        "apiKey": "sk_mars_router",
         "api": "openai-completions",
         "models": [
           {
@@ -1127,20 +1127,20 @@ Model : cc/claude-opus-4-7
 
 ```bash
 # Clonez et installez
-git clone https://github.com/decolua/9router.git
-cd 9router
+git clone https://github.com/MarsAI-org/mars-router.git
+cd mars-router
 npm install
 npm run build
 
 # Configuration
 export JWT_SECRET="votre-secret-sécurisé-changez-le"
 export INITIAL_PASSWORD="votre-mot-de-passe"
-export DATA_DIR="/var/lib/9router"
+export DATA_DIR="/var/lib/mars-router"
 export PORT="20128"
 export HOSTNAME="0.0.0.0"
 export NODE_ENV="production"
 export NEXT_PUBLIC_BASE_URL="http://localhost:20128"
-export NEXT_PUBLIC_CLOUD_URL="https://9router.com"
+export NEXT_PUBLIC_CLOUD_URL="https://mars-router.com"
 export API_KEY_SECRET="endpoint-proxy-api-key-secret"
 export MACHINE_ID_SALT="endpoint-proxy-salt"
 
@@ -1149,7 +1149,7 @@ npm run start
 
 # Ou utilisez PM2
 npm install -g pm2
-pm2 start npm --name 9router -- start
+pm2 start npm --name mars-router -- start
 pm2 save
 pm2 startup
 ```
@@ -1158,18 +1158,18 @@ pm2 startup
 
 Images publiées (multi-plateformes `linux/amd64` + `linux/arm64`) :
 
-- Docker Hub : [`decolua/9router`](https://hub.docker.com/r/decolua/9router)
-- GHCR : [`ghcr.io/decolua/9router`](https://github.com/decolua/9router/pkgs/container/9router)
+- Docker Hub : [`MarsAI-org/mars-router`](https://hub.docker.com/r/MarsAI-org/mars-router)
+- GHCR : [`ghcr.io/MarsAI-org/mars-router`](https://github.com/MarsAI-org/mars-router/pkgs/container/mars-router)
 
 **Démarrage rapide (utilisez l'image publiée) :**
 
 ```bash
 docker run -d \
-  --name 9router \
+  --name mars-router \
   -p 20128:20128 \
-  -v "$HOME/.9router:/app/data" \
+  -v "$HOME/.mars-router:/app/data" \
   -e DATA_DIR=/app/data \
-  decolua/9router:latest
+  MarsAI-org/mars-router:latest
 ```
 
 → Ouvrez http://localhost:20128
@@ -1177,11 +1177,11 @@ docker run -d \
 **Compiler depuis le code source (dev) :**
 
 ```bash
-git clone https://github.com/decolua/9router.git
-cd 9router/app
-docker build -t 9router .
-docker run -d --name 9router -p 20128:20128 \
-  -v "$HOME/.9router:/app/data" -e DATA_DIR=/app/data 9router
+git clone https://github.com/MarsAI-org/mars-router.git
+cd mars-router/app
+docker build -t mars-router .
+docker run -d --name mars-router -p 20128:20128 \
+  -v "$HOME/.mars-router:/app/data" -e DATA_DIR=/app/data mars-router
 ```
 
 **Valeurs par défaut du conteneur :**
@@ -1192,28 +1192,28 @@ docker run -d --name 9router -p 20128:20128 \
 **Commandes utiles :**
 
 ```bash
-docker logs -f 9router
-docker restart 9router
-docker stop 9router && docker rm 9router
-docker pull decolua/9router:latest   # mise à jour vers la dernière version
+docker logs -f mars-router
+docker restart mars-router
+docker stop mars-router && docker rm mars-router
+docker pull MarsAI-org/mars-router:latest   # mise à jour vers la dernière version
 ```
 
-**Persistance des données :** `$HOME/.9router/db/data.sqlite` sur l'hôte ↔ `/app/data/db/data.sqlite` dans le conteneur.
+**Persistance des données :** `$HOME/.mars-router/db/data.sqlite` sur l'hôte ↔ `/app/data/db/data.sqlite` dans le conteneur.
 
 ### Variables d'environnement
 
 | Variable                                             | Par défaut                                  | Description                                                                                  |
 | ---------------------------------------------------- | ------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| `JWT_SECRET`                                         | Généré automatiquement (`~/.9router/jwt-secret`) | Secret de signature JWT pour le cookie d'authentification du tableau de bord (remplacez-le pour partager entre instances) |
+| `JWT_SECRET`                                         | Généré automatiquement (`~/.mars-router/jwt-secret`) | Secret de signature JWT pour le cookie d'authentification du tableau de bord (remplacez-le pour partager entre instances) |
 | `INITIAL_PASSWORD`                                   | `123456`                                    | Mot de passe de première connexion quand aucun hash n'est enregistré                          |
-| `DATA_DIR`                                           | `~/.9router`                                | Emplacement principal des données de l'app (SQLite dans `$DATA_DIR/db/data.sqlite`)          |
+| `DATA_DIR`                                           | `~/.mars-router`                                | Emplacement principal des données de l'app (SQLite dans `$DATA_DIR/db/data.sqlite`)          |
 | `PORT`                                               | défaut du framework                         | Port du service (`20128` dans les exemples)                                                   |
 | `HOSTNAME`                                           | défaut du framework                         | Hôte de liaison (Docker utilise `0.0.0.0` par défaut)                                         |
 | `NODE_ENV`                                           | défaut du runtime                           | Définissez `production` pour le déploiement                                                   |
 | `BASE_URL`                                           | `http://localhost:20128`                    | URL de base interne côté serveur utilisée par les tâches de synchronisation cloud             |
-| `CLOUD_URL`                                          | `https://9router.com`                       | URL de base de l'endpoint de synchronisation cloud côté serveur                               |
+| `CLOUD_URL`                                          | `https://mars-router.com`                       | URL de base de l'endpoint de synchronisation cloud côté serveur                               |
 | `NEXT_PUBLIC_BASE_URL`                               | `http://localhost:3000`                     | URL de base publique/rétrocompatible (préférez `BASE_URL` pour le runtime serveur)            |
-| `NEXT_PUBLIC_CLOUD_URL`                              | `https://9router.com`                       | URL cloud publique/rétrocompatible (préférez `CLOUD_URL` pour le runtime serveur)             |
+| `NEXT_PUBLIC_CLOUD_URL`                              | `https://mars-router.com`                       | URL cloud publique/rétrocompatible (préférez `CLOUD_URL` pour le runtime serveur)             |
 | `API_KEY_SECRET`                                     | `endpoint-proxy-api-key-secret`             | Secret HMAC pour les clés API générées                                                         |
 | `MACHINE_ID_SALT`                                    | `endpoint-proxy-salt`                       | Sel pour le hachage stable de l'ID machine                                                    |
 | `ENABLE_REQUEST_LOGS`                                | `false`                                     | Active les journaux de requêtes/réponses dans `logs/`                                         |
@@ -1234,7 +1234,7 @@ Remarques :
 - État principal de l'app : `${DATA_DIR}/db/data.sqlite` (SQLite — fournisseurs, combos, alias, clés, paramètres, historique d'utilisation)
 - Sauvegardes automatiques : `${DATA_DIR}/db/backups/`
 - Journaux optionnels de requêtes/translator : `<repo>/logs/...` quand `ENABLE_REQUEST_LOGS=true`
-- `${DATA_DIR}` et `~/.9router` résolvent tous deux le même emplacement dans un conteneur Docker — le lien symbolique `/root/.9router -> /app/data` est créé au moment de la compilation.
+- `${DATA_DIR}` et `~/.mars-router` résolvent tous deux le même emplacement dans un conteneur Docker — le lien symbolique `/root/.mars-router -> /app/data` est créé au moment de la compilation.
 
 </details>
 
@@ -1396,9 +1396,9 @@ Authorization: Bearer votre-clé-api
 
 ## 📧 Support
 
-- **Site web** : [9router.com](https://9router.com)
-- **GitHub** : [github.com/decolua/9router](https://github.com/decolua/9router)
-- **Problèmes** : [github.com/decolua/9router/issues](https://github.com/decolua/9router/issues)
+- **Site web** : [mars-router.com](https://mars-router.com)
+- **GitHub** : [github.com/MarsAI-org/mars-router](https://github.com/MarsAI-org/mars-router)
+- **Problèmes** : [github.com/MarsAI-org/mars-router/issues](https://github.com/MarsAI-org/mars-router/issues)
 
 ---
 
@@ -1406,13 +1406,13 @@ Authorization: Bearer votre-clé-api
 
 Merci à tous les contributeurs qui ont contribué à améliorer Mars Router !
 
-[![Contributors](https://contrib.rocks/image?repo=decolua/9router&max=150&columns=15&anon=1&v=20260309)](https://github.com/decolua/9router/graphs/contributors)
+[![Contributors](https://contrib.rocks/image?repo=MarsAI-org/mars-router&max=150&columns=15&anon=1&v=20260309)](https://github.com/MarsAI-org/mars-router/graphs/contributors)
 
 ---
 
 ## 📊 Graphique d'étoiles
 
-[![Star Chart](https://starchart.cc/decolua/9router.svg?variant=adaptive)](https://starchart.cc/decolua/9router)
+[![Star Chart](https://starchart.cc/MarsAI-org/mars-router.svg?variant=adaptive)](https://starchart.cc/MarsAI-org/mars-router)
 
 ## 🔀 Forks
 

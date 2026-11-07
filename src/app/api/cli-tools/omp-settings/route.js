@@ -10,7 +10,7 @@ import { promisify } from "util";
 
 const execAsync = promisify(exec);
 
-const PROVIDER_ID = "9router";
+const PROVIDER_ID = "mars-router";
 const getOmpDir = () => path.join(os.homedir(), ".omp", "agent");
 const getOmpDbPath = () => path.join(getOmpDir(), "agent.db");
 const getOmpModelsYmlPath = () => path.join(getOmpDir(), "models.yml");
@@ -44,9 +44,9 @@ const readModelsYml = async () => {
   }
 };
 
-const has9RouterInYml = (content) => {
+const hasMarsRouterInYml = (content) => {
   if (!content) return false;
-  return content.includes("9router:") || content.includes("localhost:20128");
+  return content.includes("mars-router:") || content.includes("9router:") || content.includes("localhost:20128");
 };
 
 // Build standard Mars Router provider block for models.yml
@@ -75,11 +75,11 @@ export async function GET() {
     }
 
     const ymlContent = await readModelsYml();
-    const has9Router = has9RouterInYml(ymlContent);
+    const hasMarsRouter = hasMarsRouterInYml(ymlContent);
 
     return NextResponse.json({
       installed: true,
-      has9Router,
+      hasMarsRouter,
       configPath: getOmpModelsYmlPath(),
     });
   } catch (err) {
@@ -108,9 +108,10 @@ export async function POST(request) {
     let ymlContent = await readModelsYml();
     const providerBlock = buildOmpProviderYaml(baseUrl, resolvedKey);
 
-    // Remove existing 9router provider if present
+    // Remove existing provider block (current + legacy name) if present
     const regex = new RegExp(`\\s*${PROVIDER_ID}:[\\s\\S]*?(?=\\n\\s*\\w+:|$)`, "g");
     ymlContent = ymlContent.replace(regex, "");
+    ymlContent = ymlContent.replace(/\s*9router:[\s\S]*?(?=\n\s*\w+:|$)/g, "");
 
     if (!ymlContent.trim()) {
       ymlContent = `providers:\n${providerBlock}\n`;
@@ -152,7 +153,7 @@ export async function POST(request) {
 
     return NextResponse.json({
       success: true,
-      message: "Oh My Pi settings applied! Run 'omp' and all Mars Router models appear under 9router in /model.",
+      message: "Oh My Pi settings applied! Run 'omp' and all Mars Router models appear under mars-router in /model.",
       configPath: getOmpModelsYmlPath(),
     });
   } catch (err) {

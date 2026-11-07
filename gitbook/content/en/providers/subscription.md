@@ -32,7 +32,7 @@ Subscription tier providers are your **primary** choice - you're already paying 
 **Step 1: Connect via Dashboard**
 
 ```bash
-9router
+mars-router
 # Dashboard opens → Providers → Connect Claude Code
 ```
 
@@ -82,7 +82,7 @@ Model: cc/claude-opus-4-5-20251101
 **Step 1: Connect via Dashboard**
 
 ```bash
-9router
+mars-router
 # Dashboard → Providers → Connect Codex
 ```
 
@@ -155,7 +155,7 @@ underlying model and its image tool depends on the connected account.
 **Step 1: Connect via Dashboard**
 
 ```bash
-9router
+mars-router
 # Dashboard → Providers → Connect Gemini CLI
 ```
 
@@ -207,7 +207,7 @@ Model: gc/gemini-3-flash-preview
 **Step 1: Connect via Dashboard**
 
 ```bash
-9router
+mars-router
 # Dashboard → Providers → Connect GitHub
 ```
 
@@ -257,7 +257,7 @@ Model: gh/gpt-5
 **Step 1: Connect via Dashboard**
 
 ```bash
-9router
+mars-router
 # Dashboard → Providers → Connect Antigravity
 ```
 
@@ -313,7 +313,7 @@ Model: ag/gemini-3-pro-high
 ```
 Settings → Models → Advanced:
   OpenAI API Base URL: http://localhost:20128/v1
-  OpenAI API Key: [from 9router dashboard]
+  OpenAI API Key: [from mars-router dashboard]
   Model: cc/claude-opus-4-5-20251101
 ```
 

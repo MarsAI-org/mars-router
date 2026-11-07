@@ -143,7 +143,7 @@ Common issues and solutions when using Mars Router.
 
 1. **Start Mars Router:**
    ```bash
-   9router
+   mars-router
    ```
    Dashboard should open at http://localhost:3000
 
@@ -164,7 +164,7 @@ Common issues and solutions when using Mars Router.
 4. **Use cloud endpoint:**
    If localhost doesn't work (e.g., Cursor IDE):
    ```
-   Endpoint: https://9router.com/v1
+   Endpoint: https://mars-router.com/v1
    ```
 
 ---
@@ -183,7 +183,7 @@ Common issues and solutions when using Mars Router.
 1. **Check if Mars Router is running:**
    ```bash
    # Check process
-   ps aux | grep 9router
+   ps aux | grep mars-router
    
    # Check port 3000
    lsof -i :3000
@@ -202,10 +202,10 @@ Common issues and solutions when using Mars Router.
 3. **Restart Mars Router:**
    ```bash
    # Stop
-   pkill -f 9router
+   pkill -f mars-router
    
    # Start
-   9router
+   mars-router
    ```
 
 4. **Clear browser cache:**
@@ -346,6 +346,6 @@ Common issues and solutions when using Mars Router.
 
 ## Need More Help?
 
-- **GitHub Issues:** [github.com/decolua/9router/issues](https://github.com/decolua/9router/issues)
-- **Documentation:** [9router.com/docs](https://9router.com/docs)
+- **GitHub Issues:** [github.com/MarsAI-org/mars-router/issues](https://github.com/MarsAI-org/mars-router/issues)
+- **Documentation:** [mars-router.com/docs](https://mars-router.com/docs)
 - **FAQ:** [faq.md](faq.md)

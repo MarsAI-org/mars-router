@@ -34,7 +34,7 @@ http://localhost:20128/v1
 
 **クラウドMars Router用:**
 ```
-https://9router.com
+https://mars-router.com
 ```
 
 **手順:**
@@ -45,7 +45,7 @@ https://9router.com
 
 1. **API Key** フィールドにMars Router APIキーを入力
 2. APIキーはMars Routerダッシュボードの **Settings → API Keys** で確認できます
-3. キーは `sk-9router-` で始まります
+3. キーは `sk-mars-router-` で始まります
 
 ### 5. モデルを選択
 
@@ -71,7 +71,7 @@ Cline設定は次のようになります:
 ```
 API Provider: Ollama
 Base URL: http://localhost:20128/v1
-API Key: sk-9router-xxxxxxxxxxxxx
+API Key: sk-mars-router-xxxxxxxxxxxxx
 Model: gpt-4
 ```
 
@@ -126,7 +126,7 @@ Mars Routerダッシュボードで設定されたモデルを使用できます
 ### 「Invalid API Key」エラー
 
 1. Mars RouterダッシュボードでAPIキーを確認
-2. `sk-9router-` プレフィックスを含むキー全体をコピーしたか確認
+2. `sk-mars-router-` プレフィックスを含むキー全体をコピーしたか確認
 3. APIキーが期限切れでないか確認
 4. 新しいAPIキーを再生成してみる
 
@@ -150,7 +150,7 @@ Mars Routerダッシュボードで設定されたモデルを使用できます
 
 localhostの代わりにMars Routerクラウドエンドポイントを使用:
 
-1. Cline設定で、Base URLを設定: `https://9router.com`
+1. Cline設定で、Base URLを設定: `https://mars-router.com`
 2. Mars RouterクラウドダッシュボードでAPIキーが設定されていることを確認
 3. クラウドエンドポイントがアクティブでアクセス可能か確認
 

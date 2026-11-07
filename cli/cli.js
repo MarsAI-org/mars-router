@@ -67,7 +67,7 @@ const { ensureSqliteRuntime, buildEnvWithRuntime } = require("./hooks/sqliteRunt
 const { ensureTrayRuntime } = require("./hooks/trayRuntime");
 const args = process.argv.slice(2);
 
-// Subcommands (`9router xai video …`) run against an already-running gateway
+// Subcommands (`mars-router xai video …`) run against an already-running gateway
 // and bypass the launcher flow (no runtime self-heal, no server spawn).
 if (args[0] === "xai" && args[1] === "video") {
   const { run } = require("./src/cli/commands/xaiVideo");
@@ -80,9 +80,9 @@ if (args[0] === "xai" && args[1] === "video") {
   return;
 }
 
-// `9router connect <url>` configures local CLI tools against a remote server, and
-// `9router show` prints what they're currently set to — no local server, no
-// runtime deps. Usable via `npx 9router …`.
+// `mars-router connect <url>` configures local CLI tools against a remote server, and
+// `mars-router show` prints what they're currently set to — no local server, no
+// runtime deps. Usable via `npx mars-router …`.
 if (args[0] === "connect" || args[0] === "show") {
   const { run } = require(args[0] === "show" ? "./src/cli/commands/show" : "./src/cli/commands/connect");
   run(args.slice(1))
@@ -94,7 +94,7 @@ if (args[0] === "connect" || args[0] === "show") {
   return;
 }
 
-// Self-heal SQLite runtime deps (sql.js + better-sqlite3) into ~/.9router/runtime
+// Self-heal SQLite runtime deps (sql.js + better-sqlite3) into ~/.mars-router/runtime
 // so the server can resolve them via NODE_PATH. Best-effort — sql.js is required,
 // better-sqlite3 is optional. Logs to stderr only on failure.
 try { ensureSqliteRuntime({ silent: true }); } catch {}
@@ -124,9 +124,10 @@ function getDisplayHost() {
   return host === DEFAULT_HOST ? "localhost" : host;
 }
 const MAX_PORT_ATTEMPTS = 10;
-// Identifiers for killAllAppProcesses - only kill 9router specifically
+// Identifiers for killAllAppProcesses - only kill Mars Router specifically
 const PROCESS_IDENTIFIERS = [
-  '9router'  // Only package name - avoid killing other apps
+  'mars-router',  // Current package name
+  '9router'       // Legacy package name (pre-rename installs)
 ];
 
 // Parse arguments
@@ -168,10 +169,10 @@ Options:
   -v, --version       Show version
 
 Commands:
-  connect <server-url> Configure Claude Code for a remote 9router server
-                      (npx 9router connect http://host:20128 — no install needed)
-  show [tool…]        Show each CLI tool's current 9router config and models
-                      (e.g. 9router show claude)
+  connect <server-url> Configure Claude Code for a remote Mars Router server
+                      (npx mars-router connect http://host:20128 — no install needed)
+  show [tool…]        Show each CLI tool's current Mars Router config and models
+                      (e.g. mars-router show claude)
   xai video --prompt "..." --output video.mp4
                       Generate a Grok Imagine video via the running gateway
                       (see: ${APP_NAME} xai video --help)
@@ -203,11 +204,18 @@ function compareVersions(a, b) {
   return 0;
 }
 
-// Get app data dir (matches app/src/lib/dataDir.js convention)
+// Get app data dir (matches app/src/lib/dataDir.js convention).
+// Prefer the new ~/.mars-router, fall back to the legacy ~/.9router so an
+// un-migrated install still finds its data.
 function getAppDataDir() {
-  return process.platform === "win32"
+  const current = process.platform === "win32"
+    ? path.join(process.env.APPDATA || "", "mars-router")
+    : path.join(os.homedir(), ".mars-router");
+  if (fs.existsSync(current)) return current;
+  const legacy = process.platform === "win32"
     ? path.join(process.env.APPDATA || "", "9router")
     : path.join(os.homedir(), ".9router");
+  return fs.existsSync(legacy) ? legacy : current;
 }
 
 // Kill PID from file (best-effort, removes file after)
@@ -264,7 +272,7 @@ function killCloudflaredByAppPort(appPort) {
   return pids;
 }
 
-// Kill all 9router processes
+// Kill all Mars Router processes
 function killAllAppProcesses(appPort) {
   return new Promise((resolve) => {
     try {
@@ -291,11 +299,12 @@ function killAllAppProcesses(appPort) {
           });
           const lines = output.split("\n").slice(1).filter(l => l.trim());
           lines.forEach(line => {
-            // Whitelist: real node process running 9router/cli.js, or next-server.
-            // Avoids killing editors/grep/strace/cursor that just have "9router" in cmdline.
+            // Whitelist: real node process running mars-router/cli.js (or the
+            // legacy 9router name), or next-server.
             const cmd = line.toLowerCase();
+            const isRouterCmd = cmd.includes("mars-router") || cmd.includes("9router");
             const isAppProcess =
-              (cmd.includes("node") && cmd.includes("9router") && (cmd.includes("cli.js") || cmd.includes("\\9router") || cmd.includes("/9router")))
+              (cmd.includes("node") && isRouterCmd && (cmd.includes("cli.js") || cmd.includes("\\mars-router") || cmd.includes("/mars-router") || cmd.includes("\\9router") || cmd.includes("/9router")))
               || cmd.includes("next-server");
             if (isAppProcess) {
               const match = line.match(/^"(\d+)"/);
@@ -317,11 +326,12 @@ function killAllAppProcesses(appPort) {
           const lines = output.split('\n');
 
           lines.forEach(line => {
-            // Whitelist: real node process running 9router/cli.js, or next-server.
-            // Avoids killing grep/strace/editors/cursor that incidentally match "9router".
+            // Whitelist: real node process running mars-router/cli.js, or next-server.
+            // Avoids killing grep/strace/editors/cursor that incidentally match the name.
             const cmd = line.toLowerCase();
+            const isRouterCmd = cmd.includes("mars-router") || cmd.includes("9router");
             const isAppProcess =
-              (cmd.includes("node") && cmd.includes("9router") && (cmd.includes("cli.js") || cmd.includes("/9router")))
+              (cmd.includes("node") && isRouterCmd && (cmd.includes("cli.js") || cmd.includes("/mars-router") || cmd.includes("/9router")))
               || cmd.includes("next-server");
             if (isAppProcess) {
               const parts = line.trim().split(/\s+/);
@@ -856,7 +866,7 @@ function startServer(updatePromise) {
     if (restartCount >= MAX_RESTARTS) {
       console.error(`\n⚠️  Server crashed ${MAX_RESTARTS} times. Disabling MIT and restarting...`);
       try {
-        const dbPath = path.join(os.homedir(), process.platform === "win32" ? path.join("AppData", "Roaming", "9router", "db.json") : path.join(".9router", "db.json"));
+        const dbPath = path.join(getAppDataDir(), "db.json");
         if (fs.existsSync(dbPath)) {
           const db = JSON.parse(fs.readFileSync(dbPath, "utf-8"));
           if (db.settings) db.settings.mitmEnabled = false;

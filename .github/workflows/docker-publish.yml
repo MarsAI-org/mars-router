@@ -24,7 +24,7 @@ concurrency:
   queue: max
 
 env:
-  DOCKERHUB_IMAGE: decolua/9router
+  DOCKERHUB_IMAGE: marsai/mars-router
 
 jobs:
   prepare:
@@ -104,7 +104,7 @@ jobs:
           }
 
           const commit = execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim();
-          const publishDockerHub = process.env.REPOSITORY === "decolua/9router";
+          const publishDockerHub = process.env.REPOSITORY === "MarsAI-org/mars-router";
           const ghcrImage = `ghcr.io/${process.env.REPOSITORY.toLowerCase()}`;
           const isPrerelease = version.includes("-");
           const promoteLatest = (process.env.EVENT_NAME === "push" && !isPrerelease)
@@ -187,8 +187,8 @@ jobs:
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
             org.opencontainers.image.revision=${{ needs.prepare.outputs.commit }}
             org.opencontainers.image.version=${{ needs.prepare.outputs.version }}
-          cache-from: type=gha,scope=9router-${{ matrix.suffix }}
-          cache-to: type=gha,mode=max,scope=9router-${{ matrix.suffix }}
+          cache-from: type=gha,scope=mars-router-${{ matrix.suffix }}
+          cache-to: type=gha,mode=max,scope=mars-router-${{ matrix.suffix }}
           provenance: false
           sbom: false
 
@@ -201,7 +201,7 @@ jobs:
           set -Eeuo pipefail
           [[ "$IMAGE_DIGEST" =~ ^sha256:[0-9a-f]{64}$ ]]
 
-          container="9router-platform-smoke-${GITHUB_RUN_ID}-${{ matrix.suffix }}"
+          container="mars-router-platform-smoke-${GITHUB_RUN_ID}-${{ matrix.suffix }}"
           trap 'docker rm -f "$container" >/dev/null 2>&1 || true' EXIT
 
           docker run --detach \
@@ -317,7 +317,7 @@ jobs:
           VERSION: ${{ needs.prepare.outputs.version }}
         run: |
           set -Eeuo pipefail
-          container="9router-manifest-smoke-${GITHUB_RUN_ID}"
+          container="mars-router-manifest-smoke-${GITHUB_RUN_ID}"
           trap 'docker rm -f "$container" >/dev/null 2>&1 || true' EXIT
 
           docker run --detach \
