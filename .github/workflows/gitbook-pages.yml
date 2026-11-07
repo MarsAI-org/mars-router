@@ -37,7 +37,20 @@ jobs:
       - name: Add .nojekyll
         run: touch out/.nojekyll
 
+      - name: Skip deploy when no deploy key is configured
+        id: gate
+        env:
+          DEPLOY_KEY: ${{ secrets.GH_PAGES_DEPLOY_KEY }}
+        run: |
+          if [ -z "${DEPLOY_KEY:-}" ]; then
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::GH_PAGES_DEPLOY_KEY not set — GitBook built but not deployed."
+          else
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Deploy to mars-router.github.io
+        if: steps.gate.outputs.configured == 'true'
         uses: peaceiris/actions-gh-pages@v4
         with:
           deploy_key: ${{ secrets.GH_PAGES_DEPLOY_KEY }}
