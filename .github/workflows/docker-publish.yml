@@ -104,7 +104,7 @@ jobs:
           }
 
           const commit = execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim();
-          const publishDockerHub = process.env.REPOSITORY === "MarsAI-org/mars-router";
+          const publishDockerHub = false; // Docker Hub is not used; publish to GHCR only
           const ghcrImage = `ghcr.io/${process.env.REPOSITORY.toLowerCase()}`;
           const isPrerelease = version.includes("-");
           const promoteLatest = (process.env.EVENT_NAME === "push" && !isPrerelease)

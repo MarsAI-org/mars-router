@@ -1,6 +1,6 @@
 # Docker
 
-Run Mars Router in a container. Published image: [`marsai/mars-router`](https://hub.docker.com/r/marsai/mars-router) — multi-platform `linux/amd64` + `linux/arm64`.
+Run Mars Router in a container. Published image: [`ghcr.io/marsai-org/mars-router`](https://github.com/MarsAI-org/mars-router/pkgs/container/mars-router) — multi-platform `linux/amd64` + `linux/arm64`.
 
 ---
 
@@ -14,7 +14,7 @@ docker run -d \
   -v "$HOME/.mars-router:/app/data" \
   -e DATA_DIR=/app/data \
   --name mars-router \
-  marsai/mars-router:latest
+  ghcr.io/marsai-org/mars-router:latest
 ```
 
 App listens on port `20128`. Open: http://localhost:20128
@@ -61,7 +61,7 @@ docker run -d \
   -e HOSTNAME=0.0.0.0 \
   -e DEBUG=true \
   --name mars-router \
-  marsai/mars-router:latest
+  ghcr.io/marsai-org/mars-router:latest
 ```
 
 ## Optional Headroom sidecar
@@ -71,7 +71,7 @@ The Mars Router image does not bundle Python or Headroom. To use Headroom in Doc
 ```yaml
 services:
   mars-router:
-    image: marsai/mars-router:latest
+    image: ghcr.io/marsai-org/mars-router:latest
     ports:
       - "20128:20128"
     volumes:
@@ -95,7 +95,7 @@ If Headroom runs on the Docker host instead of as a sidecar, use `http://host.do
 ## Update to latest
 
 ```bash
-docker pull marsai/mars-router:latest
+docker pull ghcr.io/marsai-org/mars-router:latest
 docker rm -f mars-router
 # re-run the quick start command
 ```
@@ -103,7 +103,7 @@ docker rm -f mars-router
 To pin a specific version instead of following `latest`, use a numbered image tag:
 
 ```bash
-docker pull marsai/mars-router:0.5.81
+docker pull ghcr.io/marsai-org/mars-router:0.5.81
 ```
 
 ---
@@ -134,8 +134,7 @@ docker build \
 
 Push a Docker-safe semver git tag `vX.Y.Z` (or a prerelease such as `vX.Y.Z-rc.1`) → GitHub Actions builds `linux/amd64` and `linux/arm64` on native runners, health-checks each platform image, verifies the resulting manifest and `/api/health`, then publishes:
 
-- `ghcr.io/marsai/mars-router:X.Y.Z` + `:latest`
-- `marsai/mars-router:X.Y.Z` + `:latest`
+- `ghcr.io/marsai-org/mars-router:X.Y.Z` + `:latest`
 
 The `v` prefix is used only for the git tag; image tags omit it. A stable tag push promotes `latest`, but a prerelease tag such as `vX.Y.Z-rc.1` publishes only its numbered image by default. Prereleases require an explicit manual `promote_latest` opt-in. Promotion happens only after both native platform builds, both platform health checks, manifest inspection, and the resolved-manifest smoke test succeed. A failed or timed-out platform build therefore cannot move `latest`.
 
@@ -166,7 +165,7 @@ promote_latest:  true
 Numbered image tags are mutable because a republish can replace their manifest. For a deployment that must be immutable, pin the image digest instead:
 
 ```bash
-docker pull marsai/mars-router@sha256:<verified-digest>
+docker pull ghcr.io/marsai-org/mars-router@sha256:<verified-digest>
 ```
 
 The release workflow runs `/api/health` on each native `amd64` and `arm64` platform image before it uploads the digest artifact or assembles the multi-platform manifest. It then runs a second health check against the resolved version manifest before any requested `latest` promotion.
@@ -175,12 +174,9 @@ During recovery, the selected tag remains the application source while the Docke
 
 The workflow is tag-driven. Creating a git tag does not automatically create a GitHub Release, so the Releases page and the published package/image tags can be at different versions unless a maintainer creates a release separately.
 
-The upstream repository needs these repository secrets for Docker Hub publishing:
-
-- `DOCKERHUB_USERNAME`
-- `DOCKERHUB_TOKEN`
-
-GHCR publishing uses the workflow's `GITHUB_TOKEN` with package write permission. Forks can publish to their own GHCR namespace, but Docker Hub publication is restricted to the upstream `marsai/mars-router` repository.
+Publishing is GHCR-only and needs no extra secrets: it uses the workflow's
+`GITHUB_TOKEN` with package write permission. Forks can publish to their own
+GHCR namespace.
 
 The optional repository variables `ALPINE_MIRROR` and `NPM_REGISTRY` can override the default package mirrors used by the CI Docker build.
 

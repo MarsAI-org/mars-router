@@ -53,7 +53,7 @@ docker run -d --name mars-router -p 20128:20128 \
   MarsAI-org/mars-router:latest
 ```
 
-Published images: [Docker Hub](https://hub.docker.com/r/MarsAI-org/mars-router) • [GHCR](https://github.com/MarsAI-org/mars-router/pkgs/container/mars-router) (multi-platform amd64/arm64).
+Published image on GHCR ([ghcr.io/marsai-org/mars-router](https://github.com/MarsAI-org/mars-router/pkgs/container/mars-router), multi-platform amd64/arm64).
 
 🎉 Dashboard opens at `http://localhost:20128`
 

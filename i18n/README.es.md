@@ -1156,7 +1156,6 @@ pm2 startup
 
 Imágenes publicadas (multi-plataforma `linux/amd64` + `linux/arm64`):
 
-- Docker Hub: [`MarsAI-org/mars-router`](https://hub.docker.com/r/MarsAI-org/mars-router)
 - GHCR: [`ghcr.io/MarsAI-org/mars-router`](https://github.com/MarsAI-org/mars-router/pkgs/container/mars-router)
 
 **Inicio rápido (usa la imagen publicada):**

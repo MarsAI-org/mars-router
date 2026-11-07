@@ -8,7 +8,7 @@
   **Connect All AI Code Tools (Claude Code, Cursor, Antigravity, Copilot, Codex, Gemini, OpenCode, Cline, OpenClaw...) to 40+ AI Providers & 100+ Models.**
   
   [![License](https://img.shields.io/github/license/MarsAI-org/mars-router)](https://github.com/MarsAI-org/mars-router/blob/master/LICENSE)
-  [![Stars](https://img.shields.io/github/stars/MarsAI-org/mars-router?logo=github)](https://github.com/MarsAI-org/mars-router/stargazers)
+  [![Stars](https://img.shields.io/github/stars/MarsAI-org/mars-router?logo=github)](https://github.com/MarsAI-org/mars-router)
   [![Release](https://img.shields.io/github/v/release/MarsAI-org/mars-router?logo=github&label=release)](https://github.com/MarsAI-org/mars-router/releases)
   [![GHCR](https://img.shields.io/badge/GHCR-marsai--org%2Fmars--router-blue?logo=github)](https://github.com/MarsAI-org/mars-router/pkgs/container/mars-router)
   [![Node](https://img.shields.io/badge/node-%E2%89%A520-brightgreen?logo=node.js)](https://nodejs.org/)
@@ -1586,10 +1586,9 @@ pm2 startup
 
 ### Docker
 
-Published images (multi-platform `linux/amd64` + `linux/arm64`):
+Published images (multi-platform `linux/amd64` + `linux/arm64`) on GHCR:
 
-- Docker Hub: [`MarsAI-org/mars-router`](https://hub.docker.com/r/MarsAI-org/mars-router)
-- GHCR: [`ghcr.io/MarsAI-org/mars-router`](https://github.com/MarsAI-org/mars-router/pkgs/container/mars-router)
+- GHCR: [`ghcr.io/marsai-org/mars-router`](https://github.com/MarsAI-org/mars-router/pkgs/container/mars-router)
 
 **Quick start (use published image):**
 
@@ -1599,7 +1598,7 @@ docker run -d \
   -p 20128:20128 \
   -v "$HOME/.mars-router:/app/data" \
   -e DATA_DIR=/app/data \
-  MarsAI-org/mars-router:latest
+  ghcr.io/marsai-org/mars-router:latest
 ```
 
 → Open http://localhost:20128
@@ -1608,7 +1607,7 @@ docker run -d \
 
 ```bash
 git clone https://github.com/MarsAI-org/mars-router.git
-cd mars-router/app
+cd mars-router
 docker build -t mars-router .
 docker run -d --name mars-router -p 20128:20128 \
   -v "$HOME/.mars-router:/app/data" -e DATA_DIR=/app/data mars-router
@@ -1625,7 +1624,7 @@ docker run -d --name mars-router -p 20128:20128 \
 docker logs -f mars-router
 docker restart mars-router
 docker stop mars-router && docker rm mars-router
-docker pull MarsAI-org/mars-router:latest   # update to latest
+docker pull ghcr.io/marsai-org/mars-router:latest   # update to latest
 ```
 
 **Data persistence:** `$HOME/.mars-router/db/data.sqlite` on host ↔ `/app/data/db/data.sqlite` in container.
@@ -1846,7 +1845,7 @@ Thanks to all contributors who helped make Mars Router better!
 
 ## 📊 Star Chart
 
-[![Star Chart](https://starchart.cc/MarsAI-org/mars-router.svg?variant=adaptive)](https://starchart.cc/MarsAI-org/mars-router)
+[![Star History Chart](https://api.star-history.com/svg?repos=MarsAI-org/mars-router&type=Date)](https://star-history.com/#MarsAI-org/mars-router&Date)
 
 ## 🔀 Forks
 
