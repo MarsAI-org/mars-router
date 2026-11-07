@@ -1490,7 +1490,7 @@ Obrigado a todos os colaboradores que ajudaram a tornar o Mars Router melhor!
 
 ## 📊 Gráfico de estrelas
 
-[![Gráfico de estrelas](https://starchart.cc/MarsAI-org/mars-router.svg?variant=adaptive)](https://starchart.cc/MarsAI-org/mars-router)
+[![Star History Chart](https://api.star-history.com/svg?repos=MarsAI-org/mars-router&type=Date)](https://star-history.com/#MarsAI-org/mars-router&Date)
 
 ## 🔀 Forks
 

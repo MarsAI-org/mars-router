@@ -1407,7 +1407,7 @@ Authorization: Bearer your-api-key
 
 ## 📊 نمودار ستاره
 
-[![Star Chart](https://starchart.cc/MarsAI-org/mars-router.svg?variant=adaptive)](https://starchart.cc/MarsAI-org/mars-router)
+[![Star History Chart](https://api.star-history.com/svg?repos=MarsAI-org/mars-router&type=Date)](https://star-history.com/#MarsAI-org/mars-router&Date)
 
 ## 🔀 فورک‌ها
 

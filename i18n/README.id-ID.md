@@ -944,6 +944,6 @@ MIT License — lihat [LICENSE](https://github.com/MarsAI-org/mars-router/blob/m
 
 **Kalau Mars Router membantumu, kasih ⭐ di [GitHub](https://github.com/MarsAI-org/mars-router)!**
 
-[🌐 Website](https://github.com/MarsAI-org/mars-router) • [📦 npm](https://www.npmjs.com/package/mars-router) • [🐛 Laporkan Bug](https://github.com/MarsAI-org/mars-router/issues)
+[🌐 Website](https://github.com/MarsAI-org/mars-router) • [📦 GitHub](https://github.com/MarsAI-org/mars-router) • [🐛 Laporkan Bug](https://github.com/MarsAI-org/mars-router/issues)
 
 </div>
