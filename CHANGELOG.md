@@ -1,3 +1,14 @@
+# v0.5.120 (2026-11-07)
+
+## Fixes
+- **Docs/repo**: fix the dashboard image path (`images/mars-router.png`), all
+  `blob/main` → `blob/master` links, and every broken badge (npm/Docker Hub are
+  not published → use GitHub license/stars/release, GHCR, Node). Add
+  `CONTRIBUTING.md`, repository metadata, and an npm publish workflow. Docker
+  docs/wiring are GHCR-only.
+- **Release**: first tagged release that publishes the multi-platform image to
+  `ghcr.io/marsai-org/mars-router`.
+
 # v0.5.119 (2026-11-07)
 
 ## Features

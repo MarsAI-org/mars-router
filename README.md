@@ -242,28 +242,28 @@ curl http://localhost:8080/api/health   # {"ok":true}
         <img src="https://img.youtube.com/vi/VQAw612S27Y/maxresdefault.jpg" alt="Mars Router + Claude Code FREE Unlimited Setup" width="300"/>
       </a><br/>
       <b>🇵🇰 اردو / हिन्दी</b><br/>
-      <sub>Mars Router + Claude Code FREE Unlimited Setup<br/>by <a href="https://www.youtube.com/@BuildAIWithHamid">Build AI With Hamid</a></sub>
+      <sub>Mars Router + Claude Code FREE Unlimited Setup<br/>by <a href="https://www.youtube.com/results?search_query=Build+AI+With+Hamid">Build AI With Hamid</a></sub>
     </td>
     <td align="center" width="320">
       <a href="https://www.youtube.com/watch?v=raEyZPg5xE0">
         <img src="https://img.youtube.com/vi/raEyZPg5xE0/maxresdefault.jpg" alt="Mars Router Setup Tutorial" width="300"/>
       </a><br/>
       <b>🇺🇸 English</b><br/>
-      <sub>Mars Router + Claude Code FREE Setup<br/>by <a href="https://www.youtube.com/@BuildAIWithHamid">Build AI With Hamid</a></sub>
+      <sub>Mars Router + Claude Code FREE Setup<br/>by <a href="https://www.youtube.com/results?search_query=Build+AI+With+Hamid">Build AI With Hamid</a></sub>
     </td>
     <td align="center" width="320">
       <a href="https://youtu.be/3dF5GIYMrcQ?si=bAyfyiHbARJQAHj_">
         <img src="https://img.youtube.com/vi/3dF5GIYMrcQ/hqdefault.jpg" alt="Mars Router Setup Tutorial" width="300"/>
       </a><br/>
       <b>🇺🇸 English</b><br/>
-      <sub>Mars Router + Claude Code FREE Setup<br/>by <a href="https://www.youtube.com/@BuildAIWithHamid">Build AI With Hamid</a></sub>
+      <sub>Mars Router + Claude Code FREE Setup<br/>by <a href="https://www.youtube.com/results?search_query=Build+AI+With+Hamid">Build AI With Hamid</a></sub>
     </td>
     <td align="center" width="320">
       <a href="https://www.youtube.com/watch?v=o3qYCyjrFYg">
         <img src="https://img.youtube.com/vi/o3qYCyjrFYg/maxresdefault.jpg" alt="Claude Code FREE Forever" width="300"/>
       </a><br/>
       <b>🇺🇸 English</b><br/>
-      <sub>Claude Code FREE Forever — Unlimited Models<br/>by <a href="https://www.youtube.com/@BuildAIWithHamid">Build AI With Hamid</a></sub>
+      <sub>Claude Code FREE Forever — Unlimited Models<br/>by <a href="https://www.youtube.com/results?search_query=Build+AI+With+Hamid">Build AI With Hamid</a></sub>
     </td>
   </tr>
   <tr>
@@ -286,7 +286,7 @@ curl http://localhost:8080/api/health   # {"ok":true}
         <img src="https://img.youtube.com/vi/JXmg8_gccgE/maxresdefault.jpg" alt="FREE OpenClaw with Claude Opus" width="300"/>
       </a><br/>
       <b>🇺🇸 English</b><br/>
-      <sub>FREE OpenClaw + Claude Opus 4.6<br/>by <a href="https://www.youtube.com/@BuildAIWithHamid">Build AI With Hamid</a></sub>
+      <sub>FREE OpenClaw + Claude Opus 4.6<br/>by <a href="https://www.youtube.com/results?search_query=Build+AI+With+Hamid">Build AI With Hamid</a></sub>
     </td>
     <td align="center" width="320">
       <a href="https://www.youtube.com/watch?v=CkVZZUSTXAI">

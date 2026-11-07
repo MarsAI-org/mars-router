@@ -137,14 +137,14 @@ PORT=20128 HOSTNAME=0.0.0.0 NEXT_PUBLIC_BASE_URL=http://localhost:20128 npm run 
         <img src="https://img.youtube.com/vi/VQAw612S27Y/maxresdefault.jpg" alt="راه‌اندازی نامحدود رایگان Mars Router + Claude Code" width="300"/>
       </a><br/>
       <b>🇵🇰 اردو / हिन्दी</b><br/>
-      <sub>راه‌اندازی نامحدود رایگان Mars Router + Claude Code<br/>توسط <a href="https://www.youtube.com/@BuildAIWithHamid">Build AI With Hamid</a></sub>
+      <sub>راه‌اندازی نامحدود رایگان Mars Router + Claude Code<br/>توسط <a href="https://www.youtube.com/results?search_query=Build+AI+With+Hamid">Build AI With Hamid</a></sub>
     </td>
     <td align="center" width="320">
       <a href="https://www.youtube.com/watch?v=raEyZPg5xE0">
         <img src="https://img.youtube.com/vi/raEyZPg5xE0/maxresdefault.jpg" alt="آموزش راه‌اندازی Mars Router" width="300"/>
       </a><br/>
       <b>🇺🇸 انگلیسی</b><br/>
-      <sub>راه‌اندازی رایگان Mars Router + Claude Code<br/>توسط <a href="https://www.youtube.com/@BuildAIWithHamid">Build AI With Hamid</a></sub>
+      <sub>راه‌اندازی رایگان Mars Router + Claude Code<br/>توسط <a href="https://www.youtube.com/results?search_query=Build+AI+With+Hamid">Build AI With Hamid</a></sub>
     </td>
     
   </tr>
@@ -154,14 +154,14 @@ PORT=20128 HOSTNAME=0.0.0.0 NEXT_PUBLIC_BASE_URL=http://localhost:20128 npm run 
         <img src="https://img.youtube.com/vi/3dF5GIYMrcQ/hqdefault.jpg" alt="آموزش راه‌اندازی Mars Router" width="300"/>
       </a><br/>
       <b>🇺🇸 انگلیسی</b><br/>
-      <sub>راه‌اندازی رایگان Mars Router + Claude Code<br/>توسط <a href="https://www.youtube.com/@BuildAIWithHamid">Build AI With Hamid</a></sub>
+      <sub>راه‌اندازی رایگان Mars Router + Claude Code<br/>توسط <a href="https://www.youtube.com/results?search_query=Build+AI+With+Hamid">Build AI With Hamid</a></sub>
     </td>
     <td align="center" width="320">
       <a href="https://www.youtube.com/watch?v=o3qYCyjrFYg">
         <img src="https://img.youtube.com/vi/o3qYCyjrFYg/maxresdefault.jpg" alt="Claude Code رایگان برای همیشه" width="300"/>
       </a><br/>
       <b>🇺🇸 انگلیسی</b><br/>
-      <sub>Claude Code رایگان برای همیشه — مدل‌های نامحدود<br/>توسط <a href="https://www.youtube.com/@BuildAIWithHamid">Build AI With Hamid</a></sub>
+      <sub>Claude Code رایگان برای همیشه — مدل‌های نامحدود<br/>توسط <a href="https://www.youtube.com/results?search_query=Build+AI+With+Hamid">Build AI With Hamid</a></sub>
     </td>
     <td align="center" width="320">
       <a href="https://www.youtube.com/watch?v=Ttpc26m39Dw">
@@ -185,7 +185,7 @@ PORT=20128 HOSTNAME=0.0.0.0 NEXT_PUBLIC_BASE_URL=http://localhost:20128 npm run 
         <img src="https://img.youtube.com/vi/JXmg8_gccgE/maxresdefault.jpg" alt="OpenClaw رایگان با Claude Opus" width="300"/>
       </a><br/>
       <b>🇺🇸 انگلیسی</b><br/>
-      <sub>OpenClaw رایگان + Claude Opus 4.6<br/>توسط <a href="https://www.youtube.com/@BuildAIWithHamid">Build AI With Hamid</a></sub>
+      <sub>OpenClaw رایگان + Claude Opus 4.6<br/>توسط <a href="https://www.youtube.com/results?search_query=Build+AI+With+Hamid">Build AI With Hamid</a></sub>
     </td>
     <td align="center" width="320">
       <a href="https://www.youtube.com/watch?v=CkVZZUSTXAI">
