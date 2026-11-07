@@ -10,7 +10,7 @@
   [![License](https://img.shields.io/github/license/MarsAI-org/mars-router)](https://github.com/MarsAI-org/mars-router/blob/master/LICENSE)
   [![Stars](https://img.shields.io/github/stars/MarsAI-org/mars-router?logo=github)](https://github.com/MarsAI-org/mars-router)
   [![Release](https://img.shields.io/github/v/release/MarsAI-org/mars-router?logo=github&label=release)](https://github.com/MarsAI-org/mars-router/releases)
-  [![GHCR](https://img.shields.io/badge/GHCR-marsai--org%2Fmars--router-blue?logo=github)](https://github.com/MarsAI-org/mars-router/pkgs/container/mars-router)
+  [![GHCR](https://img.shields.io/badge/GHCR-marsai--org%2Fmars--router-blue?logo=github)](https://github.com/MarsAI-org/mars-router/releases)
   [![Node](https://img.shields.io/badge/node-%E2%89%A520-brightgreen?logo=node.js)](https://nodejs.org/)
 
 <a href="https://trendshift.io/repositories/22628" target="_blank"><img src="https://trendshift.io/api/badge/repositories/22628" alt="marsai-org%2Fmars-router | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
@@ -1588,7 +1588,7 @@ pm2 startup
 
 Published images (multi-platform `linux/amd64` + `linux/arm64`) on GHCR:
 
-- GHCR: [`ghcr.io/marsai-org/mars-router`](https://github.com/MarsAI-org/mars-router/pkgs/container/mars-router)
+- GHCR: [`ghcr.io/marsai-org/mars-router`](https://github.com/MarsAI-org/mars-router/releases)
 
 **Quick start (use published image):**
 

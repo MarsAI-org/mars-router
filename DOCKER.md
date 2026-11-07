@@ -1,6 +1,6 @@
 # Docker
 
-Run Mars Router in a container. Published image: [`ghcr.io/marsai-org/mars-router`](https://github.com/MarsAI-org/mars-router/pkgs/container/mars-router) — multi-platform `linux/amd64` + `linux/arm64`.
+Run Mars Router in a container. Published image: [`ghcr.io/marsai-org/mars-router`](https://github.com/MarsAI-org/mars-router/releases) — multi-platform `linux/amd64` + `linux/arm64`.
 
 ---
 

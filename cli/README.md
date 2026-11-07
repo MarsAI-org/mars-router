@@ -5,7 +5,7 @@
 **Connect All AI Code Tools (Claude Code, Cursor, Antigravity, Copilot, Codex, Gemini, OpenCode, Cline, OpenClaw...) to 40+ AI Providers & 100+ Models.**
 
 [![License](https://img.shields.io/github/license/MarsAI-org/mars-router)](https://github.com/MarsAI-org/mars-router/blob/master/LICENSE)
-[![GHCR](https://img.shields.io/badge/GHCR-marsai-org%2Fmars-router-blue?logo=github)](https://github.com/MarsAI-org/mars-router/pkgs/container/mars-router)
+[![GHCR](https://img.shields.io/badge/GHCR-marsai-org%2Fmars-router-blue?logo=github)](https://github.com/MarsAI-org/mars-router/releases)
 [![Node](https://img.shields.io/badge/node-%E2%89%A520-brightgreen?logo=node.js)](https://nodejs.org/)
 
 <a href="https://trendshift.io/repositories/22628" target="_blank"><img src="https://trendshift.io/api/badge/repositories/22628" alt="marsai-org%2Fmars-router | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
@@ -53,7 +53,7 @@ docker run -d --name mars-router -p 20128:20128 \
   MarsAI-org/mars-router:latest
 ```
 
-Published image on GHCR ([ghcr.io/marsai-org/mars-router](https://github.com/MarsAI-org/mars-router/pkgs/container/mars-router), multi-platform amd64/arm64).
+Published image on GHCR ([ghcr.io/marsai-org/mars-router](https://github.com/MarsAI-org/mars-router/releases), multi-platform amd64/arm64).
 
 🎉 Dashboard opens at `http://localhost:20128`
 
